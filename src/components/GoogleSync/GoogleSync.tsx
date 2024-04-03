@@ -10,7 +10,7 @@ import {
   deleteDriveFile,
   updateDriveFileName,
   validateGoogleOath2AccessToken,
-} from '@api/google-api';
+} from '@src/api-helpers/google-api';
 import { getFiles, stateToFile } from '@utils/google-api';
 import createGoogleCloudStorage from '@store/storage/GoogleCloudStorage';
 

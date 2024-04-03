@@ -2,8 +2,8 @@
 
 import useStore from '@store/store';
 import { ChatInterface, MessageInterface, ModelOptions } from '@type/chat';
-import { isAuthenticated, redirectToLogin, getChatCompletion, getChatCompletionStream } from '@api/api';
-import { parseEventSource } from '@api/helper';
+import { isAuthenticated, redirectToLogin, getChatCompletion, getChatCompletionStream } from '@src/api-helpers/api';
+import { parseEventSource } from '@src/api-helpers/helper';
 import { limitMessageTokens, updateTotalTokenUsed } from '@utils/messageUtils';
 import { supportedModels, defaultTitleGenModel, _defaultChatConfig } from '@constants/chat';
 import { officialAPIEndpoint, builtinAPIEndpoint } from '@constants/auth';

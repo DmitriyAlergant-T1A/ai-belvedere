@@ -6,7 +6,7 @@ import {
   getDriveFile,
   updateDriveFileDebounced,
   validateGoogleOath2AccessToken,
-} from '@api/google-api';
+} from '@src/api-helpers/google-api';
 
 const createGoogleCloudStorage = <S>(): PersistStorage<S> | undefined => {
   const accessToken = useCloudAuthStore.getState().googleAccessToken;

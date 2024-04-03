@@ -1,4 +1,4 @@
-import { listDriveFiles } from '@api/google-api';
+import { listDriveFiles } from '@src/api-helpers/google-api';
 
 import useStore, { createPartializedState } from '@store/store';
 import useCloudAuthStore from '@store/cloud-auth-store';
