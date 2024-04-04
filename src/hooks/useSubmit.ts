@@ -61,11 +61,11 @@ const useSubmit = () =>
     {
       const isAuthenticatedUser = await isAuthenticated();
 
-      if (!isAuthenticatedUser) {
-        console.log("User not authenticated, redirecting to login.");
-        await redirectToLogin();
-        throw new Error(`API Authentication Error, please reload the page`);
-      }
+      // if (!isAuthenticatedUser) {
+      //   console.log("User not authenticated, redirecting to login.");
+      //   await redirectToLogin();
+      //   throw new Error(`API Authentication Error, please reload the page`);
+      // }
 
       headers['X-api-model'] = supportedModels[model].apiAliasCurrent;
       headers['X-messages-count'] = messages.length.toString();

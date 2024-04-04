@@ -1,26 +1,29 @@
-const express = require('express');
-// const cors = require('cors');
-const path = require('path');
-const chatCompletionsApiRouter = require('./api/chat_completions');
+
+import express from 'express';
+import path from 'path';
+import chatCompletionsApiRouter from './api/chat_completions.js';
+import dotenv from 'dotenv';
 
 
 //load .env file
-require('dotenv').config();
+dotenv.config({ path: '.env.server.local' });
 
 const app = express();
+
 //app.use(cors());
+
 app.use(express.json());
 
 const PORT = process.env.SERVER_PORT || 5500;
 
-app.use('/api/v1/chat/completions', chatCompletionsApiRouter);
+app.use('/api/chat/completions', chatCompletionsApiRouter);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.resolve('dist')));
 
 // Handle React routing, return all requests to React app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.resolve('dist', 'index.html'));
 });
 
 app.listen(PORT, () => {

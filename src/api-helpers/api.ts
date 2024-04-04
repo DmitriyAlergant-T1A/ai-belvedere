@@ -20,7 +20,7 @@ export const isAuthenticated = async () => {
 
 export const redirectToLogin = async() => {
   // Redirect to a login route that triggers AAD authentication
-  window.location.href = '/.auth/login/aad';
+  // window.location.href = '/.auth/login/aad';
 }
 
 

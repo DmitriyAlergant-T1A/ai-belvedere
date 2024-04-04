@@ -1,50 +1,105 @@
-const express = require('express');
+import express from 'express';
+import axios from 'axios';
+import { DefaultAzureCredential } from '@azure/identity';
+
+import { default as LogAnalyticsClient } from '@azure/monitor-query';
 
 const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
+    const OPENAI_API_URL = process.env.OPENAI_API_URL;
+    const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+    const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+    const AZURE_LOG_ANALYTICS_RESOURCE_URI = process.env.AZURE_LOG_ANALYTICS_RESOURCE_URI;
 
-    //TODO: get OPENAI_API_URL from env vars
-    //TODO: get OPENAI_API_KEY from env vars
-    //TODO: get ANTHROPIC_API_KEY from env vars
+    const provider = req.headers['x-portkey-provider'];
+    const authHeader = provider === 'openai'
+      ? `Bearer ${OPENAI_API_KEY}`
+      : `Bearer ${ANTHROPIC_API_KEY}`;
 
-    //TODO determine provider by "x-portkey-provider" API header ('openai', 'anthropic'), 
-    // and add authentication header depending on a provider
-    //  -- for OpenAI: 'Authentication: Beared {key}'
-    //  -- for Anthropic: 'Authentication: Beared {key}'
+    if (AZURE_LOG_ANALYTICS_RESOURCE_URI) {
+      const credential = new DefaultAzureCredential();
+      const logAnalyticsClient = new LogAnalyticsClient(credential, AZURE_LOG_ANALYTICS_RESOURCE_URI);
 
-    //TODO get AZURE_LOG_ANALYTICS_RESOURCE_URI from env vars. If it is not empty:
-    
-      // 1. Authenticate using Managed Identity (or a default identity)
-      
-      // 2. Log a record to 'chatbot_api_requests' table.:
-      //     - timestamp
-      //     - x-ms-principal (from request headers)
-      //     - request Content-Length
-      //     - headers (JSON array of all request headers)
+      await logAnalyticsClient.send({
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          principal: req.headers['x-ms-principal'],
+          contentLength: req.headers['content-length'],
+          headers: JSON.stringify(req.headers),
+        }),
+        type: 'chatbot_api_requests',
+      });
+    }
 
-    //TODO forward the request to OPENAI_API_URL and pass back the response, while supporting SSE STREAMING (if the servers response was streaming)
+    const response = await axios.post(OPENAI_API_URL, req.body, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': authHeader,
+      },
+      responseType: 'stream',
+    });
 
-    // If AZURE_LOG_ANALYTICS_RESOURCE_URI was not empty, make another log entry at completion of the response:
-    // (whether naturally or by a client terminating a connection)
-      //   log a record to 'chatbot_api_req_responses' table.:
-      //     - timestamp
-      //     - x-ms-principal (from request headers)
-      //     - request Content-Length
-      //     - headers (JSON array of all request headers)
-      //     - response code
-      //     - if response code was not ok, then also an error message from the response payload
-      //     - stream_completed (Y/N) 
-      //             Y if the stream finished naturally with the DONE chunk; 
-      //             Otherwise, N (ex: client terminated connection prematurely);
-      //     - actually transferred streaming response size in characters
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    });
 
+    let responseSize = 0;
+    let streamCompleted = false;
+
+    response.data.on('data', (chunk) => {
+      res.write(chunk);
+      responseSize += chunk.length;
+    });
+
+    response.data.on('end', async () => {
+      streamCompleted = true;
+      res.write('data: [DONE]\n\n');
+      res.end();
+
+      if (AZURE_LOG_ANALYTICS_RESOURCE_URI) {
+        await logAnalyticsClient.send({
+          body: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            principal: req.headers['x-ms-principal'],
+            contentLength: req.headers['content-length'],
+            headers: JSON.stringify(req.headers),
+            responseCode: response.status,
+            streamCompleted: 'Y',
+            responseSize,
+          }),
+          type: 'chatbot_api_req_responses',
+        });
+      }
+    });
+
+    req.on('close', async () => {
+      if (!streamCompleted) {
+        if (AZURE_LOG_ANALYTICS_RESOURCE_URI) {
+          await logAnalyticsClient.send({
+            body: JSON.stringify({
+              timestamp: new Date().toISOString(),
+              principal: req.headers['x-ms-principal'],
+              contentLength: req.headers['content-length'],
+              headers: JSON.stringify(req.headers),
+              responseCode: response.status,
+              streamCompleted: 'N',
+              responseSize,
+            }),
+            type: 'chatbot_api_req_responses',
+          });
+        }
+      }
+    });
   } catch (error) {
-
-    //TODO valid way of returning HTTP 500 while wrapping the underlying error
-
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-module.exports = router;
+export default router;
+
+
