@@ -46,7 +46,9 @@ const EditView = ({
 
   const _setContent = (content: string) => {
       __setContent(content);                               // update local state (textarea display)
-      setNewMessageDraftBuffer(content, currentChatIndex); // persist to global state (centralized buffer)
+
+      if (sticky)                                         //only for the "new" message prompt (not edits)
+        setNewMessageDraftBuffer(content, currentChatIndex); // persist to global state (centralized buffer)
   }
 
   const _addPromptContent = (promptContent: string) => {
@@ -58,9 +60,10 @@ const EditView = ({
   // On chat changes, refresh the textarea based on the buffer.
   // See utils/handleNewMessageDraftsPersistence.ts on buffer synchronization with Chat-level state
   useEffect(() => {
-    __setContent(newMessageDraftBuffer ?? "");
-
-  }, [currentChatIndex, currentChats]);
+    if (sticky) {
+      __setContent(newMessageDraftBuffer ?? "");
+    }
+  }, [currentChatIndex, currentChats, sticky]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const textareaRef = React.createRef<HTMLTextAreaElement>();
