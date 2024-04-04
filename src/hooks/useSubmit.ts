@@ -25,6 +25,8 @@ const useSubmit = () =>
 {
   const setError          = useStore((state) => state.setError);
   const setGenerating     = useStore((state) => state.setGenerating);
+  
+  const generatingState = useStore((state) => state.generating);
 
   /* Prepare API Request Headers */
 
@@ -57,21 +59,21 @@ const useSubmit = () =>
     };
 
     /* Built-in endpoint (/api/v1/chat/completions) */
-    if (apiEndpoint === builtinAPIEndpoint)
+    if (apiEndpoint === builtinAPIEndpoint && import.meta.env.VITE_CHECK_AAD_AUTH === 'Y')
     {
       const isAuthenticatedUser = await isAuthenticated();
 
-      // if (!isAuthenticatedUser) {
-      //   console.log("User not authenticated, redirecting to login.");
-      //   await redirectToLogin();
-      //   throw new Error(`API Authentication Error, please reload the page`);
-      // }
-
-      headers['X-api-model'] = supportedModels[model].apiAliasCurrent;
-      headers['X-messages-count'] = messages.length.toString();
-      headers['X-purpose'] = purpose;
+      if (!isAuthenticatedUser) {
+        console.log("User not authenticated, redirecting to login.");
+        await redirectToLogin();
+        throw new Error(`API Authentication Error, please reload the page`);
+      }
     }
-  
+
+    headers['x-api-model'] = supportedModels[model].apiAliasCurrent;
+    headers['x-messages-count'] = messages.length.toString();
+    headers['x-purpose'] = purpose;
+
     return {headers};
   };
 
@@ -153,53 +155,96 @@ const useSubmit = () =>
       };
 
       const headers = await prepareApiHeaders(currChats[currentChatIndex].config.model, inputMessagesLimited, 'Chat Submission');
-        
+
+      async function handleStream(stream: ReadableStream, provider: string, addAssistantContent: (content: string) => void) {
+        if (stream) {
+          if (stream.locked)
+            throw new Error('Oops, the stream is locked right now. Please try again');
+          
+          const reader = stream.getReader();
+          let reading = true;
+          let partial = '';
+      
+          try {
+            while (reading && useStore.getState().generating) {
+              const { done, value } = await reader.read();
+              
+              if (done) {
+                reading = false;
+              } else {
+                const decodedValue = new TextDecoder().decode(value);
+                
+                if (provider === 'openai') {
+                  // Handle OpenAI stream format
+                  const result = parseEventSource(partial + decodedValue);
+                  partial = '';
+      
+                  if (result === '[DONE]') {
+                    reading = false;
+                  } else {
+                    const resultString = result.reduce((output, curr) => {
+                      if (typeof curr === 'string') {
+                        partial += curr;
+                      } else {
+                        const content = curr.choices[0]?.delta?.content ?? null;
+                        if (content) output += content;
+                      }
+                      return output;
+                    }, '');
+      
+                    addAssistantContent(resultString);
+                  }
+                } else if (provider === 'anthropic') {
+                  // Handle Anthropic stream format
+                  const lines = (partial + decodedValue).split('\n');
+                  partial = lines.pop() || ''; // Store last incomplete line for next iteration
+      
+                  for (const line of lines) {
+                    if (line.startsWith('data:')) {
+                      const data = JSON.parse(line.slice(5));
+                      if (data.type === 'content_block_delta') {
+                        const content = data.delta?.text;
+                        if (content) addAssistantContent(content);
+                      } else if (data.type === 'message_stop') {
+                        reading = false; // Set reading to false when "message_stop" event is received
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } catch (error) {
+            console.error('Error occurred during stream processing:', error);
+            // Handle the error and provide appropriate feedback to the client
+            addAssistantContent('\n***ERROR*** An error occurred during stream processing. Please try again.');
+          } finally {
+            if (useStore.getState().generating) {
+              reader.cancel('Cancelled by user');
+            } else {
+              reader.cancel('Generation completed');
+            }
+            reader.releaseLock();
+            
+            try {
+              await stream.cancel();
+            } catch (error) {
+              console.warn('Error occurred while cancelling the stream:', error);
+            }
+          }
+        }
+      }
+      
+      
+      // Usage
       stream = await getChatCompletionStream(
         useStore.getState().apiEndpoint,
         inputMessagesLimited,
         completionsConfig,
         headers.headers
       );
-  
-      if (stream) {
-        if (stream.locked)
-          throw new Error(
-            'Oops, the stream is locked right now. Please try again'
-          );
-        const reader = stream.getReader();
-        let reading = true;
-        let partial = '';
-        while (reading && useStore.getState().generating) {
-          const { done, value } = await reader.read();
-          const result = parseEventSource(
-            partial + new TextDecoder().decode(value)
-          );
-          partial = '';
 
-          if (result === '[DONE]' || done) {
-            reading = false;
-          } else {
-            const resultString = result.reduce((output: string, curr) => {
-              if (typeof curr === 'string') {
-                partial += curr;
-              } else {
-                const content = curr.choices[0]?.delta?.content ?? null;
-                if (content) output += content;
-              }
-              return output;
-            }, '');
-
-            addAssistantContent (resultString);
-          }
-        }
-        if (useStore.getState().generating) {
-          reader.cancel('Cancelled by user');
-        } else {
-          reader.cancel('Generation completed');
-        }
-        reader.releaseLock();
-        stream.cancel();
-      }
+      if (headers && stream)    
+        await handleStream(stream, headers.headers['x-portkey-provider'], addAssistantContent);
 
       // update tokens used in chatting
 
@@ -227,7 +272,7 @@ const useSubmit = () =>
           console.log(err);
           setError(err);
 
-          addAssistantContent ("***error*** could not obtain AI chat response\nuse the 'Regenerate Response' button to try again");
+          addAssistantContent ("\n***ERROR*** could not obtain AI chat response\nuse the 'Regenerate Response' button to try again");
     }
 
     if (
@@ -296,7 +341,12 @@ const useSubmit = () =>
           headers.headers
         );
 
-        let title = data.choices[0].message.content.trim();
+        let title = '';
+        if (headers.headers['x-portkey-provider'] === 'openai') {
+          title = data.choices[0].message.content.trim();
+        } else if (headers.headers['x-portkey-provider'] === 'anthropic') {
+          title = data.content[0].text.trim();
+        }
     
         if (title) // generateTitle function was able to return a non-blank Title
         {
@@ -314,7 +364,7 @@ const useSubmit = () =>
 
         // update tokens used for generating title
         if (countTotalTokens) {
-          updateTotalTokenUsed(titleGenConfig.model as ModelOptions, 
+          updateTotalTokenUsed(titleGenModel, 
             [titleGenPromptMessage], 
             {
               role: 'assistant',
@@ -322,8 +372,13 @@ const useSubmit = () =>
             });
         }
 
-      } catch (error: unknown) {
-        throw new Error(`Error generating chat title!\n${(error as Error).message}`);
+      } catch (error: unknown) { 
+        
+          const { setToastStatus, setToastMessage, setToastShow} = useStore.getState();
+
+          setToastStatus('error');
+          setToastMessage(`Error generating chat title!\n${(error as Error).message}`);
+          setToastShow(true);
       }
     } catch (e: unknown) {
       const err = (e as Error).message;
