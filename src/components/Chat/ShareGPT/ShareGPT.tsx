@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import useStore from '@store/store';
 
 import PopupModal from '@components/PopupModal';
-import { submitShareGPT } from '@api/api';
+import { submitShareGPT } from '@src/api-helpers/api';
 import { ShareGPTSubmitBodyInterface } from '@type/api';
 
 const ShareGPT = React.memo(() => {

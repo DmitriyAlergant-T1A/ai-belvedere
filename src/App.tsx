@@ -14,7 +14,7 @@ import Toast from '@components/Toast';
 import AuthenticationUpdater from './background-components/AuthenticationUpdater';
 import PageTitleUpdater from './background-components/PageTitleUpdater';
 
-import { ClientPrincipalContextProvider } from "@aaronpowell/react-static-web-apps-auth";
+// import { ClientPrincipalContextProvider } from "@aaronpowell/react-static-web-apps-auth";
 import { handleNewMessageDraftBufferRetrieve } from '@utils/handleNewMessageDraftsPersistence';
 
 function App() {
@@ -88,7 +88,7 @@ function App() {
 
   return (
     <div className='overflow-hidden w-full h-full relative'>
-      <ClientPrincipalContextProvider>
+      {/* <ClientPrincipalContextProvider> */}
         <>
           <AuthenticationUpdater />
           <PageTitleUpdater />
@@ -97,7 +97,7 @@ function App() {
           {/* <ApiPopup /> */}
           <Toast />
         </>
-      </ClientPrincipalContextProvider>
+      {/* </ClientPrincipalContextProvider> */}
     </div>
   );
 }

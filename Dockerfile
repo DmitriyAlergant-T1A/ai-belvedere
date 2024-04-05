@@ -1,19 +1,21 @@
-FROM node:alpine
+# Build stage
+FROM node:18-alpine as builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run client-build
 
-RUN addgroup -S appgroup && \
-  adduser -S appuser -G appgroup && \
-  mkdir -p /home/appuser/app && \
-  chown appuser:appgroup /home/appuser/app
-USER appuser
+# Prune development dependencies
+RUN npm prune --production
 
-RUN yarn config set prefix ~/.yarn && \
-  yarn global add serve
+# Final stage
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/src-server ./src-server
 
-WORKDIR /home/appuser/app
-COPY --chown=appuser:appgroup package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
-COPY --chown=appuser:appgroup . .
-RUN yarn build
-
-EXPOSE 3000
-CMD ["/home/appuser/.yarn/bin/serve", "-s", "dist", "-l", "3000"]
+EXPOSE 5500
+CMD ["npm", "run", "server"]

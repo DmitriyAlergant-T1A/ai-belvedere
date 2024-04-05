@@ -16,12 +16,18 @@ const tokenCostToCost = (
   tokenCost: TotalTokenUsed[ModelOptions],
   model: ModelOptions
 ) => {
+  try {
   if (!tokenCost) return 0;
   const { prompt, completion } = supportedModels[model].cost;
   const completionCost =
     (completion.price / completion.unit) * tokenCost.completionTokens;
   const promptCost = (prompt.price / prompt.unit) * tokenCost.promptTokens;
   return completionCost + promptCost;
+  } catch (error) {
+    console.error ("TokensTotalCost error: ", error);
+    return 0;
+  }
+
 };
 
 const TokensTotalCost = () => {

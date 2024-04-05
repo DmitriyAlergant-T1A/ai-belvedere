@@ -5,11 +5,10 @@ import { OpenAICompletionsConfig } from '@hooks/useSubmit';
 
 export const isAuthenticated = async () => {
   try {
-    const response = await fetch('/.auth/me');
+    const response = await fetch('/api/get-authenticated-principal-name');
     if (response.ok) {
       const data = await response.json();
-      // Check if the user data exists and has necessary properties
-      return data.clientPrincipal != null;
+      return data.clientPrincipalName != null;
     }
     return false;
   } catch (error) {
@@ -18,9 +17,10 @@ export const isAuthenticated = async () => {
   }
 }
 
+
 export const redirectToLogin = async() => {
-  // Redirect to a login route that triggers AAD authentication
-  window.location.href = '/.auth/login/aad';
+   //Redirect to a login route that triggers AAD authentication
+   window.location.href = '/.auth/login/aad';
 }
 
 
