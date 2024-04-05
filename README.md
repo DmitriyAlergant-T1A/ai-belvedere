@@ -1,149 +1,118 @@
-<h1 align="center"><b>Better ChatGPT</b></h1>
+<h1 align="center"><b>New AI Assistant UI</b></h1>
 
 <p align="center">
-   English Version |
-   <a href="README-zh_CN.md">
-      简体中文版
-   </a>
+    <a href="https://bettergpt.chat" target="_blank"><img src="public/apple-touch-icon.png" width="100" /></a>
 </p>
 
-<p align="center">
-    <a href="https://bettergpt.chat" target="_blank"><img src="public/apple-touch-icon.png" alt="Better ChatGPT" width="100" /></a>
-</p>
 
-<h4 align="center"><b>Free, Powerful, Limitless, Intelligent, Engaging</b></h4>
+## 👋🏻 New AI Assistant UI for Teams, Groups, or Families
 
-<p align="center">
-<a href="https://github.com/ztjhz/BetterChatGPT/blob/main/LICENSE" target="_blank">
-<img src="https://img.shields.io/github/license/ztjhz/BetterChatGPT?style=flat-square" alt="licence" />
-</a>
-<a href="https://github.com/ztjhz/BetterChatGPT/fork" target="_blank">
-<img src="https://img.shields.io/github/forks/ztjhz/BetterChatGPT?style=flat-square" alt="forks"/>
-</a>
-<a href="https://github.com/ztjhz/BetterChatGPT/stargazers" target="_blank">
-<img src="https://img.shields.io/github/stars/ztjhz/BetterChatGPT?style=flat-square" alt="stars"/>
-</a>
-<a href="https://github.com/ztjhz/BetterChatGPT/issues" target="_blank">
-<img src="https://img.shields.io/github/issues/ztjhz/BetterChatGPT?style=flat-square" alt="issues"/>
-</a>
-<a href="https://github.com/ztjhz/BetterChatGPT/pulls" target="_blank">
-<img src="https://img.shields.io/github/issues-pr/ztjhz/BetterChatGPT?style=flat-square" alt="pull-requests"/>
-</a>
-<a href="https://twitter.com/intent/tweet?text=👋%20Check%20this%20amazing%20repo%20https://github.com/ztjhz/BetterChatGPT,%20created%20by%20@nikushii_"><img src="https://img.shields.io/twitter/url?label=Share%20on%20Twitter&style=social&url=https%3A%2F%2Fgithub.com%2Fztjhz%2FBetterChatGPT"></a>
-</p>
+A new ChatBot UI Front-End indended to provide Pay-as-you-Go access to best AI LLM models for small teams or private groups (families).
 
-<p align="center">
-    <a href="https://bettergpt.chat">Enter Website</a>
-    ·
-    <a href="https://github.com/ztjhz/BetterChatGPT/issues/new/choose">Report Bug</a>
-    ·
-    <a href="https://github.com/ztjhz/BetterChatGPT/issues/new/choose">Request Feature</a>
-</p>
-<p align="center"><i>Did you enjoy using Better ChatGPT? Give it some love with a star! 🌟</i></p>
+Focuses on reduced complexity, easy selection of best supported models (currently by OpenAI and Anthropic) for each new chat.
 
-## 👋🏻 Introducing Better ChatGPT
+Server-side handling of API Keys (coming from Environment Variables), and basic logging (for usage analysis, who used how much).
 
-<p align="center">
-    <a href="https://bettergpt.chat" target="_blank">
-        <img src="assets/preview.png" alt="landing" width=500 />
-    </a>
-</p>
+Currently made for deployment into an Azure Container App with Azure AD Authentication, but that may evolve soon.
 
-Are you ready to unlock the full potential of ChatGPT with Better ChatGPT?
-
-Better ChatGPT is the ultimate destination for anyone who wants to experience the limitless power of conversational AI. With no limits and completely free to use for all, our app harnesses the full potential of OpenAI's ChatGPT API to offer you an unparalleled chatbot experience.
-
-Whether you're looking to chat with a virtual assistant, improve your language skills, or simply enjoy a fun and engaging conversation, our app has got you covered. So why wait? Join us today and explore the exciting world of Better ChatGPT!
+Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjhz/BetterChatGPT), but at this point it was significantly modified with little possibility to merge upstream.
 
 # 🔥 Features
 
-Better ChatGPT comes with a bundle of amazing features! Here are some of them:
+- Currently supports OpenAI and Anthropic models; Anthropic models support is configurable (can be enabled or disabled).
+- Server-Side Proxy to secure the API keys, and implement basic usage logging (only metadata, not conversations content)
+- Basic support for Azure AD authentication by Azure Container Apps: logout button, authentication redirect on session expiration.
+- Prompt Library
+- Dark Mode
+- Add Clarification button to quickly amending the previous message (instead of lengtherning the thread)
+- Organize chats into folders (with colours), filter chats and folders
+- Keeps track and displays tokens count and pricing estimates
+- Quick model selection window for new chats (with hotkeys)
+- Chat title generation (uses GPT-3.5 or Haiku)
+- Chats, and unsent message drafts are automatically persisted to browser's local storage
+- Import / Export
+- Download chat (markdown, json, PNG)
+- Multiple language support (i18n) -> currently narrowed down to English and Russian
+    (other languages i18n existed in the upstream project, but these translations were not maintained with fork changes)
 
-- Proxy to bypass ChatGPT regional restrictions
-- Prompt library
-- Organize chats into folders (with colours)
-- Filter chats and folders
-- Token count and pricing
-- ShareGPT integration
-- Custom model parameters (e.g. presence_penalty)
-- Chat as user / assistant / system
-- Edit, reorder and insert any messages, anywhere
-- Chat title generator
-- Save chat automatically to local storage
-- Import / Export chat
-- Download chat (markdown / image / json)
-- Sync to Google Drive
-- Azure OpenAI endpoint support
-- Multiple language support (i18n)
+Features that existed in the original project, but were hidden or removed
+- Conversation publishing to ShareGPT - removed for privacy considerations
+- Conversations sync to Google Drive  - removed for privacy considerations
+- Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and did not play well with Anthropic.
 
-# 🛠️ Usage
+# 🛠️ Deployment to Azure
 
-To get started, simply visit our website at <https://bettergpt.chat/>. There are 3 ways for you to start using Better ChatGPT.
+   ```
+   ... TBD (docker build, push to ACR, create an Azure Container App)
+   ... TBD (Azure AD Authentication for ACR App)
+   ... TBD (Azure Log Analytics with Data Collection Endpoint for logging)
+   ```
 
-1. Enter into the API menu your OpenAI API Key obtained from [OpenAI API Keys](https://platform.openai.com/account/api-keys).
-2. Utilise the api endpoint proxy provided by [ayaka14732/ChatGPTAPIFree](https://github.com/ayaka14732/ChatGPTAPIFree) (if you are in a region with no access to ChatGPT)
-3. Host your own API endpoint by following the instructions provided here: <https://github.com/ayaka14732/ChatGPTAPIFree>. Subsequently, enter the API endpoint into the API menu.
-
-## Desktop App
-
-Download the desktop app [here](https://github.com/ztjhz/BetterChatGPT/releases)
-
-| OS      | Download  |
-| ------- | --------- |
-| Windows | .exe      |
-| MacOS   | .dmg      |
-| Linux   | .AppImage |
-
-### Features:
-
-- Unlimited local storage
-- Runs locally (access Better ChatGPT even if the website is not accessible)
-
-# 🛫 Host your own Instance
-
-If you'd like to run your own instance of Better ChatGPT, you can easily do so by following these steps:
-
-## Vercel
-
-One click deploy with Vercel
-
-[![Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fztjhz%2FBetterChatGPT)
-
-## GitHub Pages
-
-### Steps
-
-1. Create a GitHub account (if you don't have one already)
-1. Star this [repository](https://github.com/ztjhz/BetterChatGPT) ⭐️
-1. Fork this [repository](https://github.com/ztjhz/BetterChatGPT)
-1. In your forked repository, navigate to the `Settings` tab
-   ![image](https://user-images.githubusercontent.com/59118459/223753577-9b6f8266-26e8-471b-8f45-a1a02fbab232.png)
-1. In the left sidebar, click on `Pages` and in the right section, select `GitHub Actions` for `source`.
-   ![image](https://user-images.githubusercontent.com/59118459/227568881-d8fb7baa-f890-4dee-8fc2-b6b429ba2098.png)
-1. Now, click on `Actions`
-   ![image](https://user-images.githubusercontent.com/59118459/223751928-cf2b91b9-4663-4a36-97de-5eb751b32c7e.png)
-1. In the left sidebar, click on `Deploy to GitHub Pages`
-   ![image](https://user-images.githubusercontent.com/59118459/223752459-183ec23f-72f5-436e-a088-e3386492b8cb.png)
-1. Above the list of workflow runs, select `Run workflow`.
-   ![image](https://user-images.githubusercontent.com/59118459/223753340-1270e038-d213-4d6f-938c-66a30dad7c88.png)
-1. Navigate back to the `Settings` tab
-   ![image](https://user-images.githubusercontent.com/59118459/223753577-9b6f8266-26e8-471b-8f45-a1a02fbab232.png)
-1. In the left sidebar, click on `Pages` and in the right section. Then at the top section, you can see that "Your site is live at `XXX`".
-   ![image](https://user-images.githubusercontent.com/59118459/227568881-d8fb7baa-f890-4dee-8fc2-b6b429ba2098.png)
-
-### Running it locally
+# 🛠️ Running it locally
+## Client-Side is pre-built and statically served by the Server
 
 1. Ensure that you have the following installed:
 
    - [node.js](https://nodejs.org/en/) (v14.18.0 or above)
-   - [yarn](https://yarnpkg.com/) or [npm](https://www.npmjs.com/) (6.14.15 or above)
+   - [npm](https://www.npmjs.com/) (6.14.15 or above)
 
-2. Clone this [repository](https://github.com/ztjhz/BetterChatGPT) by running `git clone https://github.com/ztjhz/BetterChatGPT.git`
-3. Navigate into the directory by running `cd BetterChatGPT`
-4. Run `yarn` or `npm install`, depending on whether you have yarn or npm installed.
-5. Launch the app by running `yarn dev` or `npm run dev`
+2. Clone this repository
 
-### Running it locally using docker compose
+3. Create .env.server.local file to configure server-side
+      ```
+      OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+      OPENAI_API_KEY=...
+      ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages
+      ANTHROPIC_API_KEY=...
+      ```
+
+4. Create .env.production file to configure client-side build
+      ```
+      VITE_COMPANY_NAME=(Your Company/Team/Family name)
+      VITE_ANTHROPIC_ENABLE=Y
+      VITE_USE_AAD_AUTH=N
+      ```
+
+5. Run `npm install`
+
+6. Launch the app by running `**npm run client-build && npm run server**`
+
+7. Navigate to http://localhost:5500
+   
+
+# 🛠️ Running it locally for client-side debugging 
+## (Server-Side provides the API, Client-Side is served through Vite)
+
+1. Ensure that you have the following installed:
+
+   - [node.js](https://nodejs.org/en/) (v14.18.0 or above)
+   - [npm](https://www.npmjs.com/) (6.14.15 or above)
+
+2. Clone this repository
+
+3. **Create .env.server.local file** to configure server-side
+      ```
+      OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+      OPENAI_API_KEY=...
+      ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages
+      ANTHROPIC_API_KEY=...
+      ```
+
+4. **Create .env.develipment file** to configure client-side
+      ```
+      VITE_COMPANY_NAME=(Your Company/Team/Family name)
+      VITE_ANTHROPIC_ENABLE=Y
+      VITE_USE_AAD_AUTH=N
+      ```
+
+5. Run `npm install`
+
+6. Launch the app by running `**npm run dev**`
+
+7. Navigate to http://localhost:5173
+  
+# 🛠️ Running it locally using docker compose
+
 1. Ensure that you have the following installed:
 
    - [docker](https://www.docker.com/) (v24.0.7 or above)
@@ -167,36 +136,3 @@ One click deploy with Vercel
    ```
    docker compose down
    ```
-
-# ⭐️ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=ztjhz/BetterChatGPT&type=Date)](https://github.com/ztjhz/BetterChatGPT/stargazers)
-
-<h3 align="center">
-A ⭐️ to <b>Better ChatGPT</b> is to make it shine brighter and benefit more people.
-</h3>
-
-# ❤️ Contributors
-
-Thanks to all the contributors!
-
-<a href="https://github.com/ztjhz/BetterChatGPT/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ztjhz/BetterChatGPT" />
-</a>
-
-# 🙏 Support
-
-At Better ChatGPT, we strive to provide you with useful and amazing features around the clock. And just like any project, your support and motivation will be instrumental in helping us keep moving forward!
-
-If you have enjoyed using our app, we kindly ask you to give this project a ⭐️. Your endorsement means a lot to us and encourages us to work harder towards delivering the best possible experience.
-
-If you would like to support the team, consider sponsoring us through one of the methods below. Every contribution, no matter how small, helps us to maintain and improve our service.
-
-| Payment Method | Link                                                                                                                                                 |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GitHub         | [![GitHub Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/ztjhz) |
-| KoFi           | [![support](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/betterchatgpt)                                                             |
-| Alipay (Ayaka) | <img src="https://ayaka14732.github.io/sponsor/alipay.jpg" width=150 />                                                                              |
-| Wechat (Ayaka) | <img src="https://ayaka14732.github.io/sponsor/wechat.png" width=150 />                                                                              |
-
-Thank you for being a part of our community, and we look forward to serving you better in the future.
