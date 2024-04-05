@@ -4,6 +4,18 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+
+# Expose build arguments as environment variables
+ARG VITE_COMPANY_NAME
+ENV VITE_COMPANY_NAME=$VITE_COMPANY_NAME
+
+ARG VITE_ANTHROPIC_ENABLE
+ENV VITE_ANTHROPIC_ENABLE=$VITE_ANTHROPIC_ENABLE
+
+ARG VITE_CHECK_AAD_AUTH
+ENV VITE_CHECK_AAD_AUTH=$VITE_CHECK_AAD_AUTH
+
+# Build the Vite application
 RUN npm run client-build
 
 # Prune development dependencies
