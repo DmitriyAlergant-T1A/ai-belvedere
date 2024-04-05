@@ -104,7 +104,7 @@ router.post('/', async (req, res) => {
         model: requestPayload.model,
         provider: provider,
         purpose: requestPurpose,
-        headers: JSON.stringify(req.headers),
+        headers: "" //JSON.stringify(req.headers),
       }]);
 
 
@@ -198,7 +198,7 @@ router.post('/', async (req, res) => {
         model: requestPayload.model,
         provider: provider,
         purpose: requestPurpose,
-        headers: JSON.stringify(req.headers),
+        headers: "", //JSON.stringify(req.headers),
         apiResponseCode: apiResponseCode,
         streamCompleted: streamCompleted,
       }]
