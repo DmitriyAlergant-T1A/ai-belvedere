@@ -1,19 +1,33 @@
-FROM node:alpine
+# Build stage
+FROM node:18-alpine as builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
 
-RUN addgroup -S appgroup && \
-  adduser -S appuser -G appgroup && \
-  mkdir -p /home/appuser/app && \
-  chown appuser:appgroup /home/appuser/app
-USER appuser
+# Expose build arguments as environment variables
+ARG VITE_COMPANY_NAME
+ENV VITE_COMPANY_NAME=$VITE_COMPANY_NAME
 
-RUN yarn config set prefix ~/.yarn && \
-  yarn global add serve
+ARG VITE_ANTHROPIC_ENABLE
+ENV VITE_ANTHROPIC_ENABLE=$VITE_ANTHROPIC_ENABLE
 
-WORKDIR /home/appuser/app
-COPY --chown=appuser:appgroup package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
-COPY --chown=appuser:appgroup . .
-RUN yarn build
+ARG VITE_CHECK_AAD_AUTH
+ENV VITE_CHECK_AAD_AUTH=$VITE_CHECK_AAD_AUTH
 
-EXPOSE 3000
-CMD ["/home/appuser/.yarn/bin/serve", "-s", "dist", "-l", "3000"]
+# Build the Vite application
+RUN npm run client-build
+
+# Prune development dependencies
+RUN npm prune --production
+
+# Final stage
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/src-server ./src-server
+
+EXPOSE 5500
+CMD ["npm", "run", "server"]

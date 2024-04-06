@@ -1,0 +1,63 @@
+name: Build and Push to Azure Container Registry
+
+on:
+  push:
+    branches:
+      - dev
+      - prod
+
+env:
+  AZ_RESOURCE_GROUP: ${{ vars.AZ_RESOURCE_GROUP }}
+  AZ_CONTAINER_REGISTRY_NAME: ${{ vars.AZ_CONTAINER_REGISTRY_NAME }}
+  AZ_CONTAINER_APP_NAME: ${{ vars.AZ_CONTAINER_APP_NAME }}
+  AZ_IMAGE_NAME: ${{ vars.AZ_IMAGE_NAME }}
+  AZ_IMAGE_VERSION_TAG: ${{ github.ref == 'refs/heads/prod' && 'prod' || 'dev' }}
+  
+  VITE_COMPANY_NAME: ${{ vars.VITE_COMPANY_NAME }}
+  VITE_ANTHROPIC_ENABLE: ${{ vars.VITE_ANTHROPIC_ENABLE }}
+  VITE_CHECK_AAD_AUTH: ${{ vars.VITE_CHECK_AAD_AUTH }}
+
+jobs:
+  Build-and-Push-Image:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/prod' && 'prod' || 'dev' }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+    - name: Build image
+      run: |
+        docker build . -t ${{ env.AZ_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.AZ_IMAGE_NAME }}:${{ env.AZ_IMAGE_VERSION_TAG }} \
+        --build-arg VITE_COMPANY_NAME="${{ env.VITE_COMPANY_NAME }}" \
+        --build-arg VITE_ANTHROPIC_ENABLE="${{ env.VITE_ANTHROPIC_ENABLE }}" \
+        --build-arg VITE_CHECK_AAD_AUTH="${{ env.VITE_CHECK_AAD_AUTH }}"
+    
+    - name: Push image to ACR
+      run: |
+        az acr login --name ${{ env.AZ_CONTAINER_REGISTRY_NAME }}
+
+        docker push ${{ env.AZ_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.AZ_IMAGE_NAME }}:${{ env.AZ_IMAGE_VERSION_TAG }}
+          
+  Update-Container-App:
+    needs: Build-and-Push-Image
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/prod' && 'prod' || 'dev' }}
+
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy to Azure Container App
+      uses: azure/container-apps-deploy-action@v0
+      with:
+        acrName: ${{ env.AZ_CONTAINER_REGISTRY_NAME }}
+        containerAppName: ${{ env.AZ_CONTAINER_APP_NAME }}
+        resourceGroup: ${{ env.AZ_RESOURCE_GROUP }}
+        imageToDeploy: ${{ env.AZ_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.AZ_IMAGE_NAME }}:${{ env.AZ_IMAGE_VERSION_TAG }}

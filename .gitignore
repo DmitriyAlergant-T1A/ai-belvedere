@@ -26,3 +26,6 @@ dist-ssr
 release/
 
 .env
+.env.local
+.env.development
+.env.production
