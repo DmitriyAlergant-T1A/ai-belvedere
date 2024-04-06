@@ -81,6 +81,8 @@ router.post('/', async (req, res) => {
                      "anthropic-version": "2023-06-01"};
 
       const { messages, model, temperature, top_p, frequency_penalty, presence_penalty, max_tokens, stream, ...restBody } = req.body; // decompose the request body
+
+      // Anthropic API does not accept 'system' role messages, so we need to extract them and send them as a separate field
       const systemMessage = messages.find(msg => msg.role === 'system')?.content || '';
       const filteredMessages = messages.filter(msg => msg.role !== 'system');
 

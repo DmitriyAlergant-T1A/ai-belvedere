@@ -1,7 +1,10 @@
 import { ShareGPTSubmitBodyInterface } from '@type/api';
-import { ConfigInterface, MessageInterface, ModelOptions } from '@type/chat';
+import { MessageInterface, ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 import { OpenAICompletionsConfig } from '@hooks/useSubmit';
+import useStore from '@store/store';
+import { builtinAPIEndpoint, officialAPIEndpoint } from '@constants/auth';
+import { EventSourceData } from '@type/api';
 
 export const isAuthenticated = async () => {
   try {
@@ -17,12 +20,58 @@ export const isAuthenticated = async () => {
   }
 }
 
-
 export const redirectToLogin = async() => {
    //Redirect to a login route that triggers AAD authentication
    window.location.href = '/.auth/login/aad';
 }
 
+  /* Prepare API Request Headers */
+export const prepareApiHeaders = async (
+    model: ModelOptions, 
+    messages: MessageInterface[],
+    purpose: string) => {
+
+  const apiEndpoint  = useStore.getState().apiEndpoint;
+  const apiKey        = useStore.getState().apiKey;
+
+  const headers: Record<string, string> = {};
+
+  if (apiEndpoint !== builtinAPIEndpoint){
+
+    if (!apiKey || apiKey.length === 0) {
+      throw new Error('API key is required but missing.');
+    }
+
+    headers['Authorization'] = `Bearer ${apiKey}`;
+  }
+
+  if (apiEndpoint.includes('openai.azure.com')  && apiKey)
+    headers['api-key'] = apiKey;
+
+  /* If not an "official" API endpoint -> it is assumed to be a PortkeyAI Gateway */
+  if (apiEndpoint !== officialAPIEndpoint)
+  {
+    headers['x-portkey-provider'] = supportedModels[model].portkeyProvider;
+  };
+
+  /* Built-in endpoint (/api/v1/chat/completions) */
+  if (apiEndpoint === builtinAPIEndpoint && import.meta.env.VITE_CHECK_AAD_AUTH === 'Y')
+  {
+    const isAuthenticatedUser = await isAuthenticated();
+
+    if (!isAuthenticatedUser) {
+      console.log("User not authenticated, redirecting to login.");
+      await redirectToLogin();
+      throw new Error(`API Authentication Error, please reload the page`);
+    }
+  }
+
+  headers['x-api-model'] = supportedModels[model].apiAliasCurrent;
+  headers['x-messages-count'] = messages.length.toString();
+  headers['x-purpose'] = purpose;
+
+  return {headers};
+};
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -57,6 +106,28 @@ export const getChatCompletion = async (
 
   const data = await response.json();
   return data;
+};
+
+const parseEventSource = (
+  data: string
+): '[DONE]' | EventSourceData[] => {
+  const result = data
+    .split('\n\n')
+    .filter(Boolean)
+    .map((chunk) => {
+      const jsonString = chunk
+        .split('\n')
+        .map((line) => line.replace(/^data: /, ''))
+        .join('');
+      if (jsonString === '[DONE]') return jsonString;
+      try {
+        const json = JSON.parse(jsonString);
+        return json;
+      } catch {
+        return jsonString;
+      }
+    });
+  return result;
 };
 
 export const getChatCompletionStream = async (
@@ -120,6 +191,84 @@ export const getChatCompletionStream = async (
   const stream = response.body;
   return stream;
 };
+
+export async function handleStream(stream: ReadableStream, provider: string, addAssistantContent: (content: string) => void) {
+  if (stream) {
+    if (stream.locked)
+      throw new Error('Oops, the stream is locked right now. Please try again');
+    
+    const reader = stream.getReader();
+    let reading = true;
+    let partial = '';
+
+    try {
+      while (reading && useStore.getState().generating) {
+        const { done, value } = await reader.read();
+        
+        if (done) {
+          reading = false;
+        } else {
+          const decodedValue = new TextDecoder().decode(value);
+          
+          if (provider === 'openai') {
+            // Handle OpenAI stream format
+            const result = parseEventSource(partial + decodedValue);
+            partial = '';
+
+            if (result === '[DONE]') {
+              reading = false;
+            } else {
+              const resultString = result.reduce((output, curr) => {
+                if (typeof curr === 'string') {
+                  partial += curr;
+                } else {
+                  const content = curr.choices[0]?.delta?.content ?? null;
+                  if (content) output += content;
+                }
+                return output;
+              }, '');
+
+              addAssistantContent(resultString);
+            }
+          } else if (provider === 'anthropic') {
+            // Handle Anthropic stream format
+            const lines = (partial + decodedValue).split('\n');
+            partial = lines.pop() || ''; // Store last incomplete line for next iteration
+
+            for (const line of lines) {
+              if (line.startsWith('data:')) {
+                const data = JSON.parse(line.slice(5));
+                if (data.type === 'content_block_delta') {
+                  const content = data.delta?.text;
+                  if (content) addAssistantContent(content);
+                } else if (data.type === 'message_stop') {
+                  reading = false; // Set reading to false when "message_stop" event is received
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred during stream processing:', error);
+      // Handle the error and provide appropriate feedback to the client
+      addAssistantContent('\n***ERROR*** An error occurred during stream processing. Please try again.');
+    } finally {
+      if (useStore.getState().generating) {
+        reader.cancel('Cancelled by user');
+      } else {
+        reader.cancel('Generation completed');
+      }
+      reader.releaseLock();
+      
+      try {
+        await stream.cancel();
+      } catch (error) {
+        console.warn('Error occurred while cancelling the stream:', error);
+      }
+    }
+  }
+}
 
 export const submitShareGPT = async (body: ShareGPTSubmitBodyInterface) => {
   const request = await fetch('https://sharegpt.com/api/conversations', {
