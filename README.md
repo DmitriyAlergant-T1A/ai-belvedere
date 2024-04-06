@@ -43,9 +43,39 @@ Features that existed in the original project, but were hidden or removed
 # 🛠️ Deployment to Azure
 
    ```
-   ... TBD (docker build, push to ACR, create an Azure Container App)
-   ... TBD (Azure AD Authentication for ACR App)
-   ... TBD (Azure Log Analytics with Data Collection Endpoint for logging)
+      1. Create a Resource Group
+      2. Create Azure Container Registry (Basic Tier)
+         - Enable Admin Access (but no need to retain the password)
+      3. Build, tag and push docker image
+         - See command examples in the `./github/workflows/docker-image-to-acr.yml` pipeline
+      4. Create Azure Key Vault
+         - IAM policy type
+         - Grant yourself an IAM role Secrets Officer
+         - Create secrets with `openai-api-key`, `anthropic-api-key`
+      5. Create a Log Analytics Workspace
+         - Create a Data Collection Endpoint in Azure Monitor
+         - Create Custom Tables in Log Analytics (which will automatically create a Data Collection Rule)
+      6. Create Azure Container App (and let it automatically create a Container App Environment)
+         - Select a container from ACR
+         - Define environment variables:
+         - `OPENAI_API_URL=https://api.openai.com/v1/chat/completions`
+         - `OPENAI_API_KEY=placeholder`
+         - `ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages`
+         - `ANTHROPIC_API_KEY=placeholder`
+         - `AZURE_LOG_ANALYTICS_RESOURCE_URI=https://your-data-collectionendpoint.eastus-1.ingest.monitor.azure.com`
+         - `AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID=dcr-immutable-id-of-data-collection-rule`
+         - `AZURE_LOG_ANALYTICS_REQ_LOGS_DS=Custom-chatbot_app_api_requests_CL`
+         - `AZURE_LOG_ANALYTICS_RES_LOGS_DS=Custom-chatbot_app_api_responses_CL`
+         - Enable Ingress to port 5500 (public)
+      7. After the Container App is deployed:
+         - Configure Scaling (1 .. 1)
+         - Define "Secrets" (`openai-api-key`, `anthropic-api-key`) as references to a Key Vault
+         - Adjust environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) to reference these secrets
+         - Enable Authentication with Azure AD Entra ID (details TBD)
+      8. Enable Managed Identities and grant IAM Roles:
+         - on Key Vault to the Container App [Key Vault Secrets User]
+         - on ACR to the Container App [Role: AcrPull Role]
+         - on Data Collection Rule (!) to the Container App [Role: something something Metrics Publisher]
    ```
 
 # 🛠️ Running it locally
