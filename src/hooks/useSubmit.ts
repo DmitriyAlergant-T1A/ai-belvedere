@@ -24,6 +24,8 @@ const useSubmit = () =>
 
   const handleSubmit = async () => {
 
+    console.debug('Chat completion request initiated...');
+
     //This is an util function not a renderable component, so direct State access is used
 
     const countTotalTokens  = useStore.getState().countTotalTokens;
@@ -110,7 +112,7 @@ const useSubmit = () =>
       );
 
       if (headers && stream)    
-        await handleStream(stream, headers.headers['x-portkey-provider'], addAssistantContent);
+        await handleStream(stream, addAssistantContent);
 
       // update tokens used in chatting
 
@@ -155,6 +157,8 @@ const useSubmit = () =>
 
   const generateChatTitle = async () => {
 
+    console.debug('Chat title generation request initiated...');
+
     const countTotalTokens  = useStore.getState().countTotalTokens;
     const currentChatIndex  = useStore.getState().currentChatIndex;
     const currChats         = useStore.getState().chats;
@@ -196,60 +200,53 @@ const useSubmit = () =>
         frequency_penalty: _defaultChatConfig.frequency_penalty
       };
 
-      try
-      {
-        const headers = await prepareApiHeaders(titleGenModel, [titleGenPromptMessage], 'Title Generation');
+      const headers = await prepareApiHeaders(titleGenModel, [titleGenPromptMessage], 'Title Generation');
 
-        let data = await getChatCompletion(
-          useStore.getState().apiEndpoint,
-          [titleGenPromptMessage],
-          titleGenConfig,
-          headers.headers
-        );
+      let data = await getChatCompletion(
+        useStore.getState().apiEndpoint,
+        [titleGenPromptMessage],
+        titleGenConfig,
+        headers.headers
+      );
 
-        let title = '';
-        if (headers.headers['x-portkey-provider'] === 'openai') {
-          title = data.choices[0].message.content.trim();
-        } else if (headers.headers['x-portkey-provider'] === 'anthropic') {
-          title = data.content[0].text.trim();
-        }
-    
-        if (title) // generateTitle function was able to return a non-blank Title
-        {
-          if (title.startsWith('"') && title.endsWith('"')) {
-            title = title.slice(1, -1);
-          }
+      let title = data?.message?.content?.trim();
   
-          const updatedChats: ChatInterface[] = JSON.parse(
-            JSON.stringify(useStore.getState().chats)
-          );
-          updatedChats[currentChatIndex].title = title;
-          updatedChats[currentChatIndex].titleSet = true;
-          setChats(updatedChats);
+      if (title) // generateTitle function was able to return a non-blank Title
+      {
+        if (title.startsWith('"') && title.endsWith('"')) {
+          title = title.slice(1, -1);
         }
 
-        // update tokens used for generating title
-        if (countTotalTokens) {
-          updateTotalTokenUsed(titleGenModel, 
-            [titleGenPromptMessage], 
-            {
-              role: 'assistant',
-              content: title,
-            });
-        }
-
-      } catch (error: unknown) { 
-        
-          const { setToastStatus, setToastMessage, setToastShow} = useStore.getState();
-
-          setToastStatus('error');
-          setToastMessage(`Error generating chat title!\n${(error as Error).message}`);
-          setToastShow(true);
+        const updatedChats: ChatInterface[] = JSON.parse(
+          JSON.stringify(useStore.getState().chats)
+        );
+        updatedChats[currentChatIndex].title = title;
+        updatedChats[currentChatIndex].titleSet = true;
+        setChats(updatedChats);
       }
+
+      console.debug('Chat title succesfully generated: ' + title);
+
+      // update tokens used for generating title
+      if (countTotalTokens) {
+        updateTotalTokenUsed(titleGenModel, 
+          [titleGenPromptMessage], 
+          {
+            role: 'assistant',
+            content: title,
+          });
+      }
+
     } catch (e: unknown) {
-      const err = (e as Error).message;
-      console.log(err);
-      setError(err);
+      const err = 'Error generating chat title! ' + (e as Error).message;
+      
+      console.error(err);
+      
+      const { setToastStatus, setToastMessage, setToastShow} = useStore.getState();
+
+      setToastStatus('error');
+      setToastMessage(err);
+      setToastShow(true);
     }
   }
 

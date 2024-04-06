@@ -1,4 +1,3 @@
-import { ShareGPTSubmitBodyInterface } from '@type/api';
 import { MessageInterface, ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 import { OpenAICompletionsConfig } from '@hooks/useSubmit';
@@ -51,7 +50,7 @@ export const prepareApiHeaders = async (
   /* If not an "official" API endpoint -> it is assumed to be a PortkeyAI Gateway */
   if (apiEndpoint !== officialAPIEndpoint)
   {
-    headers['x-portkey-provider'] = supportedModels[model].portkeyProvider;
+    headers['x-model-provider'] = supportedModels[model].portkeyProvider;
   };
 
   /* Built-in endpoint (/api/v1/chat/completions) */
@@ -108,27 +107,6 @@ export const getChatCompletion = async (
   return data;
 };
 
-const parseEventSource = (
-  data: string
-): '[DONE]' | EventSourceData[] => {
-  const result = data
-    .split('\n\n')
-    .filter(Boolean)
-    .map((chunk) => {
-      const jsonString = chunk
-        .split('\n')
-        .map((line) => line.replace(/^data: /, ''))
-        .join('');
-      if (jsonString === '[DONE]') return jsonString;
-      try {
-        const json = JSON.parse(jsonString);
-        return json;
-      } catch {
-        return jsonString;
-      }
-    });
-  return result;
-};
 
 export const getChatCompletionStream = async (
   endpoint: string,
@@ -192,14 +170,18 @@ export const getChatCompletionStream = async (
   return stream;
 };
 
-export async function handleStream(stream: ReadableStream, provider: string, addAssistantContent: (content: string) => void) {
+export async function handleStream(stream: ReadableStream, addAssistantContent: (content: string) => void) {
   if (stream) {
     if (stream.locked)
       throw new Error('Oops, the stream is locked right now. Please try again');
     
     const reader = stream.getReader();
+
     let reading = true;
-    let partial = '';
+
+    /* This is our own simplified implementation of a response stream (provider-agnostic) */
+    /* See back-end chat_completions.js implementation */
+    
 
     try {
       while (reading && useStore.getState().generating) {
@@ -209,40 +191,33 @@ export async function handleStream(stream: ReadableStream, provider: string, add
           reading = false;
         } else {
           const decodedValue = new TextDecoder().decode(value);
-          
-          if (provider === 'openai') {
-            // Handle OpenAI stream format
-            const result = parseEventSource(partial + decodedValue);
-            partial = '';
+          const lines = decodedValue.split('\n');
 
-            if (result === '[DONE]') {
-              reading = false;
-            } else {
-              const resultString = result.reduce((output, curr) => {
-                if (typeof curr === 'string') {
-                  partial += curr;
-                } else {
-                  const content = curr.choices[0]?.delta?.content ?? null;
-                  if (content) output += content;
-                }
-                return output;
-              }, '');
+          let buffer = '';
 
-              addAssistantContent(resultString);
-            }
-          } else if (provider === 'anthropic') {
-            // Handle Anthropic stream format
-            const lines = (partial + decodedValue).split('\n');
-            partial = lines.pop() || ''; // Store last incomplete line for next iteration
+          for (const line of lines) {
+            if (line.startsWith('data:')) {
 
-            for (const line of lines) {
-              if (line.startsWith('data:')) {
-                const data = JSON.parse(line.slice(5));
-                if (data.type === 'content_block_delta') {
-                  const content = data.delta?.text;
-                  if (content) addAssistantContent(content);
-                } else if (data.type === 'message_stop') {
-                  reading = false; // Set reading to false when "message_stop" event is received
+              const data = line.slice(6);
+              //console.debug('handleStream: received data: ', data);
+
+              if (data === '[DONE]') {
+                reading = false;
+              } else {
+                buffer += data;
+                try {
+                  const content = JSON.parse(buffer)?.content;
+                  if (content) {
+                    addAssistantContent(content);
+                    //console.debug('handleStream: processed content: ', content);
+                  }
+                  else {
+                    //console.debug('handleStream: chunk content is empty ', content);
+                  }
+                  buffer = '';
+                 
+                } catch (error) {
+                  //console.debug('handleStream: received an incomplete JSON. Line buffered: ', buffer);
                 }
               }
             }
@@ -254,11 +229,15 @@ export async function handleStream(stream: ReadableStream, provider: string, add
       // Handle the error and provide appropriate feedback to the client
       addAssistantContent('\n***ERROR*** An error occurred during stream processing. Please try again.');
     } finally {
-      if (useStore.getState().generating) {
-        reader.cancel('Cancelled by user');
+      
+      if (!useStore.getState().generating) {
+        reader.cancel('Stream cancelled by user');
+        console.debug('Stream cancelled by user');
       } else {
         reader.cancel('Generation completed');
+        console.debug('Generation completed');
       }
+
       reader.releaseLock();
       
       try {
@@ -269,18 +248,3 @@ export async function handleStream(stream: ReadableStream, provider: string, add
     }
   }
 }
-
-export const submitShareGPT = async (body: ShareGPTSubmitBodyInterface) => {
-  const request = await fetch('https://sharegpt.com/api/conversations', {
-    body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-  });
-
-  const response = await request.json();
-  const { id } = response;
-  const url = `https://shareg.pt/${id}`;
-  window.open(url, '_blank');
-};
