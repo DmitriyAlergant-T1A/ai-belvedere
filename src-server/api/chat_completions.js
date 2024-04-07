@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import https from 'https';
 import { v4 as uuidv4 } from 'uuid';
+import os from 'os';
 
 import { isAggregateLogsUploadError, LogsIngestionClient } from "@azure/monitor-ingestion";
 
@@ -52,6 +53,8 @@ router.post('/', async (req, res) => {
     const AZURE_LOG_ANALYTICS_RES_LOGS_DS = process.env.AZURE_LOG_ANALYTICS_RES_LOGS_DS;
 
     const AZURE_LOG_ANALYTICS_RESOURCE_URI = process.env.AZURE_LOG_ANALYTICS_RESOURCE_URI;
+
+    const ENVIRONMENT = process.env.ENVIRONMENT || os.hostname();
 
     let credential, logsIngestionClient;
 
@@ -129,11 +132,13 @@ router.post('/', async (req, res) => {
       [{
         requestId: requestId,
         TimeGenerated: new Date().toISOString(),
+        environment: ENVIRONMENT,
         principal: clientPrincipalName,
         requestSize: req.headers['content-length'],
         model: requestPayload.model,
-        provider: provider,
+        provider: requestedProvider,
         purpose: requestPurpose,
+        
         headers: "" //JSON.stringify(req.headers),
       }]);
 
@@ -331,11 +336,12 @@ router.post('/', async (req, res) => {
       [{
         requestId: requestId,
         TimeGenerated: new Date().toISOString(),
+        environment: ENVIRONMENT,
         principal: clientPrincipalName,
         requestSize: req.headers['content-length'], // content-length could be a number, but we keep it as string - this is how we set up Data Collection Rules in ALA...
         responseSize: responseSize.toString(),      // responseSize is a number, but convert it to string - this is how we set up Data Collection Rules in ALA...
         model: requestPayload.model,
-        provider: provider,
+        provider: requestedProvider,
         purpose: requestPurpose,
         headers: "", //JSON.stringify(req.headers),
         apiResponseCode: apiResponseCode,
