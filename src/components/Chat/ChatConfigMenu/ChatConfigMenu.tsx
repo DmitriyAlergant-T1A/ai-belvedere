@@ -46,6 +46,7 @@ const ChatConfigMenu = ({
     <PopupModal
       title={t('configuration') as string}
       setIsModalOpen={setIsModalOpen}
+      handleClose={handleConfirm}
       handleConfirm={handleConfirm}
       handleClickBackdrop={handleConfirm}
     >
@@ -98,9 +99,11 @@ export const ModelSelector = ({
 
   return (
     <div className='mb-1'>
-      <div className="mb-1 font-bold text-gray-900 dark:text-gray-300">{t('model')}</div>
+      <div className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
+        {t('model')}
+      </div>
       <button
-        className='btn btn-neutral btn-small flex gap-1'
+        className='btn btn-neutral btn-small border-gray-300 text-gray-900 text-md dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-300 border flex gap-1'
         type='button'
         onClick={() => setDropDown((prev) => !prev)}
         aria-label='model'
@@ -112,7 +115,7 @@ export const ModelSelector = ({
         id='dropdown'
         className={`${
           dropDown ? '' : 'hidden'
-        } absolute top-100 bottom-100 z-10 bg-white rounded-lg shadow-xl border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800 opacity-90`}
+        } absolute top-100 bottom-100 z-10 bg-white rounded-lg shadow-xl border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-300 group dark:bg-gray-600 opacity-90`}
       >
         <ul
           className='text-sm text-gray-700 dark:text-gray-200 p-0 m-0'
@@ -178,7 +181,7 @@ export const MaxTokenSlider = ({
           min={0}
           max={_maxModelTokens}
           step={1}
-          className='w-1/4 h-10 p-2 border rounded-md text-gray-900 dark:text-gray-300 mr-2 mt-2'
+          className='w-1/4 h-10 p-2 border rounded-md text-gray-900 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 mr-2 mt-2'
         />
         <input
           type='range'
