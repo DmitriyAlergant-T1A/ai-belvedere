@@ -8,27 +8,29 @@ import { PromptSlice, createPromptSlice } from './prompt-slice';
 import { ToastSlice, createToastSlice } from './toast-slice';
 import { TokensToastSlice, createTokensToastSlice } from './tokens-toast-slice';
 import {
-  LocalStorageInterfaceV0ToV1,
-  LocalStorageInterfaceV1ToV2,
-  LocalStorageInterfaceV2ToV3,
-  LocalStorageInterfaceV3ToV4,
-  LocalStorageInterfaceV4ToV5,
-  LocalStorageInterfaceV5ToV6,
-  LocalStorageInterfaceV6ToV7,
-  LocalStorageInterfaceV7oV8,
+  // LocalStorageInterfaceV0ToV1,
+  // LocalStorageInterfaceV1ToV2,
+  // LocalStorageInterfaceV2ToV3,
+  // LocalStorageInterfaceV3ToV4,
+  // LocalStorageInterfaceV4ToV5,
+  // LocalStorageInterfaceV5ToV6,
+  // LocalStorageInterfaceV6ToV7,
+  // LocalStorageInterfaceV7oV8,
   LocalStorageInterfaceV8oV9,
 } from '@type/chat';
 import {
-  migrateV0,
-  migrateV1,
-  migrateV2,
-  migrateV3,
-  migrateV4,
-  migrateV5,
-  migrateV6,
-  migrateV7,
+  // migrateV0,
+  // migrateV1,
+  // migrateV2,
+  // migrateV3,
+  // migrateV4,
+  // migrateV5,
+  // migrateV6,
+  // migrateV7,
   migrateV8,
+  migrateV9,
 } from './migrate';
+import { add } from 'lodash';
 
 export type StoreState = ChatSlice &
   InputSlice &
@@ -56,10 +58,12 @@ export const createPartializedState = (state: StoreState) => ({
   theme: state.theme,
   autoTitle: state.autoTitle,
   requestTokensCount: state.requestTokensCount,
-  advancedMode: state.advancedMode,
+  showSystemPrompt: state.showSystemPrompt,
+  addCompanyPromptToggle: state.addCompanyPromptToggle,
   prompts: state.prompts,
   defaultChatConfig: state.defaultChatConfig,
   defaultSystemMessage: state.defaultSystemMessage,
+  companySystemPrompt: state.companySystemPrompt,
   hideMenuOptions: state.hideMenuOptions,
   firstVisit: state.firstVisit,
   hideSideMenu: state.hideSideMenu,
@@ -86,27 +90,29 @@ const useStore = create<StoreState>()(
     {
       name: 'free-chat-gpt',
       partialize: (state) => createPartializedState(state),
-      version: 9,
+      version: 10,
       migrate: (persistedState, version) => {
         switch (version) {
           case 0:
-            migrateV0(persistedState as LocalStorageInterfaceV0ToV1);
+            //migrateV0(persistedState as LocalStorageInterfaceV0ToV1);
           case 1:
-            migrateV1(persistedState as LocalStorageInterfaceV1ToV2);
+            //migrateV1(persistedState as LocalStorageInterfaceV1ToV2);
           case 2:
-            migrateV2(persistedState as LocalStorageInterfaceV2ToV3);
+            //migrateV2(persistedState as LocalStorageInterfaceV2ToV3);
           case 3:
-            migrateV3(persistedState as LocalStorageInterfaceV3ToV4);
+            //migrateV3(persistedState as LocalStorageInterfaceV3ToV4);
           case 4:
-            migrateV4(persistedState as LocalStorageInterfaceV4ToV5);
+            //migrateV4(persistedState as LocalStorageInterfaceV4ToV5);
           case 5:
-            migrateV5(persistedState as LocalStorageInterfaceV5ToV6);
+            //migrateV5(persistedState as LocalStorageInterfaceV5ToV6);
           case 6:
-            migrateV6(persistedState as LocalStorageInterfaceV6ToV7);
+            //migrateV6(persistedState as LocalStorageInterfaceV6ToV7);
           case 7:
-            migrateV7(persistedState as LocalStorageInterfaceV7oV8);
+            //migrateV7(persistedState as LocalStorageInterfaceV7oV8);
           case 8:
             migrateV8(persistedState as LocalStorageInterfaceV8oV9);
+          case 9:
+            migrateV9(persistedState as LocalStorageInterfaceV8oV9);
             break;
         }
         return persistedState as StoreState;

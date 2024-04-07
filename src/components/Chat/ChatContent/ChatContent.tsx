@@ -60,7 +60,7 @@ const ChatContent = ({ chatDownloadAreaRef }: ChatContentProps) =>  {
       ? state.chats[state.currentChatIndex].messages.length
       : 0
   );
-  const advancedMode = useStore((state) => state.advancedMode);
+  const showSystemPrompt = useStore((state) => state.showSystemPrompt);
   const generatingState = useStore((state) => state.generating);
   const hideSideMenu = useStore((state) => state.hideSideMenu);
 
@@ -84,14 +84,8 @@ const ChatContent = ({ chatDownloadAreaRef }: ChatContentProps) =>  {
             className='flex flex-col items-center text-sm dark:bg-gray-800 w-full'
             ref={chatDownloadAreaRef}
           >
-            {/* {<ChatHeader />} */}
-            
-            {/* "Plus" New Message Button to insert messages in the middle of the thread 
-              {!generating && advancedMode && messages?.length === 0 && (
-              <NewMessageButton messageIndex={-1} />
-            )} */}
             {messages?.map((message, index) => (
-              (advancedMode || index !== 0 || message.role !== 'system') && (
+              (showSystemPrompt || index !== 0 || message.role !== 'system') && (
                 <React.Fragment key={index}>
                   <Message
                     role={message.role}
@@ -99,8 +93,6 @@ const ChatContent = ({ chatDownloadAreaRef }: ChatContentProps) =>  {
                     content={message.content}
                     messageIndex={index}
                   />
-                  {/* "Plus" New Message Button to insert messages in the middle of the thread 
-                    {!generating && advancedMode && <NewMessageButton messageIndex={index} />} */}
                 </React.Fragment>
               )
             ))}

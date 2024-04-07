@@ -3,26 +3,27 @@ import { useTranslation } from 'react-i18next';
 import useStore from '@store/store';
 import Toggle from '@components/Menu/Toggle';
 
-const AdvancedModeToggle = () => {
+const ShowSystemPromptToggle = () => {
   const { t } = useTranslation();
 
-  const setAdvancedMode = useStore((state) => state.setAdvancedMode);
+  const setShowSystemPrompt = useStore((state) => state.setShowSystemPrompt);
 
   const [isChecked, setIsChecked] = useState<boolean>(
-    useStore.getState().advancedMode
+    useStore.getState().showSystemPrompt
   );
 
   useEffect(() => {
-    setAdvancedMode(isChecked);
+    setShowSystemPrompt(isChecked);
   }, [isChecked]);
 
   return (
     <Toggle
-      label={t('advancedMode') as string}
+      label={t('showSystemPromptToggle') as string}
+      tooltip='Show system prompt in each chat'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />
   );
 };
 
-export default AdvancedModeToggle;
+export default ShowSystemPromptToggle;

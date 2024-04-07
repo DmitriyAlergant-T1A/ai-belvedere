@@ -19,6 +19,7 @@ const AutoTitleToggle = () => {
   return (
     <Toggle
       label={t('autoTitle') as string}
+      tooltip='Automatically set titles of new chats based on the first messages (AI-based)'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />

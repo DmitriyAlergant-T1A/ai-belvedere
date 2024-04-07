@@ -29,7 +29,7 @@ const Message = React.memo(
     sticky?: boolean;
   }) => {
     const hideSideMenu = useStore((state) => state.hideSideMenu);
-    const advancedMode = useStore((state) => state.advancedMode);
+    const showSystemPrompt = useStore((state) => state.showSystemPrompt);
 
     return (
       <div
@@ -47,7 +47,7 @@ const Message = React.memo(
           <Avatar role={role} model={model}/>
           <div className='w-[calc(100%-50px)]'>
 
-          {advancedMode && (role=='system') && 
+          {showSystemPrompt && (role=='system') && 
             ( 
               // System Prompt
               <div className='prose dark:prose-invert font-bold relative'>

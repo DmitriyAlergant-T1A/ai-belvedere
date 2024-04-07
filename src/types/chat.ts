@@ -177,5 +177,8 @@ export interface LocalStorageInterfaceV7oV8
 
 export interface LocalStorageInterfaceV8oV9
   extends LocalStorageInterfaceV7oV8 {
+}
 
+export interface LocalStorageInterfaceV9oV10
+  extends LocalStorageInterfaceV8oV9 {
 }

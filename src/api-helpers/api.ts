@@ -1,7 +1,8 @@
-import { ShareGPTSubmitBodyInterface } from '@type/api';
-import { ConfigInterface, MessageInterface, ModelOptions } from '@type/chat';
+import { MessageInterface, ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 import { OpenAICompletionsConfig } from '@hooks/useSubmit';
+import useStore from '@store/store';
+import { _builtinAPIEndpoint } from '@constants/apiEndpoints';
 
 export const isAuthenticated = async () => {
   try {
@@ -17,12 +18,41 @@ export const isAuthenticated = async () => {
   }
 }
 
-
 export const redirectToLogin = async() => {
    //Redirect to a login route that triggers AAD authentication
    window.location.href = '/.auth/login/aad';
 }
 
+  /* Prepare API Request Headers */
+export const prepareApiHeaders = async (
+    model: ModelOptions, 
+    messages: MessageInterface[],
+    purpose: string) => {
+
+  const apiEndpoint  = useStore.getState().apiEndpoint;
+
+  const headers: Record<string, string> = {};
+
+  headers['x-model-provider'] = supportedModels[model].portkeyProvider;
+
+  /* Built-in endpoint (/api/v1/chat/completions) */
+  if (apiEndpoint === _builtinAPIEndpoint && import.meta.env.VITE_CHECK_AAD_AUTH === 'Y')
+  {
+    const isAuthenticatedUser = await isAuthenticated();
+
+    if (!isAuthenticatedUser) {
+      console.log("User not authenticated, redirecting to login.");
+      await redirectToLogin();
+      throw new Error(`API Authentication Error, please reload the page`);
+    }
+  }
+
+  headers['x-api-model'] = supportedModels[model].apiAliasCurrent;
+  headers['x-messages-count'] = messages.length.toString();
+  headers['x-purpose'] = purpose;
+
+  return {headers};
+};
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -58,6 +88,7 @@ export const getChatCompletion = async (
   const data = await response.json();
   return data;
 };
+
 
 export const getChatCompletionStream = async (
   endpoint: string,
@@ -121,17 +152,81 @@ export const getChatCompletionStream = async (
   return stream;
 };
 
-export const submitShareGPT = async (body: ShareGPTSubmitBodyInterface) => {
-  const request = await fetch('https://sharegpt.com/api/conversations', {
-    body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-  });
+export async function handleStream(stream: ReadableStream, addAssistantContent: (content: string) => void) {
+  if (stream) {
+    if (stream.locked)
+      throw new Error('Oops, the stream is locked right now. Please try again');
+    
+    const reader = stream.getReader();
 
-  const response = await request.json();
-  const { id } = response;
-  const url = `https://shareg.pt/${id}`;
-  window.open(url, '_blank');
-};
+    let reading = true;
+
+    /* This is our own simplified implementation of a response stream (provider-agnostic) */
+    /* See back-end chat_completions.js implementation */
+    
+
+    try {
+      while (reading && useStore.getState().generating) {
+        const { done, value } = await reader.read();
+        
+        if (done) {
+          reading = false;
+        } else {
+          const decodedValue = new TextDecoder().decode(value);
+          const lines = decodedValue.split('\n');
+
+          let buffer = '';
+
+          for (const line of lines) {
+            if (line.startsWith('data:')) {
+
+              const data = line.slice(6);
+              //console.debug('handleStream: received data: ', data);
+
+              if (data === '[DONE]') {
+                reading = false;
+              } else {
+                buffer += data;
+                try {
+                  const content = JSON.parse(buffer)?.content;
+                  if (content) {
+                    addAssistantContent(content);
+                    //console.debug('handleStream: processed content: ', content);
+                  }
+                  else {
+                    //console.debug('handleStream: chunk content is empty ', content);
+                  }
+                  buffer = '';
+                 
+                } catch (error) {
+                  //console.debug('handleStream: received an incomplete JSON. Line buffered: ', buffer);
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred during stream processing:', error);
+      // Handle the error and provide appropriate feedback to the client
+      addAssistantContent('\n***ERROR*** An error occurred during stream processing. Please try again.');
+    } finally {
+      
+      if (!useStore.getState().generating) {
+        reader.cancel('Stream cancelled by user');
+        console.debug('Stream cancelled by user');
+      } else {
+        reader.cancel('Generation completed');
+        console.debug('Generation completed');
+      }
+
+      reader.releaseLock();
+      
+      try {
+        await stream.cancel();
+      } catch (error) {
+        console.warn('Error occurred while cancelling the stream:', error);
+      }
+    }
+  }
+}

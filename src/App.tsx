@@ -5,14 +5,14 @@ import i18n from './i18n';
 import Chat from '@components/Chat';
 import Menu from '@components/Menu';
 
-import useInitialiseNewChat from '@hooks/useInitialiseNewChat';
 import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
-// import ApiPopup from '@components/ApiPopup';
 import Toast from '@components/Toast';
 
 import AuthenticationUpdater from './background-components/AuthenticationUpdater';
 import PageTitleUpdater from './background-components/PageTitleUpdater';
+import CompanySystemPromptUpdater from './background-components/CompanySystemPromptUpdater';
+
 
 // import { ClientPrincipalContextProvider } from "@aaronpowell/react-static-web-apps-auth";
 import { handleNewMessageDraftBufferRetrieve } from '@utils/handleNewMessageDraftsPersistence';
@@ -90,8 +90,12 @@ function App() {
     <div className='overflow-hidden w-full h-full relative'>
       {/* <ClientPrincipalContextProvider> */}
         <>
+
+          {/* Background components */}
           <AuthenticationUpdater />
+          <CompanySystemPromptUpdater />
           <PageTitleUpdater />
+
           <Menu chatDownloadAreaRef={chatDownloadAreaRef}/>
           <Chat chatDownloadAreaRef={chatDownloadAreaRef}/>
           {/* <ApiPopup /> */}
