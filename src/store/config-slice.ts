@@ -9,7 +9,8 @@ export interface ConfigSlice {
   autoTitle: boolean;
   requestTokensCount: boolean;
   hideMenuOptions: boolean;
-  advancedMode: boolean;
+  showSystemPrompt: boolean;
+  addCompanyPromptToggle: boolean;
   defaultChatConfig: ConfigInterface;
   defaultSystemMessage: string;
   hideSideMenu: boolean;
@@ -23,7 +24,8 @@ export interface ConfigSlice {
   setTheme: (theme: Theme) => void;
   setAutoTitle: (autoTitle: boolean) => void;
   setRequestTokensCount: (requestTokensCount: boolean) => void;
-  setAdvancedMode: (advancedMode: boolean) => void;
+  setShowSystemPrompt: (showSystemPrompt: boolean) => void;
+  setAddCompanyPromptToggle: (addCompanyPromptToggle: boolean) => void;
   setDefaultChatConfig: (defaultChatConfig: ConfigInterface) => void;
   setDefaultSystemMessage: (defaultSystemMessage: string) => void;
   setHideMenuOptions: (hideMenuOptions: boolean) => void;
@@ -44,7 +46,8 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
   autoTitle: true,
   requestTokensCount: true,
   enterToSubmit: true,
-  advancedMode: false,
+  showSystemPrompt: false,
+  addCompanyPromptToggle: true,
   defaultChatConfig: _defaultChatConfig,
   defaultSystemMessage: _defaultSystemMessage,
   inlineLatex: false,
@@ -83,10 +86,16 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
       chatNamesAsPageTitles: chatNamesAsPageTitles,
     }));
   },
-  setAdvancedMode: (advancedMode: boolean) => {
+  setShowSystemPrompt: (showSystemPrompt: boolean) => {
     set((prev: ConfigSlice) => ({
       ...prev,
-      advancedMode: advancedMode,
+      showSystemPrompt: showSystemPrompt,
+    }));
+  },
+  setAddCompanyPromptToggle(addCompanyPromptToggle: boolean) {
+    set((prev: ConfigSlice) => ({ 
+      ...prev, 
+      addCompanyPromptToggle: addCompanyPromptToggle
     }));
   },
   setDefaultChatConfig: (defaultChatConfig: ConfigInterface) => {

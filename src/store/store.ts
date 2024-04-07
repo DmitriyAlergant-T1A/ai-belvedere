@@ -8,27 +8,28 @@ import { PromptSlice, createPromptSlice } from './prompt-slice';
 import { ToastSlice, createToastSlice } from './toast-slice';
 import { TokensToastSlice, createTokensToastSlice } from './tokens-toast-slice';
 import {
-  LocalStorageInterfaceV0ToV1,
-  LocalStorageInterfaceV1ToV2,
-  LocalStorageInterfaceV2ToV3,
-  LocalStorageInterfaceV3ToV4,
-  LocalStorageInterfaceV4ToV5,
-  LocalStorageInterfaceV5ToV6,
-  LocalStorageInterfaceV6ToV7,
-  LocalStorageInterfaceV7oV8,
+  // LocalStorageInterfaceV0ToV1,
+  // LocalStorageInterfaceV1ToV2,
+  // LocalStorageInterfaceV2ToV3,
+  // LocalStorageInterfaceV3ToV4,
+  // LocalStorageInterfaceV4ToV5,
+  // LocalStorageInterfaceV5ToV6,
+  // LocalStorageInterfaceV6ToV7,
+  // LocalStorageInterfaceV7oV8,
   LocalStorageInterfaceV8oV9,
 } from '@type/chat';
 import {
-  migrateV0,
-  migrateV1,
-  migrateV2,
-  migrateV3,
-  migrateV4,
-  migrateV5,
-  migrateV6,
-  migrateV7,
+  // migrateV0,
+  // migrateV1,
+  // migrateV2,
+  // migrateV3,
+  // migrateV4,
+  // migrateV5,
+  // migrateV6,
+  // migrateV7,
   migrateV8,
 } from './migrate';
+import { add } from 'lodash';
 
 export type StoreState = ChatSlice &
   InputSlice &
@@ -56,7 +57,8 @@ export const createPartializedState = (state: StoreState) => ({
   theme: state.theme,
   autoTitle: state.autoTitle,
   requestTokensCount: state.requestTokensCount,
-  advancedMode: state.advancedMode,
+  showSystemPrompt: state.showSystemPrompt,
+  addCompanyPromptToggle: state.addCompanyPromptToggle,
   prompts: state.prompts,
   defaultChatConfig: state.defaultChatConfig,
   defaultSystemMessage: state.defaultSystemMessage,

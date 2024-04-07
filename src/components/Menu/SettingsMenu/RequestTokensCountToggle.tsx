@@ -19,6 +19,7 @@ const RequestTokensCountToggle = () => {
   return (
     <Toggle
       label={t('requestTokensCount') as string}
+      tooltip='After each submission show tokens count in the left bottom corner'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />

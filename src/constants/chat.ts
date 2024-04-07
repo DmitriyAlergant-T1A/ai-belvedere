@@ -119,10 +119,13 @@ export const generateDefaultChat = (
 ): ChatInterface => ({
   id: uuidv4(),
   title: title ? title : 'New Chat',
-  messages:
-    useStore.getState().defaultSystemMessage.length > 0
-      ? [{ role: 'system', content: useStore.getState().defaultSystemMessage }]
-      : [],
+  messages: [{ 
+      role: 'system', 
+      content: 
+        (useStore.getState().defaultSystemMessage ?? '')
+        +
+        (useStore.getState().addCompanyPromptToggle ? '\n\n{COMPANY_SYSTEM_PROMPT_FRAGMENT}' : '')
+            }],
   config: { ...useStore.getState().defaultChatConfig },
   titleSet: false,
   folder,

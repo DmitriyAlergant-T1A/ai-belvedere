@@ -8,7 +8,7 @@ import SettingIcon from '@icon/SettingIcon';
 import ThemeSwitcher from '@components/Menu/SettingsMenu/ThemeSwitcher';
 import LanguageSelector from '@components/Menu/SettingsMenu/LanguageSelector';
 import AutoTitleToggle from './AutoTitleToggle';
-import AdvancedModeToggle from './AdvencedModeToggle';
+import ShowSystemPromptToggle from './ShowSystemPromptToggle';
 import InlineLatexToggle from './InlineLatexToggle';
 import EnterToSubmitToggle from './EnterToSubmitToggle';
 import RequestTokensCountToggle from './RequestTokensCountToggle'
@@ -20,6 +20,7 @@ import ApiButton from './ApiButton';
 import ClearConversation from '@components/Menu/SettingsMenu/ClearConversation';
 import ImportExportChat from '@components/Chat/ImportExportChat';
 import { _defaultChatConfig, _defaultSystemMessage } from '@constants/chat';
+import AddCompanyPromptToggle from './AddCompanyPromptToggle';
 
 
 
@@ -51,16 +52,17 @@ const SettingsMenu = () => {
           <div className='p-6 border-b border-gray-200 dark:border-gray-600 flex-col items-start gap-4 w-96'>
             <LanguageSelector />
             <div className='p-1'><></></div>
-            <DefaultSystemChat />
+            <DefaultSystemPrompt />
             <div className='p-1'><></></div>
               <div className='flex flex-col gap-3'>
+              <ShowSystemPromptToggle />
+              <AddCompanyPromptToggle />
               <AutoTitleToggle />
               <ChatNamesAsPageTitlesToggle/>
               <EnterToSubmitToggle />
               <TotalTokenCostToggle />
               <RequestTokensCountToggle />
               {/* <InlineLatexToggle /> */}
-              <AdvancedModeToggle />
             </div>
             <div className='p-1 mt-4'><ThemeSwitcher /></div>
             <div className='p-1'><PromptLibraryMenu /></div>
@@ -76,7 +78,7 @@ const SettingsMenu = () => {
 };
 
 
-const DefaultSystemChat = () => {
+const DefaultSystemPrompt = () => {
   const { t } = useTranslation('model');
 
   const setDefaultSystemMessage = useStore(state => state.setDefaultSystemMessage);
@@ -107,7 +109,9 @@ const DefaultSystemChat = () => {
       </div>
       <textarea
         // overflow-y-hidden
-        className='w-full my-2 mx-0 px-2 resize-none rounded-lg bg-transparent resize-none leading-7 p-1 border border-gray-400/50 focus:ring-1 focus:ring-blue max-h-8 transition-all text-gray-900 dark:text-gray-300'
+        className='w-full my-2 mx-0 px-2 resize-none rounded-lg bg-transparent resize-none leading-7 p-1 border border-gray-400/50 focus:ring-1 focus:ring-blue max-h-8 transition-all 
+          bg-white hover:bg-gray-500/10 dark:bg-gray-800 dark:border-gray-600
+          text-gray-900 dark:text-gray-300'
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         onChange={(e) => {
