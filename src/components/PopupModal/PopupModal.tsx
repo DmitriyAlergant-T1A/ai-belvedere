@@ -56,8 +56,8 @@ const PopupModal = ({
     return ReactDOM.createPortal(
       <div className='fixed top-0 left-0 z-[999] w-full p-4 overflow-x-hidden overflow-y-auto h-full flex justify-center items-center'>
         <div className='relative z-2 max-w-3xl md:h-auto flex justify-center max-h-full'>
-          <div className='relative bg-gray-50 rounded-lg shadow dark:bg-gray-700 max-h-full overflow-y-auto hide-scroll-bar'>
-            <div className='flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600'>
+          <div className='relative bg-gray-50 rounded-lg shadow dark:bg-gray-700 max-h-full flex flex-col'>
+            <div className='flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600 bg-gray-50 dark:bg-gray-700'>
               <h3 className='ml-2 text-lg font-semibold text-gray-900 dark:text-white'>
                 {title}
               </h3>
@@ -70,17 +70,19 @@ const PopupModal = ({
                 <CrossIcon2 />
               </button>
             </div>
-
-            {message && (
-              <div className='p-6 border-b border-gray-200 dark:border-gray-600'>
-                <div className='min-w-fit text-gray-900 dark:text-gray-300 text-sm mt-4'>
-                  {message}
+    
+            <div className='flex-grow overflow-y-auto'>
+              {message && (
+                <div className='p-6 border-b border-gray-200 dark:border-gray-600'>
+                  <div className='min-w-fit text-gray-900 dark:text-gray-300 text-sm mt-4'>
+                    {message}
+                  </div>
                 </div>
-              </div>
-            )}
-
-            {children}
-
+              )}
+    
+              {children}
+            </div>
+    
             <div className='flex items-center justify-center p-6 gap-4'>
               {handleConfirm && (
                 <button
@@ -111,7 +113,7 @@ const PopupModal = ({
         />
       </div>,
       modalRoot
-    );
+    );    
   } else {
     return null;
   }
