@@ -2,8 +2,7 @@ import { MessageInterface, ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 import { OpenAICompletionsConfig } from '@hooks/useSubmit';
 import useStore from '@store/store';
-import { builtinAPIEndpoint, officialAPIEndpoint } from '@constants/auth';
-import { EventSourceData } from '@type/api';
+import { builtinAPIEndpoint } from '@constants/apiEndpoints';
 
 export const isAuthenticated = async () => {
   try {
@@ -31,27 +30,10 @@ export const prepareApiHeaders = async (
     purpose: string) => {
 
   const apiEndpoint  = useStore.getState().apiEndpoint;
-  const apiKey        = useStore.getState().apiKey;
 
   const headers: Record<string, string> = {};
 
-  if (apiEndpoint !== builtinAPIEndpoint){
-
-    if (!apiKey || apiKey.length === 0) {
-      throw new Error('API key is required but missing.');
-    }
-
-    headers['Authorization'] = `Bearer ${apiKey}`;
-  }
-
-  if (apiEndpoint.includes('openai.azure.com')  && apiKey)
-    headers['api-key'] = apiKey;
-
-  /* If not an "official" API endpoint -> it is assumed to be a PortkeyAI Gateway */
-  if (apiEndpoint !== officialAPIEndpoint)
-  {
-    headers['x-model-provider'] = supportedModels[model].portkeyProvider;
-  };
+  headers['x-model-provider'] = supportedModels[model].portkeyProvider;
 
   /* Built-in endpoint (/api/v1/chat/completions) */
   if (apiEndpoint === builtinAPIEndpoint && import.meta.env.VITE_CHECK_AAD_AUTH === 'Y')

@@ -90,7 +90,9 @@ function App() {
     <div className='overflow-hidden w-full h-full relative'>
       {/* <ClientPrincipalContextProvider> */}
         <>
-          <AuthenticationUpdater />
+          { import.meta.env.VITE_CHECK_AAD_AUTH === 'Y' &&
+            (<AuthenticationUpdater />)
+          }
           <PageTitleUpdater />
           <Menu chatDownloadAreaRef={chatDownloadAreaRef}/>
           <Chat chatDownloadAreaRef={chatDownloadAreaRef}/>
