@@ -1,5 +1,5 @@
 {
-  "configuration": "Configuration",
+  "configuration": "Chat Model Configuration",
   "model": "Model",
   "maxGenerationTokens": {
     "label": "Max Gen Tokens",

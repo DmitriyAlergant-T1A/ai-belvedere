@@ -13,7 +13,7 @@ import {
 } from '@components/Chat/ChatConfigMenu/ChatConfigMenu';
 
 import { ModelOptions } from '@type/chat';
-import { _defaultChatConfig, supportedModels } from '@constants/chat';
+import { _defaultChatConfig, defaultModel, supportedModels } from '@constants/chat';
 import LinkIcon from '@icon/LinkIcon'
 
 const DefaultChatConfigMenu = () => {
@@ -70,9 +70,9 @@ const ChatConfigPopup = ({
   };
 
   const handleReset = () => {
-    _setModel(_defaultChatConfig.model);
-    _setMaxPromptToken(_defaultChatConfig.maxGenerationTokens);
-    _setMaxGenerationToken(_defaultChatConfig.maxPromptTokens);
+    _setModel(defaultModel);
+    _setMaxPromptToken(Math.min(_defaultChatConfig.maxPromptTokens, supportedModels[defaultModel].maxModelInputTokens));
+    _setMaxGenerationToken(Math.min(_defaultChatConfig.maxGenerationTokens, supportedModels[defaultModel].maxModelCompletionTokens));
     _setTemperature(_defaultChatConfig.temperature);
     _setTopP(_defaultChatConfig.top_p);
     _setPresencePenalty(_defaultChatConfig.presence_penalty);
