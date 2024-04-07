@@ -19,6 +19,7 @@ const InlineLatexToggle = () => {
   return (
     <Toggle
       label={t('inlineLatex') as string}
+      tooltip=''
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />

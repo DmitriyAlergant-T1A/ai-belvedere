@@ -32,7 +32,6 @@ const useAddChat = () => {
     
     updatedChats.unshift(newChat);
     setChats(updatedChats);
-    console.debug("useAddChat: persisted updated chats")
   
     setNewMessageDraftBuffer("", 0);    // clear the new message draft buffer for new chat
 

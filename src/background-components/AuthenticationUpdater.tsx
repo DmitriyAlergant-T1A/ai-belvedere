@@ -4,10 +4,12 @@ import useStore from '@store/store';
 const AuthenticationUpdater = () => {
   const setUsername = useStore((state) => state.setUserName);
 
+  const apiEndpoint = useStore((state) => state.apiEndpoint);
+
   useEffect(() => {
     const fetchClientPrincipalName = async () => {
       try {
-        const response = await fetch('/api/get-authenticated-principal-name');
+        const response = await fetch(`${apiEndpoint}/get-authenticated-principal-name`);
         if (!response.ok) {
           throw new Error('Failed to fetch client principal name');
         }

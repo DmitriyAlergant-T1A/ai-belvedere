@@ -109,6 +109,7 @@ export const TotalTokenCostToggle = () => {
   return (
     <Toggle
       label={t('countTotalTokens') as string}
+      tooltip='Count accumulated tokens cost and display on the left menu'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />

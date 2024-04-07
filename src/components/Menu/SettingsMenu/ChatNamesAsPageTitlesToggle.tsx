@@ -19,6 +19,7 @@ const ChatNamesAsPageTitlesToggle = () => {
   return (
     <Toggle
       label={t('chatNamesAsPageTitles') as string}
+      tooltip='Use chat names as page (browser tab) titles'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />

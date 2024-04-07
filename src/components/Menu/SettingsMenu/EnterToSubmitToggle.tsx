@@ -19,6 +19,7 @@ const EnterToSubmitToggle = () => {
   return (
     <Toggle
       label={t('enterToSubmit') as string}
+      tooltip='Press Enter to submit messages instead of Shift + Enter'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />

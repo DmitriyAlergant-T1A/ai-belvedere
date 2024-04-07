@@ -97,20 +97,23 @@ router.post('/', async (req, res) => {
 
       requestPayload = req.body;
     }
-      
-     //Add Anthropic Headers
+    
+    //TBD, system prompt injection for Company-Provided System Prompt Fragment
+     
     if (provider == 'anthropic')
     {
+      //Anthropic-specific headers
       authHeader =  {...authHeader,
               'x-api-key': `${apiKey}`, 
               "anthropic-version": "2023-06-01"};
+
+      //Anthropic-specific headers body preprocessing
 
       const { messages, model, temperature, top_p, frequency_penalty, presence_penalty, max_tokens, stream, ...restBody } = req.body; // decompose the request body
 
       // Anthropic API does not accept 'system' role messages, so we need to extract them and send them as a separate field
       const systemMessage = messages.find(msg => msg.role === 'system')?.content || '';
       const filteredMessages = messages.filter(msg => msg.role !== 'system');
-
       requestPayload = {
         model: model,
         system: systemMessage,
