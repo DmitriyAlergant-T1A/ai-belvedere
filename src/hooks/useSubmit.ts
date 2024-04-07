@@ -105,7 +105,7 @@ const useSubmit = () =>
       
       // Usage
       stream = await getChatCompletionStream(
-        useStore.getState().apiEndpoint,
+        useStore.getState().apiEndpoint + "/chat/completions",
         inputMessagesLimited,
         completionsConfig,
         headers.headers
@@ -203,7 +203,7 @@ const useSubmit = () =>
       const headers = await prepareApiHeaders(titleGenModel, [titleGenPromptMessage], 'Title Generation');
 
       let data = await getChatCompletion(
-        useStore.getState().apiEndpoint,
+        useStore.getState().apiEndpoint + "/chat/completions",
         [titleGenPromptMessage],
         titleGenConfig,
         headers.headers

@@ -5,7 +5,7 @@ import useStore from '@store/store';
 import useHideOnOutsideClick from '@hooks/useHideOnOutsideClick';
 import PopupModal from '@components/PopupModal';
 
-import {developmentAPIEndpoint, builtinAPIEndpoint, availableEndpoints} from '@constants/apiEndpoints'
+import {_developmentAPIEndpoint, _builtinAPIEndpoint, availableEndpoints} from '@constants/apiEndpoints'
 
 
 const ApiMenu = ({
@@ -24,18 +24,18 @@ const ApiMenu = ({
 
   const handleSave = () => {
     setApiEndpoint(_apiEndpoint);
+    console.log('API Endpoint Changed: ', _apiEndpoint);
+
     setIsModalOpen(false);
   };
 
   const handleToggleEndpointType = (value: string) => {
-
-    console.log('handleToggleEndpointType', value);
-
     if ( value === 'builtin') {
-      _setApiEndpoint(builtinAPIEndpoint);
+      _setApiEndpoint(_builtinAPIEndpoint);
     } else if ( value === 'development') {
-      _setApiEndpoint(developmentAPIEndpoint);
+      _setApiEndpoint(_developmentAPIEndpoint);
     }
+
 
   };
   
@@ -53,7 +53,7 @@ const ApiMenu = ({
           </div>
           <select
             className='text-gray-800 dark:text-gray-300 p-1 text-sm border bg-white hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-md m-0 w-full mr-0 h-8 focus:outline-none'
-            value={(_apiEndpoint === builtinAPIEndpoint) ? 'builtin' : 'development'}
+            value={(_apiEndpoint === _builtinAPIEndpoint) ? 'builtin' : 'development'}
             onChange={(e) => handleToggleEndpointType(e.target.value)}
           >
             <option value="builtin">{companyName}-Provided Endpoint</option>
@@ -65,11 +65,11 @@ const ApiMenu = ({
           <input
             type='text'
             className={`${
-              _apiEndpoint === builtinAPIEndpoint
+              _apiEndpoint === _builtinAPIEndpoint
                 ? 'bg-gray-200 text-gray-500                border    border-gray-300     dark:bg-gray-700 dark:text-gray-500 dark:border-gray-300 '
                 : 'bg-white hover:bg-gray-100 text-gray-800 border    dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300'}  
               p-3 text-sm rounded-md m-0 w-full mr-0 h-8 focus:outline-none`}
-            readOnly={_apiEndpoint === builtinAPIEndpoint ? true : undefined}
+            readOnly={_apiEndpoint === _builtinAPIEndpoint ? true : undefined}
             value={_apiEndpoint}
             onChange={(e) => {
               _setApiEndpoint(e.target.value);
@@ -79,7 +79,7 @@ const ApiMenu = ({
 
         <div className='min-w-fit text-gray-900 dark:text-gray-300 text-sm flex flex-col gap-3 leading-relaxed'>
 
-          {(_apiEndpoint === builtinAPIEndpoint) ? 
+          {(_apiEndpoint === _builtinAPIEndpoint) ? 
             (
             <p>The {companyName}-Provided API endpoint is an integral part of this application. This is the default. <br/> Do not change unless you know what you are doing.</p>
             )

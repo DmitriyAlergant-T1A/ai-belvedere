@@ -30,7 +30,7 @@
   "total": "Total",
   "enterToSubmit": "Enter to Submit",
   "showSystemPromptToggle": "Show System Prompt",
-  "addCompanyPromptToggle": "Add Company-Provided System Prompt",
+  "addCompanyPromptToggle": "Use In New Chats",
   "countTotalTokens": "Show Accumulated Costs",
   "requestTokensCount": "Show Request Tokens Count",
   "chatNamesAsPageTitles": "Use Chat Names as Page Titles",

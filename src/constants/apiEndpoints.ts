@@ -1,8 +1,7 @@
-export const builtinAPIEndpoint = '/api/chat/completions';
+export const _builtinAPIEndpoint = '/api';
+export const _developmentAPIEndpoint = 'http://localhost:5500/api';
 
-export const developmentAPIEndpoint = 'http://localhost:5500/api/chat/completions';
+export const availableEndpoints = [_builtinAPIEndpoint, _developmentAPIEndpoint];
 
-export const availableEndpoints = [builtinAPIEndpoint, developmentAPIEndpoint];
-
-export const defaultAPIEndpoint = import.meta.env.VITE_DEFAULT_API_ENDPOINT || builtinAPIEndpoint;
+export const defaultAPIEndpoint = import.meta.env.VITE_DEFAULT_API_ENDPOINT || _builtinAPIEndpoint;
 

@@ -38,8 +38,6 @@ export const createChatSlice: StoreSlice<ChatSlice> = (set, get) => ({
 
   setCurrentChatIndex: (currentChatIndex: number) => {
 
-    console.debug(`setCurrentChatIndex: ${currentChatIndex}`)
-
     // Synchronize New Message Draft Buffer with chat-level state
     handleNewMessageDraftBufferPersist("setCurrentChatIndex");
 

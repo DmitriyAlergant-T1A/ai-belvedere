@@ -12,11 +12,14 @@ import {
   LocalStorageInterfaceV6ToV7,
   LocalStorageInterfaceV7oV8,
   LocalStorageInterfaceV8oV9,
+  LocalStorageInterfaceV9oV10,
 } from '@type/chat';
 import {
   _defaultChatConfig,
   defaultModel,
 } from '@constants/chat';
+import { persist } from 'zustand/middleware';
+import { defaultAPIEndpoint } from '@constants/apiEndpoints';
 
 export const migrateV8 = (persistedState: LocalStorageInterfaceV8oV9) => {
  
@@ -34,5 +37,10 @@ export const migrateV8 = (persistedState: LocalStorageInterfaceV8oV9) => {
       //delete chat.config.max_tokens; // Remove old setting
     }
   });
+};
 
+
+export const migrateV9 = (persistedState: LocalStorageInterfaceV9oV10) => {
+  //One-time reset of the API Endpoint, new default does not comptain /chat/completions
+  persistedState.apiEndpoint = defaultAPIEndpoint
 };

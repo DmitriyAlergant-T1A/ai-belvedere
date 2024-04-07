@@ -7,6 +7,7 @@ import PopupModal from '@components/PopupModal';
 import SettingIcon from '@icon/SettingIcon';
 import ThemeSwitcher from '@components/Menu/SettingsMenu/ThemeSwitcher';
 import LanguageSelector from '@components/Menu/SettingsMenu/LanguageSelector';
+import SystemPromptConfig from './SystemPromptConfig';
 import AutoTitleToggle from './AutoTitleToggle';
 import ShowSystemPromptToggle from './ShowSystemPromptToggle';
 import InlineLatexToggle from './InlineLatexToggle';
@@ -49,80 +50,32 @@ const SettingsMenu = () => {
           title={t('setting') as string}
           cancelButton={false}
         >
-          <div className='p-6 border-b border-gray-200 dark:border-gray-600 flex-col items-start gap-4 w-96'>
+          <div className='p-6 border-b border-gray-200 dark:border-gray-600 flex-col flex-col items-start gap-4 w-96'>
+            <SystemPromptConfig />
+            <div className='p-1'><></></div>
             <LanguageSelector />
             <div className='p-1'><></></div>
-            <DefaultSystemPrompt />
-            <div className='p-1'><></></div>
-              <div className='flex flex-col gap-3'>
-              <ShowSystemPromptToggle />
-              <AddCompanyPromptToggle />
-              <AutoTitleToggle />
-              <ChatNamesAsPageTitlesToggle/>
-              <EnterToSubmitToggle />
-              <TotalTokenCostToggle />
-              <RequestTokensCountToggle />
-              {/* <InlineLatexToggle /> */}
+            <div className='flex flex-col gap-3'>
+                <ShowSystemPromptToggle />
+                <AutoTitleToggle />
+                <ChatNamesAsPageTitlesToggle/>
+                <EnterToSubmitToggle />
+                <TotalTokenCostToggle />
+                <RequestTokensCountToggle />
+                {/* <InlineLatexToggle /> */}
             </div>
-            <div className='p-1 mt-4'><ThemeSwitcher /></div>
-            <div className='p-1'><PromptLibraryMenu /></div>
-            <div className='p-1'><ChatConfigMenu /></div>
-            <div className='p-1'><ApiButton /></div>
-            <div className='p-1'><ImportExportChat /></div>
-            <div className='p-1'><ClearConversation /></div>
+            <div className = "block">
+              <div className='p-1 mt-4'><ThemeSwitcher /></div>
+              <div className='p-1'><PromptLibraryMenu /></div>
+              <div className='p-1'><ChatConfigMenu /></div>
+              <div className='p-1'><ApiButton /></div>
+              <div className='p-1'><ImportExportChat /></div>
+              <div className='p-1'><ClearConversation /></div>
+            </div>
           </div>
         </PopupModal>
       )}
     </>
-  );
-};
-
-
-const DefaultSystemPrompt = () => {
-  const { t } = useTranslation('model');
-
-  const setDefaultSystemMessage = useStore(state => state.setDefaultSystemMessage);
-
-  const [_systemMessage, _setSystemMessage] = useState<string>(useStore.getState().defaultSystemMessage);
-
-
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.target.style.height = 'auto';
-    e.target.style.height = `${e.target.scrollHeight}px`;
-    e.target.style.maxHeight = `${e.target.scrollHeight}px`;
-  };
-
-  const handleOnFocus = (e: React.FocusEvent<HTMLTextAreaElement, Element>) => {
-    e.target.style.height = `32`;
-    e.target.style.maxHeight = `${e.target.scrollHeight}px`;
-  };
-
-  const handleOnBlur = (e: React.FocusEvent<HTMLTextAreaElement, Element>) => {
-    e.target.style.height = 'auto';
-    e.target.style.maxHeight = '2.5rem';
-  };
-
-  return (
-    <div>
-      <div className='block text-sm font-medium text-gray-900 dark:text-white'>
-        {t('defaultSystemMessage')}
-      </div>
-      <textarea
-        // overflow-y-hidden
-        className='w-full my-2 mx-0 px-2 resize-none rounded-lg bg-transparent resize-none leading-7 p-1 border border-gray-400/50 focus:ring-1 focus:ring-blue max-h-8 transition-all 
-          bg-white hover:bg-gray-500/10 dark:bg-gray-800 dark:border-gray-600
-          text-gray-900 dark:text-gray-300'
-        onFocus={handleOnFocus}
-        onBlur={handleOnBlur}
-        onChange={(e) => {
-          _setSystemMessage(e.target.value);       // Local state for display
-          setDefaultSystemMessage(e.target.value); // Update the store
-        }}
-        onInput={handleInput}
-        value={_systemMessage}
-        rows={8}
-      ></textarea>
-    </div>
   );
 };
 

@@ -14,9 +14,7 @@ const companyName:string = import.meta.env.VITE_COMPANY_NAME || "";
 
 export const _defaultSystemMessage =
   import.meta.env.VITE_DEFAULT_SYSTEM_MESSAGE ??
-  `You are ${companyName} ChatGPT - an AI Large Language Models access interface provided by ${companyName}.
-   Carefully follow the user's instructions. Respond using Markdown. Respond briefly, elaborate further when asked.
-   If asked for code writing, only give that code, withhold explanations until requested. If asked for code modification, only give the relevant or changed pieces of code - unless specifically requested provide a complete snippet, then comply.`;
+  `Carefully follow the user's instructions. Respond using Markdown. Respond briefly, elaborate further when asked. If asked for code writing, only give that code, withhold explanations until requested. If asked for code modification, only give the relevant or changed pieces of code. Unless specifically requested provide a complete snippet, then comply.`;
 
 export const defaultModel: ModelOptions = 'gpt-4-turbo-preview';
 
@@ -122,9 +120,9 @@ export const generateDefaultChat = (
   messages: [{ 
       role: 'system', 
       content: 
+        (useStore.getState().addCompanyPromptToggle ? useStore.getState().companySystemPrompt + '\n\n' : '')
+        + 
         (useStore.getState().defaultSystemMessage ?? '')
-        +
-        (useStore.getState().addCompanyPromptToggle ? '\n\n{COMPANY_SYSTEM_PROMPT_FRAGMENT}' : '')
             }],
   config: { ...useStore.getState().defaultChatConfig },
   titleSet: false,

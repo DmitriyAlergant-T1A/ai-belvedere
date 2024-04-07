@@ -7,9 +7,14 @@ import { languageCodeToName, selectableLanguages } from '@constants/language';
 const LanguageSelector = () => {
   const { i18n } = useTranslation();
 
+  const { t } = useTranslation('');
+
   const [dropDown, setDropDown] = useState<boolean>(false);
   return (
-    <div className='prose dark:prose-invert relative'>
+    <div className='flex prose dark:prose-invert relative'>
+      <div className="mr-2 mb-2 mt-2 text-sm font-medium"> 
+        {t('language')}
+      </div>
       <button
         className='btn btn-neutral btn-small w-36 flex justify-between'
         type='button'

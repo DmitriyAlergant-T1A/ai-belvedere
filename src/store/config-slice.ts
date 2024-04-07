@@ -13,6 +13,7 @@ export interface ConfigSlice {
   addCompanyPromptToggle: boolean;
   defaultChatConfig: ConfigInterface;
   defaultSystemMessage: string;
+  companySystemPrompt: string;
   hideSideMenu: boolean;
   enterToSubmit: boolean;
   inlineLatex: boolean;
@@ -28,6 +29,7 @@ export interface ConfigSlice {
   setAddCompanyPromptToggle: (addCompanyPromptToggle: boolean) => void;
   setDefaultChatConfig: (defaultChatConfig: ConfigInterface) => void;
   setDefaultSystemMessage: (defaultSystemMessage: string) => void;
+  setcompanySystemPrompt: (companySystemPrompt: string) => void;
   setHideMenuOptions: (hideMenuOptions: boolean) => void;
   setHideSideMenu: (hideSideMenu: boolean) => void;
   setEnterToSubmit: (enterToSubmit: boolean) => void;
@@ -50,6 +52,7 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
   addCompanyPromptToggle: true,
   defaultChatConfig: _defaultChatConfig,
   defaultSystemMessage: _defaultSystemMessage,
+  companySystemPrompt: '',
   inlineLatex: false,
   markdownMode: true,
   countTotalTokens: true,
@@ -108,6 +111,12 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
     set((prev: ConfigSlice) => ({
       ...prev,
       defaultSystemMessage: defaultSystemMessage,
+    }));
+  },
+  setcompanySystemPrompt: (companySystemPrompt: string) => {
+    set((prev: ConfigSlice) => ({
+      ...prev,
+      companySystemPrompt: companySystemPrompt,
     }));
   },
   setHideMenuOptions: (hideMenuOptions: boolean) => {
