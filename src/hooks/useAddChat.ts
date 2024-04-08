@@ -5,10 +5,12 @@ import { ChatInterface, ModelOptions } from '@type/chat';
 import { handleNewMessageDraftBufferPersist } from '@utils/handleNewMessageDraftsPersistence';
 
 const useAddChat = () => {
+
   const setChats = useStore((state) => state.setChats);
   const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
-
   const setNewMessageDraftBuffer = useStore((state) => state.setNewMessageDraftBuffer);
+  const replaceCurrentChat = useStore((state) => state.replaceCurrentChat);
+  const currentChatIndex = useStore((state) => state.currentChatIndex);
 
   const addChat = (folder?: string, model?: ModelOptions) => { // Added optional model parameter
 
@@ -30,7 +32,11 @@ const useAddChat = () => {
       newChat.config = { ...newChat.config, model };
     }  
     
-    updatedChats.unshift(newChat);
+    if (replaceCurrentChat)
+      updatedChats[currentChatIndex] = newChat;
+    else
+      updatedChats.unshift(newChat);
+  
     setChats(updatedChats);
   
     setNewMessageDraftBuffer("", 0);    // clear the new message draft buffer for new chat

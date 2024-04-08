@@ -7,6 +7,7 @@ import useAddChat from '@hooks/useAddChat';
 import PopupModal from '@components/PopupModal'; // Ensure this is correctly imported
 import { ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
+import { replace } from 'lodash';
 
 const NewChat = ({ folder }: { folder?: string }) => {
   const { t } = useTranslation();
@@ -15,6 +16,8 @@ const NewChat = ({ folder }: { folder?: string }) => {
   const addChat = useAddChat(); 
 
   const defaultModel = useStore((state) => state.defaultChatConfig.model);
+
+  const replaceCurrentChat = useStore((state) => state.replaceCurrentChat);
 
   const handleModelSelect = (model: string) => {
     //console.log(`Model selected: ${model}`);
@@ -91,7 +94,7 @@ const NewChat = ({ folder }: { folder?: string }) => {
 
       {isModelSelectionOpen && (
         <PopupModal
-          title="New Chat: Select Model. Press / for default."
+          title="New Chat: Select Model"
           setIsModalOpen={setIsModelSelectionOpen}
           cancelButton={true}
         >
@@ -106,6 +109,13 @@ const NewChat = ({ folder }: { folder?: string }) => {
                 }
             `}
             </style>
+            { replaceCurrentChat && (
+            <div className='flex flex-col items-center mt-4 mb-2 text-lg font-medium text-red-700'>
+                <div className='border-2 border-red-700 p-2'>
+                  Warning: currently active chat will be dropped, replaced with new chat.<br/>
+                  see "Drop active chat when New Chat is created" toggle in Settings
+                </div>
+            </div>)}
             <table className='w-full text-center text-gray-700 dark:text-gray-300' style={{ tableLayout: 'fixed' }}>
                 <tbody>
                 <tr><td className='pt-2 text-lg' colSpan={3}><b>OpenAI GPT: Iconic Large Language Models that started it all</b></td></tr>

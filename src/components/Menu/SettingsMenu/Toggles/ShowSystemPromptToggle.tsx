@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useStore from '@store/store';
-import Toggle from '@components/Menu/Toggle';
+import Toggle from './Toggle';
 
-const InlineLatexToggle = () => {
+const ShowSystemPromptToggle = () => {
   const { t } = useTranslation();
 
-  const setInlineLatex = useStore((state) => state.setInlineLatex);
+  const setShowSystemPrompt = useStore((state) => state.setShowSystemPrompt);
 
   const [isChecked, setIsChecked] = useState<boolean>(
-    useStore.getState().inlineLatex
+    useStore.getState().showSystemPrompt
   );
 
   useEffect(() => {
-    setInlineLatex(isChecked);
+    setShowSystemPrompt(isChecked);
   }, [isChecked]);
 
   return (
     <Toggle
-      label={t('inlineLatex') as string}
-      tooltip=''
+      label={t('showSystemPromptToggle') as string}
+      tooltip='Show system prompt in each chat'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />
   );
 };
 
-export default InlineLatexToggle;
+export default ShowSystemPromptToggle;

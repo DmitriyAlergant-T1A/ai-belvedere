@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import useStore from '@store/store';
-import AddCompanyPromptToggle from "./AddCompanyPromptToggle";
+import AddCompanyPromptToggle from "./Toggles/AddCompanyPromptToggle";
 
 const SystemPromptConfig = () => {
     const { t } = useTranslation('');

@@ -1,27 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useStore from '@store/store';
-import useCloudAuthStore from '@store/cloud-auth-store';
 
 import PopupModal from '@components/PopupModal';
 import SettingIcon from '@icon/SettingIcon';
 import ThemeSwitcher from '@components/Menu/SettingsMenu/ThemeSwitcher';
 import LanguageSelector from '@components/Menu/SettingsMenu/LanguageSelector';
 import SystemPromptConfig from './SystemPromptConfig';
-import AutoTitleToggle from './AutoTitleToggle';
-import ShowSystemPromptToggle from './ShowSystemPromptToggle';
-import InlineLatexToggle from './InlineLatexToggle';
-import EnterToSubmitToggle from './EnterToSubmitToggle';
-import RequestTokensCountToggle from './RequestTokensCountToggle'
-import { TotalTokenCostToggle } from '../TokensTotalCost';
-import ChatNamesAsPageTitlesToggle from './ChatNamesAsPageTitlesToggle';
+import AutoTitleToggle from './Toggles/AutoTitleToggle';
+import ShowSystemPromptToggle from './Toggles/ShowSystemPromptToggle';
+import InlineLatexToggle from './Toggles/InlineLatexToggle';
+import EnterToSubmitToggle from './Toggles/EnterToSubmitToggle';
+import RequestTokensCountToggle from './Toggles/RequestTokensCountToggle'
+import TotalTokenCostToggle from './Toggles/TotalTokenCostToggle';
+import ChatNamesAsPageTitlesToggle from './Toggles/ChatNamesAsPageTitlesToggle';
 import PromptLibraryMenu from '@components/Menu/SettingsMenu/PromptLibraryMenu';
 import ChatConfigMenu from '@components/Menu/SettingsMenu/DefaultChatConfigMenu';
 import ApiButton from './ApiButton';
 import ClearConversation from '@components/Menu/SettingsMenu/ClearConversation';
 import ImportExportChat from '@components/Chat/ImportExportChat';
 import { _defaultChatConfig, _defaultSystemMessage } from '@constants/chat';
-import AddCompanyPromptToggle from './AddCompanyPromptToggle';
+import ReplaceCurrentChatToggle from './Toggles/ReplaceCurrentChatToggle';
 
 
 
@@ -62,6 +61,7 @@ const SettingsMenu = () => {
                 <EnterToSubmitToggle />
                 <TotalTokenCostToggle />
                 <RequestTokensCountToggle />
+                <ReplaceCurrentChatToggle />
                 {/* <InlineLatexToggle /> */}
             </div>
             <div className = "block">
