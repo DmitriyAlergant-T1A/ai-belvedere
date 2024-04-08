@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useStore from '@store/store';
-import Toggle from '@components/Menu/Toggle';
+import Toggle from './Toggle';
 
 const AddCompanyPromptToggle = () => {
   const { t } = useTranslation();

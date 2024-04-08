@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useStore from '@store/store';
-import Toggle from '@components/Menu/Toggle';
+import Toggle from './Toggle';
 
-const AutoTitleToggle = () => {
+const EnterToSubmitToggle = () => {
   const { t } = useTranslation();
 
-  const setAutoTitle = useStore((state) => state.setAutoTitle);
+  const setEnterToSubmit = useStore((state) => state.setEnterToSubmit);
 
   const [isChecked, setIsChecked] = useState<boolean>(
-    useStore.getState().autoTitle
+    useStore.getState().enterToSubmit
   );
 
   useEffect(() => {
-    setAutoTitle(isChecked);
+    setEnterToSubmit(isChecked);
   }, [isChecked]);
 
   return (
     <Toggle
-      label={t('autoTitle') as string}
-      tooltip='Automatically set titles of new chats based on the first messages (AI-based)'
+      label={t('enterToSubmit') as string}
+      tooltip='Press Enter to submit messages instead of Shift + Enter'
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />
   );
 };
 
-export default AutoTitleToggle;
+export default EnterToSubmitToggle;

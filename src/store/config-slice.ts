@@ -21,6 +21,7 @@ export interface ConfigSlice {
   countTotalTokens: boolean;
   chatNamesAsPageTitles: boolean;
   totalTokenUsed: TotalTokenUsed;
+  replaceCurrentChat: boolean;
   setOpenConfig: (openConfig: boolean) => void;
   setTheme: (theme: Theme) => void;
   setAutoTitle: (autoTitle: boolean) => void;
@@ -38,6 +39,7 @@ export interface ConfigSlice {
   setCountTotalTokens: (countTotalTokens: boolean) => void;
   setTotalTokenUsed: (totalTokenUsed: TotalTokenUsed) => void;
   setChatNamesAsPageTitles: (chatNamesAsPageTitles: boolean) => void;
+  setReplaceCurrentChat: (replaceCurrentChat: boolean) => void;
 }
 
 export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
@@ -57,8 +59,9 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
   markdownMode: true,
   countTotalTokens: true,
   chatNamesAsPageTitles: false,
-
+  replaceCurrentChat: false,
   totalTokenUsed: {},
+  
   setOpenConfig: (openConfig: boolean) => {
     set((prev: ConfigSlice) => ({
       ...prev,
@@ -160,5 +163,8 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
       ...prev,
       totalTokenUsed: totalTokenUsed,
     }));
+  },
+  setReplaceCurrentChat(replaceCurrentChat) {
+    set((prev: ConfigSlice) => ({ ...prev, replaceCurrentChat }));
   },
 });

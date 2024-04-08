@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useStore from '@store/store';
-import Toggle from '@components/Menu/Toggle';
+import Toggle from './Toggle';
 
-const EnterToSubmitToggle = () => {
+const InlineLatexToggle = () => {
   const { t } = useTranslation();
 
-  const setEnterToSubmit = useStore((state) => state.setEnterToSubmit);
+  const setInlineLatex = useStore((state) => state.setInlineLatex);
 
   const [isChecked, setIsChecked] = useState<boolean>(
-    useStore.getState().enterToSubmit
+    useStore.getState().inlineLatex
   );
 
   useEffect(() => {
-    setEnterToSubmit(isChecked);
+    setInlineLatex(isChecked);
   }, [isChecked]);
 
   return (
     <Toggle
-      label={t('enterToSubmit') as string}
-      tooltip='Press Enter to submit messages instead of Shift + Enter'
+      label={t('inlineLatex') as string}
+      tooltip=''
       isChecked={isChecked}
       setIsChecked={setIsChecked}
     />
   );
 };
 
-export default EnterToSubmitToggle;
+export default InlineLatexToggle;

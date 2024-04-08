@@ -56,5 +56,6 @@
   "cloneChat": "Clone Chat",
   "cloned": "Chat Cloned",
   "submitPlaceholder": "Type a message...",
-  "logout": "Logout"
+  "logout": "Logout",
+  "replaceCurrentChatToggle": "Drop active chat when New Chat is created"
 }
