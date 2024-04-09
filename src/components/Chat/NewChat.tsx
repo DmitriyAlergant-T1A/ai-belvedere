@@ -58,13 +58,25 @@ const NewChat = ({ folder }: { folder?: string }) => {
   }, [generating, isModelSelectionOpen, defaultModel]); // Add dependencies here
 
 
-  const ModelSelectionButton = ({ model }: { model: ModelOptions }) => 
-  {
+  const ModelSelectionButton = ({ model, enabled = true }: { model: ModelOptions; enabled?: boolean }) => {
     return (
-    <div className='flex justify-center'>
-      <button className='min-w-btn btn btn-neutral p-4 rounded-lg md:border border-gray-900 dark:border-gray-200' onClick={() => handleModelSelect(model)}>{supportedModels[model].displayName}</button>
-    </div>);
-  }
+      <div className='flex justify-center'>
+        <button
+          className={`btn h-16 w-24 p-2 text-center justify-center rounded-lg md:border 
+          ${
+            enabled ? 'btn-neutral border-gray-900 dark:border-gray-200' 
+              : 
+                      'btn-disabled bg-gray-100 text-gray-500 border-gray-300 dark:bg-gray-700 dark:border-gray-500/70 dark:text-gray-500/70'
+          }`}
+          disabled={!enabled}
+          onClick={() => enabled && handleModelSelect(model)}
+        >
+          {supportedModels[model].displayName.trim()}
+        </button>
+      </div>
+    );
+  };
+  
 
   const anthropicEnable:string = import.meta.env.VITE_ANTHROPIC_ENABLE || "N";
   // console.log(`Anthropic Enable: ${anthropicEnable}`)
@@ -110,41 +122,41 @@ const NewChat = ({ folder }: { folder?: string }) => {
             `}
             </style>
             { replaceCurrentChat && (
-            <div className='flex flex-col items-center mt-4 mb-2 text-lg font-medium text-red-700'>
+            <div className='flex flex-col items-center text-center mt-4 mb-2 text-lg font-medium text-red-700'>
                 <div className='border-2 border-red-700 p-2'>
-                  Warning: currently active chat will be dropped, replaced with new chat.<br/>
-                  see "Drop active chat when New Chat is created" toggle in Settings
+                  <div>Warning: currently active chat will be dropped, replaced with new chat.</div>
+                  <div>See "Drop active chat when New Chat is created" toggle in Settings.</div>
                 </div>
             </div>)}
             <table className='w-full text-center text-gray-700 dark:text-gray-300' style={{ tableLayout: 'fixed' }}>
                 <tbody>
-                <tr><td className='pt-2 text-lg' colSpan={3}><b>OpenAI GPT: Iconic Large Language Models that started it all</b></td></tr>
+                <tr><td className='pt-2 text-lg' colSpan={3}><b>OpenAI: the iconic models that started it all</b></td></tr>
                 <tr>
                     <td style={{ paddingTop: '20px' }}>
                       <ModelSelectionButton model='gpt-3.5-turbo'/>
                     </td>
                     <td style={{ paddingTop: '20px' }}>
-                      GPT-4 (non-Turbo)
+                      <ModelSelectionButton model='gpt-4' enabled={false}/>
                     </td>
                     <td style={{ paddingTop: '20px' }}>
                       <ModelSelectionButton model='gpt-4-turbo-preview'/>
                     </td>                    
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                    <td style={{ paddingTop: '10px' }}>Same as "free" ChatGPT.com<br/>Obsolete. Try Haiku instead.</td>
-                    <td style={{ paddingTop: '10px' }}>GPT-4 (non-Turbo) is obsolete. Try Anthropic Claude instead.</td>
-                    <td style={{ paddingTop: '10px' }}>OpenAI's strongest model <br/>Context up to 128K tokens</td>
+                    <td className="p-2">Same as on "free" ChatGPT site. Obsolete. Try Haiku instead.</td>
+                    <td className="p-2">Obsolete, Disabled.<br/>Try Claude models.</td>
+                    <td className="p-2">OpenAI's overall strongest model as of today</td>
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top'}}>
-                    <td style={{ paddingTop: '10px' }}>Cheap <b>(baseline)</b><br/>per input/output token</td>
-                    <td style={{ paddingTop: '10px' }}>Price-performance is no longer competitive with other options</td>
-                    <td style={{ paddingTop: '10px' }}>Cost: <b>20x</b> of GPT-3.5<br/>per input/output token</td>
+                    <td style={{ paddingTop: '10px' }}>Cheap <b>(baseline)</b></td>
+                    <td style={{ paddingTop: '10px' }}>No longer competitive</td>
+                    <td style={{ paddingTop: '10px' }}>Cost: <b>20x</b> of GPT-3.5</td>
                 </tr>
                 <tr><td className='pt-6 text-lg' colSpan={3}></td></tr>
                 {(anthropicEnable=='Y') && (
                   <>
-                    <tr><td className='pt-2 text-lg border-t' colSpan={3}><b>Anthropic Claude 3: newest models by Anthropic, a strong OpenAI rival</b></td></tr>
-                    <tr><td className='' colSpan={3}>See <a className={`text-indigo-700 hover:text-indigo-500 visited:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 dark:visited:text-indigo-400`} 
+                    <tr><td className='pt-2 text-lg border-t' colSpan={3}><b>Claude 3: newest models by Anthropic, #2 rival</b></td></tr>
+                    <tr><td className='' colSpan={3}><a className={`text-indigo-500/80 hover:text-indigo-500/80 visited:text-indigo-700 dark:text-indigo-400/80 dark:hover:text-indigo-300/80 dark:visited:text-indigo-400`} 
                         href="https://www.anthropic.com/news/claude-3-family">https://www.anthropic.com/news/claude-3-family</a></td></tr>
                     <tr>
                         <td style={{ paddingTop: '20px' }}>
@@ -158,14 +170,14 @@ const NewChat = ({ folder }: { folder?: string }) => {
                         </td>  
                     </tr>
                     <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                        <td style={{ paddingTop: '10px' }}>Anthropic's fast&cheap model<br/>Approaches GPT-4<br/>Context up to 200K tokens</td>
-                        <td style={{ paddingTop: '10px' }}>Very strong mid-range model<br/>Comparable with GPT-4<br/>Context up to 200K tokens</td>
-                        <td style={{ paddingTop: '10px' }}>Anthropic's strongest model <br/>Beats most GPT-4 benchmarks<br/>Context up to 200K tokens</td>
+                        <td className="p-2">Best of "fast & cheap" models. Very good. Start here often.</td>
+                        <td className="p-2">Strong mid-range model. Great for coding.</td>
+                        <td className="p-2">Strongest model, expensive. Often beats GPT-4 Turbo. Best coding.</td>
                     </tr>
                     <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top'}}>
-                        <td style={{ paddingTop: '10px' }}>Cost: <b>60-80%</b> of GPT-3.5<br/><b>(cheaper but better!)</b></td>
-                        <td style={{ paddingTop: '10px' }}>Cost: <b>~8x</b> of GPT-3.5<br/>per input/output token</td>
-                        <td style={{ paddingTop: '10px' }}>Cost: <b>~50x</b> of GPT-3.5<br/>per input/output token</td>
+                        <td className="p-2">Cost: <b>60-80%</b> of GPT-3.5<br/><b>Cheaper but better!</b></td>
+                        <td className="p-2">Cost: <b>6-10x</b> of GPT-3.5</td>
+                        <td className="p-2">Cost: <b>30-50x</b> of GPT-3.5</td>
                     </tr>
                   </>
                 )}
