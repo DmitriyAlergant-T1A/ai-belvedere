@@ -1,4 +1,3 @@
-
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -6,38 +5,74 @@ import cors from 'cors';
 
 import chatCompletionsApiRouter from './api/chatCompletions.js';
 import { configApiRouter } from './api/configApiRouter.js';
-import { getAuthenticatedPrincipalNameRouter } from './api/getAuthenticatedPrincipalName.js';
 
+import pkg from 'express-openid-connect';
+const { auth, requiresAuth } = pkg;
 
 //load .env file
 dotenv.config({ path: '.env.server.local' });
 
 const app = express();
 
-
 //Enable unrestricted CORS (for now it's ok)
 app.use(cors());
 
 app.use(express.json());
 
-const PORT = process.env.SERVER_PORT || 5500;
+const authConfig = {
+  authRequired: true,
+  //auth0Logout: true,
+  secret: process.env.AUTH_SECRET,
+  baseURL: process.env.OIDC_BASEURL,
+  clientID: process.env.OIDC_CLIENTID,  
+  issuerBaseURL: process.env.OIDC_ISSUERBASEURL
+};
 
-// Main endpoint for chat completions
-app.use('/api/chat/completions', chatCompletionsApiRouter);
+// Middleware to conditionally apply authentication
+const conditionalAuth = (req, res, next) => {
+  if (process.env.AUTH_AUTH0 === 'Y') {
+    requiresAuth()(req, res, next);
+  } else {
+    next();
+  }
+};
 
-// Endpoint to retrieve server-side configuration items
-app.use('/api/config', configApiRouter());
 
-// Endpoint to retrieve the X-MS-CLIENT-PRINCIPAL-NAME header value by the client app
-app.use('/api/get-authenticated-principal-name', getAuthenticatedPrincipalNameRouter());
-
-// Serve static files from the React app
+// Serve static web app content without authentication
 app.use(express.static(path.resolve('dist')));
-``
-// Handle React routing, return all requests to React app
+
+// Main app route (react app) without authentication
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('dist', 'index.html'));
 });
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+if (process.env.AUTH_AUTH0 === 'Y') {
+  app.use(auth(authConfig));
+}
+
+// Main endpoint for chat completions
+app.use('/api/chat/completions', conditionalAuth, chatCompletionsApiRouter);
+
+// Endpoint to retrieve server-side configuration items
+app.use('/api/config', conditionalAuth, configApiRouter());
+
+app.get('/api/profile', conditionalAuth, (req, res) => {
+  if (process.env.AUTH_AUTH0 === 'Y') {
+    res.send(JSON.stringify(req.oidc.user));
+  } else if (process.env.AUTH_AAD_EXTERNAL === 'Y') {
+    res.send(JSON.stringify({"username":req.headers['x-ms-client-principal-name'] || "unknown user"}));
+  } else {
+    res.send(JSON.stringify({ message: 'Authentication disabled' }));
+  }
+});
+
+// Main app route (react app) with authentication for other routes
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve('dist', 'index.html'));
+});
+
+const PORT = process.env.SERVER_PORT || 5500;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}; Access the app http://localhost:${PORT}/`);

@@ -64,7 +64,10 @@ router.post('/', async (req, res) => {
       logsIngestionClient = new LogsIngestionClient(AZURE_LOG_ANALYTICS_RESOURCE_URI, credential);
     }
 
-    const clientPrincipalName = req.headers['x-ms-client-principal-name'] ?? 'unknown user';
+    console.log(JSON.stringify(req.oidc.user));
+
+    const userProfileEmail = req.oidc?.user?.email || req.headers['x-ms-client-principal-name'] || 'unknown user';
+
     const requestPurpose = req.headers['x-purpose'];
     const requestedProvider = req.headers['x-model-provider'];
 
@@ -136,7 +139,7 @@ router.post('/', async (req, res) => {
         requestId: requestId,
         TimeGenerated: new Date().toISOString(),
         environment: ENVIRONMENT,
-        principal: clientPrincipalName,
+        principal: userProfileEmail,
         requestSize: req.headers['content-length'],
         model: requestPayload.model,
         provider: requestedProvider,
@@ -162,7 +165,7 @@ router.post('/', async (req, res) => {
     
     const requestModule = apiUrl.startsWith('https') ? https : http;
 
-    console.log(`${requestId}: Processing request from client principal '${clientPrincipalName}', purpose: '${requestPurpose}' provider: '${provider}', model: '${req.body.model}'`);
+    console.log(`${requestId}: Processing request from client principal '${userProfileEmail}', purpose: '${requestPurpose}' provider: '${provider}', model: '${req.body.model}'`);
 
     let apiResponseCode = undefined;
 
@@ -340,7 +343,7 @@ router.post('/', async (req, res) => {
         requestId: requestId,
         TimeGenerated: new Date().toISOString(),
         environment: ENVIRONMENT,
-        principal: clientPrincipalName,
+        principal: userProfileEmail,
         requestSize: req.headers['content-length'], // content-length could be a number, but we keep it as string - this is how we set up Data Collection Rules in ALA...
         responseSize: responseSize.toString(),      // responseSize is a number, but convert it to string - this is how we set up Data Collection Rules in ALA...
         model: requestPayload.model,
