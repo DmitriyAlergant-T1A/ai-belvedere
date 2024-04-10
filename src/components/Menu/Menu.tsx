@@ -38,19 +38,20 @@ const Menu = React.memo(({chatDownloadAreaRef}: {chatDownloadAreaRef: React.RefO
           hideSideMenu ? 'translate-x-[-100%]' : 'translate-x-[0%]'
         }`}
       >
-        <div className='flex h-full min-h-0 flex-col'>
-          <div className='flex h-full w-full flex-1 items-start border-white/20'>
-            <nav className='flex h-full flex-1 flex-col space-y-1 px-2 pt-2'>
+        <div className='flex h-full w-full flex-1 items-start border-white/20'>
+          <nav className='flex h-full flex-1 flex-col space-y-1 px-2 pt-2'>
+            <div className='flex justify-between w-full'>
+              <NewChat />
               <div className='flex gap-2'>
-                <NewChat />
                 <CloneChat /> 
                 <NewFolder />
               </div>
-              <ChatHistoryList chatDownloadAreaRef={chatDownloadAreaRef}/>
-              <MenuOptions />
-            </nav>
-          </div>
+            </div>
+            <ChatHistoryList chatDownloadAreaRef={chatDownloadAreaRef}/>
+            <MenuOptions />
+          </nav>
         </div>
+
         <div
           id='menu-close'
           className={`${
