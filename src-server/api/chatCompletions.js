@@ -230,6 +230,8 @@ router.post('/', async (req, res) => {
                 if (item === '[DONE]') {
                   //console.log("Responded With data: [DONE]")
                   res.write('data: [DONE]\n\n');
+                  console.log(`${requestId}: Response stream completed`)
+                  streamCompleted = true;
                 } else if (typeof item === 'string') {
                   //console.log("chunk incomplete (not an object), buffered")
                   partial += item;
@@ -268,6 +270,9 @@ router.post('/', async (req, res) => {
                     if (content) res.write(`data: ${JSON.stringify({ content })}\n\n`);
                   } else if (data.type === 'message_stop') {
                     res.write('data: [DONE]\n\n');
+
+                    console.log(`${requestId}: Response stream completed`)
+                    streamCompleted = true;
                   }
                 }
               }
@@ -283,8 +288,6 @@ router.post('/', async (req, res) => {
       });
 
       apiRes.on('end', async () => {
-        //console.log(`${requestId}: Response stream completed`)
-        streamCompleted = true;
 
         if (req.body.stream) {
           if (res.statusCode == 200)    // Don't append data: [DONE] when status code is not 200 - this is just an error JSON response. It was not streaming and will not be handled as a stream by the client.
