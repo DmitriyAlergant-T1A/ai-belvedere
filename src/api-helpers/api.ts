@@ -19,8 +19,9 @@ export const isAuthenticated = async () => {
 }
 
 export const redirectToLogin = async() => {
-   //Redirect to a login route that triggers AAD authentication
-   window.location.href = '/login';
+  // Redirect to the login URL that triggers AAD authentication
+  const loginUrl = import.meta.env.VITE_LOGIN_URL;
+  window.location.href = loginUrl;
 }
 
   /* Prepare API Request Headers */

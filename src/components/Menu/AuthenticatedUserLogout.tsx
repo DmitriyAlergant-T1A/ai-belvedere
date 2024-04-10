@@ -31,7 +31,7 @@ const AuthenticatedUserLogout = () => {
     setToastShow(true);
     
     setTimeout(() => {
-      window.location.href = '/.auth/logout'
+      window.location.href = import.meta.env.VITE_LOGOUT_URL;
     }, 2000);
   };
 
