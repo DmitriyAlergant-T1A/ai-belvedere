@@ -91,4 +91,16 @@ if (process.env.USE_HTTPS === 'Y') {
   http.createServer(app).listen(PORT, () => {
     console.log(`HTTP Server is running on port ${PORT}; Access the app http://localhost:${PORT}/`);
   });
+
+// Redirect from HTTP to HTTPS
+if (process.env.USE_HTTPS === 'Y') {
+  const httpApp = express();
+  httpApp.get('*', (req, res) => {
+    res.redirect(`https://${req.headers.host}${req.url}`);
+  });
+  http.createServer(httpApp).listen(80, () => {
+    console.log('HTTP Server running on port 80 for HTTPS redirection');
+  });
+}
+
 }
