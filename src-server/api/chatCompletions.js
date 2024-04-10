@@ -156,13 +156,13 @@ router.post('/', async (req, res) => {
       },
     };
 
-    let responseSize = 0;
+    let responseSizeDataChunks = 0;
     let batchResponseData = '';
     let streamCompleted = false;
     
     const requestModule = apiUrl.startsWith('https') ? https : http;
 
-    console.log(`${requestId}: Processing request from client principal '${clientPrincipalName}', purpose: '${requestPurpose}' provider: '${provider}', model: '${req.body.model}'`);
+    console.log(`${requestId}: New request from client '${clientPrincipalName}', purpose: '${requestPurpose}' provider: '${provider}', model: '${req.body.model}', length: ${req.headers['content-length']} bytes`);
 
     let apiResponseCode = undefined;
 
@@ -188,8 +188,6 @@ router.post('/', async (req, res) => {
       let partial = '';
 
       apiRes.on('data', (chunk) => {
-
-          responseSize += chunk.length;
   
           if (!req.body.stream)
             batchResponseData += chunk.toString();
@@ -230,6 +228,8 @@ router.post('/', async (req, res) => {
                 if (item === '[DONE]') {
                   //console.log("Responded With data: [DONE]")
                   res.write('data: [DONE]\n\n');
+                  console.log(`${requestId}: Response stream completed`)
+                  streamCompleted = true;
                 } else if (typeof item === 'string') {
                   //console.log("chunk incomplete (not an object), buffered")
                   partial += item;
@@ -239,6 +239,8 @@ router.post('/', async (req, res) => {
                     //console.log(`Responded With data: ${JSON.stringify({ content })}`);
                     res.write(`data: ${JSON.stringify({ content })}\n\n`);
                     partial = '';
+
+                    responseSizeDataChunks += 1;
                   } else if (item.choices[0]?.finish_reason === 'stop' || item.choices[0]?.finish_reason === 'length') {
                     // Normal stop is OK, we just ignore this. A [DONE] will follow anyway.
                   } else if (item.choices[0]?.finish_reason in ('content_filter')) {
@@ -265,9 +267,15 @@ router.post('/', async (req, res) => {
                   const data = JSON.parse(line.slice(5));
                   if (data.type === 'content_block_delta') {
                     const content = data.delta?.text;
-                    if (content) res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                    if (content) {
+                      res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                      responseSizeDataChunks += 1;
+                    }
                   } else if (data.type === 'message_stop') {
                     res.write('data: [DONE]\n\n');
+
+                    console.log(`${requestId}: Response stream completed`)
+                    streamCompleted = true;
                   }
                 }
               }
@@ -283,8 +291,6 @@ router.post('/', async (req, res) => {
       });
 
       apiRes.on('end', async () => {
-        //console.log(`${requestId}: Response stream completed`)
-        streamCompleted = true;
 
         if (req.body.stream) {
           if (res.statusCode == 200)    // Don't append data: [DONE] when status code is not 200 - this is just an error JSON response. It was not streaming and will not be handled as a stream by the client.
@@ -331,7 +337,7 @@ router.post('/', async (req, res) => {
 
     apiReq.on('close',async () => {
       if (req.body.stream)
-         console.log(`${requestId}: Response closed. Stream completed: `, streamCompleted);
+         console.log(`${requestId}: Response closed. Stream completed: ${streamCompleted}. Response size sent: ${responseSizeDataChunks + 3} chunks (tokens?)`);
       else
          console.log(`${requestId}: Response closed`);
 
@@ -342,7 +348,7 @@ router.post('/', async (req, res) => {
         environment: ENVIRONMENT,
         principal: clientPrincipalName,
         requestSize: req.headers['content-length'], // content-length could be a number, but we keep it as string - this is how we set up Data Collection Rules in ALA...
-        responseSize: responseSize.toString(),      // responseSize is a number, but convert it to string - this is how we set up Data Collection Rules in ALA...
+        responseSize: responseSizeDataChunks.toString(),      // responseSize is a number, but convert it to string - this is how we set up Data Collection Rules in ALA...
         model: requestPayload.model,
         provider: requestedProvider,
         purpose: requestPurpose,

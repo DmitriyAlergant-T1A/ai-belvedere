@@ -110,7 +110,7 @@ Features that existed in the original project, but were hidden or removed
 7. Navigate to http://localhost:5500
    
 
-# 🛠️ Running it locally for client-side debugging 
+# 🛠️ Running it locally for client-side debugging  (Vite)
 ## (Server-Side provides the API, Client-Side is served through Vite)
 
 1. Ensure that you have the following installed:
@@ -140,29 +140,5 @@ Features that existed in the original project, but were hidden or removed
 6. Launch the app by running `**npm run dev**`
 
 7. Navigate to http://localhost:5173
-  
-# 🛠️ Running it locally using docker compose
 
-1. Ensure that you have the following installed:
-
-   - [docker](https://www.docker.com/) (v24.0.7 or above)
-      ```bash
-      curl https://get.docker.com | sh \
-      && sudo usermod -aG docker $USER
-      ```
-
-2. Build the docker image
-   ```
-   docker compose build
-   ```
-
-3. Build and start the container using docker compose
-   ```
-   docker compose build
-   docker compose up -d
-   ```
-
-4. Stop the container
-   ```
-   docker compose down
-   ```
+8. In Settings -> API Settings, select Development Endpoint (localhost:5500/api)
