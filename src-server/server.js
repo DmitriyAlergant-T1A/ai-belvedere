@@ -2,6 +2,9 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import fs from 'fs';
+import https from 'https';
+import http from 'http';
 
 import chatCompletionsApiRouter from './api/chatCompletions.js';
 import { configApiRouter } from './api/configApiRouter.js';
@@ -74,6 +77,18 @@ app.get('/*', (req, res) => {
 
 const PORT = process.env.SERVER_PORT || 5500;
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}; Access the app http://localhost:${PORT}/`);
-});
+// Check if HTTPS is enabled via environment variable
+if (process.env.USE_HTTPS === 'Y') {
+  const httpsOptions = {
+    key: fs.readFileSync(process.env.SSL_KEY_PATH),
+    cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+  };
+  
+  https.createServer(httpsOptions, app).listen(PORT, () => {
+    console.log(`HTTPS Server is running on port ${PORT}; Access the app https://localhost:${PORT}/`);
+  });
+} else {
+  http.createServer(app).listen(PORT, () => {
+    console.log(`HTTP Server is running on port ${PORT}; Access the app http://localhost:${PORT}/`);
+  });
+}
