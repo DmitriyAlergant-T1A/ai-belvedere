@@ -37,8 +37,8 @@ jobs:
         docker build . -t ${{ env.AZ_CONTAINER_REGISTRY_NAME }}.azurecr.io/${{ env.AZ_IMAGE_NAME }}:${{ env.AZ_IMAGE_VERSION_TAG }} \
         --build-arg VITE_COMPANY_NAME="${{ env.VITE_COMPANY_NAME }}" \
         --build-arg VITE_ANTHROPIC_ENABLE="${{ env.VITE_ANTHROPIC_ENABLE }}" \
-        --build-arg VITE_CHECK_AAD_AUTH="${{ env.VITE_CHECK_AAD_AUTH }}"
-        --build-arg VITE_LOGIN_URL="${{ env.VITE_LOGIN_URL }}"
+        --build-arg VITE_CHECK_AAD_AUTH="${{ env.VITE_CHECK_AAD_AUTH }}" \
+        --build-arg VITE_LOGIN_URL="${{ env.VITE_LOGIN_URL }}" \
         --build-arg VITE_LOGOUT_URL="${{ env.VITE_LOGOUT_URL }}"
 
     
