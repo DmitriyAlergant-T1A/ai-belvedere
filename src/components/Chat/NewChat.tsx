@@ -62,7 +62,7 @@ const NewChat = ({ folder }: { folder?: string }) => {
     return (
       <div className='flex justify-center'>
         <button
-          className={`btn h-16 w-24 p-2 text-center justify-center rounded-lg md:border 
+          className={`btn h-16 w-28 p-2 text-center justify-center rounded-lg md:border 
           ${
             enabled ? 'btn-neutral border-gray-900 dark:border-gray-200' 
               : 
@@ -84,7 +84,7 @@ const NewChat = ({ folder }: { folder?: string }) => {
   return (
     <>
       <a
-        className={`flex flex-1 items-center rounded-md hover:bg-gray-500/10 transition-all duration-200 text-white text-sm flex-shrink-0 ${
+        className={`flex items-center rounded-md hover:bg-gray-500/10 transition-all duration-200 text-white text-sm flex-shrink-0 ${
           generating ? 'cursor-not-allowed opacity-40' : 'cursor-pointer opacity-100'
         } ${folder ? 'justify-start' : 'py-2 px-2 gap-3 mb-2 border border-white/20'}`}
         onClick={() => {
@@ -130,7 +130,7 @@ const NewChat = ({ folder }: { folder?: string }) => {
             </div>)}
             <table className='w-full text-center text-gray-700 dark:text-gray-300' style={{ tableLayout: 'fixed' }}>
                 <tbody>
-                <tr><td className='pt-2 text-lg' colSpan={3}><b>OpenAI: the iconic models that started it all</b></td></tr>
+                <tr><td className='pt-2 text-lg' colSpan={3}><b>OpenAI: iconic language models that started it all</b></td></tr>
                 <tr>
                     <td style={{ paddingTop: '20px' }}>
                       <ModelSelectionButton model='gpt-3.5-turbo'/>
@@ -143,19 +143,20 @@ const NewChat = ({ folder }: { folder?: string }) => {
                     </td>                    
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                    <td className="p-2">Same as on "free" ChatGPT site. Obsolete. Try Haiku instead.</td>
-                    <td className="p-2">Obsolete, Disabled.<br/>Try Claude models.</td>
-                    <td className="p-2">OpenAI's overall strongest model as of today</td>
+                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].usage_description }}></td>
+                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].usage_description }}></td>
+                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo-preview'].usage_description }}></td>
                 </tr>
-                <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top'}}>
-                    <td style={{ paddingTop: '10px' }}>Cheap <b>(baseline)</b></td>
-                    <td style={{ paddingTop: '10px' }}>No longer competitive</td>
-                    <td style={{ paddingTop: '10px' }}>Cost: <b>20x</b> of GPT-3.5</td>
+                <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
+                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].cost_description }}></td>
+                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].cost_description }}></td>
+                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo-preview'].cost_description }}></td>
                 </tr>
+
                 <tr><td className='pt-6 text-lg' colSpan={3}></td></tr>
                 {(anthropicEnable=='Y') && (
                   <>
-                    <tr><td className='pt-2 text-lg border-t' colSpan={3}><b>Claude 3: newest models by Anthropic, #2 rival</b></td></tr>
+                    <tr><td className='pt-2 text-lg border-t' colSpan={3}><b>Claude 3: newest and hottest models by Anthropic</b></td></tr>
                     <tr><td className='' colSpan={3}><a className={`text-indigo-500/80 hover:text-indigo-500/80 visited:text-indigo-700 dark:text-indigo-400/80 dark:hover:text-indigo-300/80 dark:visited:text-indigo-400`} 
                         href="https://www.anthropic.com/news/claude-3-family">https://www.anthropic.com/news/claude-3-family</a></td></tr>
                     <tr>
@@ -170,15 +171,16 @@ const NewChat = ({ folder }: { folder?: string }) => {
                         </td>  
                     </tr>
                     <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                        <td className="p-2">Best of "fast & cheap" models. Very good. Start here often.</td>
-                        <td className="p-2">Strong mid-range model. Great for coding.</td>
-                        <td className="p-2">Strongest model, expensive. Often beats GPT-4 Turbo. Best coding.</td>
+                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].usage_description }}></td>
+                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-sonnet'].usage_description }}></td>
+                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-opus'].usage_description }}></td>
                     </tr>
-                    <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top'}}>
-                        <td className="p-2">Cost: <b>60-80%</b> of GPT-3.5<br/><b>Cheaper but better!</b></td>
-                        <td className="p-2">Cost: <b>6-10x</b> of GPT-3.5</td>
-                        <td className="p-2">Cost: <b>30-50x</b> of GPT-3.5</td>
+                    <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
+                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].cost_description }}></td>
+                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-sonnet'].cost_description }}></td>
+                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-opus'].cost_description }}></td>
                     </tr>
+
                   </>
                 )}
                 </tbody>
