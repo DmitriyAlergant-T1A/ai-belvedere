@@ -7,7 +7,7 @@ const StopGeneratingButton = () => {
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.ctrlKey && (event.key === 's' || event.key === 'ы')) {
+      if (event.key === 'Escape') {
       event.preventDefault();
       setGenerating(false);
       }
@@ -27,7 +27,7 @@ const StopGeneratingButton = () => {
     // >
       <div className={`flex w-full z-0 justify-start`}>
         <button
-          className='btn relative min-w-[12em] z-1000 justify-center items-center btn-neutral border-0 md:border border-gray-900 dark:border-gray-200'
+          className='btn relative min-w-[12em] z-1000 justify-left text-left btn-neutral border-0 md:border border-gray-900 dark:border-gray-200'
           aria-label='stop generating' onClick={() => setGenerating(false)}
         >
             <svg
@@ -44,7 +44,7 @@ const StopGeneratingButton = () => {
             >
               <rect x='3' y='3' width='18' height='18' rx='2' ry='2'></rect>
             </svg>
-            &nbsp;&nbsp;Stop generating<br/>hotkey: ctrl+s
+            &nbsp;&nbsp;Stop generating<br/>&nbsp;&nbsp;hotkey: Esc
         </button>
       </div>
   ) : (
