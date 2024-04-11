@@ -31,14 +31,14 @@ const NewChat = ({ folder }: { folder?: string }) => {
   // Function to handle Enter key press
   const handleEnterKeyPress = (event: KeyboardEvent) => {
 
-    //Use default model; Close modal;
-    if ((event.key === '/' || event.key === '.') && isModelSelectionOpen) {
+    //Use default model; Close ,modal;
+    if (event.key === '/' && isModelSelectionOpen) {
       handleModelSelect(defaultModel);
       event.preventDefault();
     }
 
     //Show New Chat modal
-    if (event.ctrlKey && (event.key === '/' || event.key === '.') && !isModelSelectionOpen && !generating) {
+    if (event.ctrlKey && event.key === '/' && !isModelSelectionOpen && !generating) {
       setIsModelSelectionOpen(true);
       event.preventDefault();
     }
@@ -84,7 +84,7 @@ const NewChat = ({ folder }: { folder?: string }) => {
   return (
     <>
       <a
-        className={`flex items-center rounded-md hover:bg-gray-500/10 transition-all duration-200 text-white text-sm flex-shrink-0 ${
+        className={`flex flex-1 items-center rounded-md hover:bg-gray-500/10 transition-all duration-200 text-white text-sm flex-shrink-0 ${
           generating ? 'cursor-not-allowed opacity-40' : 'cursor-pointer opacity-100'
         } ${folder ? 'justify-start' : 'py-2 px-2 gap-3 mb-2 border border-white/20'}`}
         onClick={() => {
@@ -139,18 +139,18 @@ const NewChat = ({ folder }: { folder?: string }) => {
                       <ModelSelectionButton model='gpt-4' enabled={false}/>
                     </td>
                     <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-4-turbo'/>
+                      <ModelSelectionButton model='gpt-4-turbo-preview'/>
                     </td>                    
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].usage_description }}></td>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].usage_description }}></td>
-                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].usage_description }}></td>
+                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo-preview'].usage_description }}></td>
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].cost_description }}></td>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].cost_description }}></td>
-                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].cost_description }}></td>
+                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo-preview'].cost_description }}></td>
                 </tr>
 
                 <tr><td className='pt-6 text-lg' colSpan={3}></td></tr>

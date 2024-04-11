@@ -75,6 +75,8 @@ export interface ModelDetails {
     prompt: { price: number; unit: number };
     completion: { price: number; unit: number };
   };
+  usage_description: string;
+  cost_description: string;
 }
 
 export type ModelsList = {

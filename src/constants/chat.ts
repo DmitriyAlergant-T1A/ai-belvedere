@@ -54,22 +54,7 @@ export const supportedModels: ModelsList = {
   'gpt-4-turbo-preview': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4 Turbo Preview (legacy)',
-    enabled: false,
-    apiAliasCurrent: 'gpt-4-turbo-preview',
-    portkeyProvider: 'openai',
-    titleGenModel: 'gpt-3.5-turbo',
-    cost: {
-      prompt: { price: 10.00, unit: 1000000 },
-      completion: { price: 30.00, unit: 1000000 },
-    },
-    usage_description: "",
-    cost_description: 'Cost: <b>20x</b> of GPT-3.5',
-  },
-  'gpt-4-turbo': {
-    maxModelInputTokens: 128000-4096,
-    maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4 Turbo (latest)',
+    displayName: 'GPT-4 Turbo',
     enabled: true,
     apiAliasCurrent: 'gpt-4-turbo-preview',
     portkeyProvider: 'openai',
@@ -78,7 +63,7 @@ export const supportedModels: ModelsList = {
       prompt: { price: 10.00, unit: 1000000 },
       completion: { price: 30.00, unit: 1000000 },
     },
-    usage_description: "OpenAI's strongest model as of today. Industry leading. ",
+    usage_description: "OpenAI's strongest model as of today, keeps improving.",
     cost_description: 'Cost: <b>20x</b> of GPT-3.5',
   },
   'claude-3-haiku': {
