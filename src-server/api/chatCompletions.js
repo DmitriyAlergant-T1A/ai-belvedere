@@ -177,8 +177,20 @@ router.post('/', async (req, res) => {
         console.log(`${requestId}: Response received... status: ${apiRes.statusCode}. Starting to stream...`)
       else if (apiRes.statusCode==200)
         console.log(`${requestId}: Response received... status: ${apiRes.statusCode}. Not streaming. Buffering complete response.`)
-      else
-        console.log(`${requestId}: Response received... status: ${apiRes.statusCode}`)
+      else { /* Non-200 Responses */
+        console.log(`${requestId}: Response received... status: ${apiRes.statusCode}`);
+    
+        // Handle non-200 responses by sending the response back to the client
+        let data = '';
+        apiRes.on('data', (chunk) => {
+          data += chunk;
+        });
+        apiRes.on('end', () => {
+          res.status(apiRes.statusCode).send(data);
+        });
+        return; // Exit the function to prevent further processing
+      }
+        
 
       if (req.body.stream) {
         res.writeHead(apiRes.statusCode, {
@@ -239,6 +251,8 @@ router.post('/', async (req, res) => {
                   //console.log("chunk incomplete (not an object), buffered")
                   partial += item;
                 } else if (typeof item === 'object') {
+                  //console.log(JSON.stringify(item)); 
+                  
                   const content = item.choices[0]?.delta?.content ?? null;
                   if (content != null) {
                     //console.log(`Responded With data: ${JSON.stringify({ content })}`);
