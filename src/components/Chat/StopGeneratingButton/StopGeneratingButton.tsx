@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useStore from '@store/store';
 
 const StopGeneratingButton = () => {
   const setGenerating = useStore((state) => state.setGenerating);
   const generating = useStore((state) => state.generating);
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.ctrlKey && (event.key === 's' || event.key === 'ы')) {
+      event.preventDefault();
+      setGenerating(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [setGenerating]);
 
   return generating ? (
     // <div
@@ -29,7 +44,7 @@ const StopGeneratingButton = () => {
             >
               <rect x='3' y='3' width='18' height='18' rx='2' ry='2'></rect>
             </svg>
-            &nbsp;&nbsp;Stop generating
+            &nbsp;&nbsp;Stop generating<br/>hotkey: ctrl+s
         </button>
       </div>
   ) : (
