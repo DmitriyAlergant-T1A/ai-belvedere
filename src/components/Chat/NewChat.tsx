@@ -31,14 +31,14 @@ const NewChat = ({ folder }: { folder?: string }) => {
   // Function to handle Enter key press
   const handleEnterKeyPress = (event: KeyboardEvent) => {
 
-    //Use default model; Close ,modal;
-    if (event.key === '/' && isModelSelectionOpen) {
+    //Use default model; Close modal;
+    if ((event.key === '/' || event.key === '.') && isModelSelectionOpen) {
       handleModelSelect(defaultModel);
       event.preventDefault();
     }
 
     //Show New Chat modal
-    if (event.ctrlKey && event.key === '/' && !isModelSelectionOpen && !generating) {
+    if (event.ctrlKey && (event.key === '/' || event.key === '.') && !isModelSelectionOpen && !generating) {
       setIsModelSelectionOpen(true);
       event.preventDefault();
     }
