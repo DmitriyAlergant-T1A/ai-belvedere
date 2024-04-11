@@ -139,18 +139,18 @@ const NewChat = ({ folder }: { folder?: string }) => {
                       <ModelSelectionButton model='gpt-4' enabled={false}/>
                     </td>
                     <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-4-turbo-preview'/>
+                      <ModelSelectionButton model='gpt-4-turbo'/>
                     </td>                    
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].usage_description }}></td>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].usage_description }}></td>
-                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo-preview'].usage_description }}></td>
+                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].usage_description }}></td>
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].cost_description }}></td>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].cost_description }}></td>
-                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo-preview'].cost_description }}></td>
+                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].cost_description }}></td>
                 </tr>
 
                 <tr><td className='pt-6 text-lg' colSpan={3}></td></tr>
