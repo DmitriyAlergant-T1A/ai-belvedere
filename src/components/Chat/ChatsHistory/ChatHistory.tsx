@@ -126,6 +126,13 @@ const ChatHistory = React.memo(
               onChange={(e) => {
                 _setTitle(e.target.value);
               }}
+
+              // Do not count click on this textarea (when visible - isEdit) as a current chat change
+              // Otherwise we were losing focus and can't edit title
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+
               onKeyDown={handleKeyDown}
               ref={inputRef}
             />

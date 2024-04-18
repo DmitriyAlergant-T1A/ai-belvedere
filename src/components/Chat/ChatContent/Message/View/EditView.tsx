@@ -57,12 +57,19 @@ const EditView = ({
     setNewMessageDraftBuffer(newContent, currentChatIndex); // persist to global state (centralized buffer)
 }
 
-  // On chat changes, refresh the textarea based on the buffer.
-  // See utils/handleNewMessageDraftsPersistence.ts on buffer synchronization with Chat-level state
   useEffect(() => {
+
+    // On chat changes, refresh the textarea based on the buffer.
+    // See utils/handleNewMessageDraftsPersistence.ts on buffer synchronization with Chat-level state
     if (sticky) {
       __setContent(newMessageDraftBuffer ?? "");
     }
+
+    //Bring focus to new message textarea on switching between chats
+    if (sticky && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+
   }, [currentChatIndex, currentChats, sticky]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -228,12 +235,6 @@ const EditView = ({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, []);
-
-  useEffect(() => {
-    if (sticky && textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  }, [sticky, textareaRef]);
   
 
   const chats = JSON.parse(JSON.stringify(useStore.getState().chats || []));
