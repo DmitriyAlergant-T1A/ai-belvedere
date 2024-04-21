@@ -22,14 +22,14 @@ app.use(cors());
 
 app.use(express.json());
 
-const authConfig = {
-  authRequired: true,
-  //auth0Logout: true,
-  secret: process.env.AUTH_SECRET,
-  baseURL: process.env.OIDC_BASEURL,
-  clientID: process.env.OIDC_CLIENTID,  
-  issuerBaseURL: process.env.OIDC_ISSUERBASEURL
-};
+
+// Serve static web app content without authentication
+app.use(express.static(path.resolve('dist')));
+
+// Main app route (react app) without authentication
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve('dist', 'index.html'));
+});
 
 // Middleware to conditionally apply authentication
 const conditionalAuth = (req, res, next) => {
@@ -40,17 +40,18 @@ const conditionalAuth = (req, res, next) => {
   }
 };
 
-
-// Serve static web app content without authentication
-app.use(express.static(path.resolve('dist')));
-
-// Main app route (react app) without authentication
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve('dist', 'index.html'));
-});
-
-// auth router attaches /login, /logout, and /callback routes to the baseURL
+// auth0 router attaches /login, /logout, and /callback routes to the baseURL
 if (process.env.AUTH_AUTH0 === 'Y') {
+
+  const authConfig = {
+    authRequired: true,
+    //auth0Logout: true,
+    secret: process.env.AUTH_SECRET,
+    baseURL: process.env.OIDC_BASEURL,
+    clientID: process.env.OIDC_CLIENTID,  
+    issuerBaseURL: process.env.OIDC_ISSUERBASEURL
+  };  
+
   app.use(auth(authConfig));
 }
 
