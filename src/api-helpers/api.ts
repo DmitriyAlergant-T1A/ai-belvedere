@@ -6,10 +6,10 @@ import { _builtinAPIEndpoint } from '@constants/apiEndpoints';
 
 export const isAuthenticated = async () => {
   try {
-    const response = await fetch('/api/get-authenticated-principal-name');
+    const response = await fetch('/api/profile');
     if (response.ok) {
       const data = await response.json();
-      return data.clientPrincipalName != null;
+      return data.name != null;
     }
     return false;
   } catch (error) {
