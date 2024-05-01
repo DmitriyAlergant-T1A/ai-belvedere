@@ -2,41 +2,10 @@ import express from 'express';
 import http from 'http';
 import https from 'https';
 import { v4 as uuidv4 } from 'uuid';
-import os from 'os';
 
-import { isAggregateLogsUploadError, LogsIngestionClient } from "@azure/monitor-ingestion";
-
-import { getAzureCredential } from '../azure-credentials.js';
-
-//import { openai_parseEventSource } from './parse_openai.js';
+import logRequestRouter from './logging/logging-router.js';
 
 const router = express.Router();
-
-function logToAzureLogAnalytics(logsIngestionClient, streamName, requestId, logsData) {
-
-  const AZURE_LOG_ANALYTICS_RESOURCE_URI = process.env.AZURE_LOG_ANALYTICS_RESOURCE_URI;
-  const AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID = process.env.AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID;
-
-  if (AZURE_LOG_ANALYTICS_RESOURCE_URI) {
-
-    //console.log(JSON.stringify(logsData));
-
-    logsIngestionClient.upload(AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID, streamName, logsData)
-    .catch(e => {
-      let aggregateErrors = isAggregateLogsUploadError(e) ? e.errors : [];
-      if (aggregateErrors.length > 0) {
-        //console.log(`${requestId} Some logs have failed to complete ingestion`);
-        for (const error of aggregateErrors) {
-          console.log(`${requestId} Logs ingestion error: ${error?.cause?.statusCode}  ${error?.cause?.code} ${error?.cause?.details?.error?.message}`);
-          //console.log(`${requestId} Logs ingestion error: ${JSON.stringify(error)}`);
-        }
-      } else {
-        console.log(`${requestId} Error uploading logs to ALA: ` + e);
-      }
-    });
-  }
-}
-
 
 router.post('/', async (req, res) => {
 
@@ -53,18 +22,6 @@ router.post('/', async (req, res) => {
     const AZURE_LOG_ANALYTICS_RES_LOGS_DS = process.env.AZURE_LOG_ANALYTICS_RES_LOGS_DS;
 
     const AZURE_LOG_ANALYTICS_RESOURCE_URI = process.env.AZURE_LOG_ANALYTICS_RESOURCE_URI;
-
-    const ENVIRONMENT = process.env.ENVIRONMENT || os.hostname();
-
-    let credential, logsIngestionClient;
-
-    if (AZURE_LOG_ANALYTICS_RESOURCE_URI) {
-      credential = getAzureCredential();
-
-      logsIngestionClient = new LogsIngestionClient(AZURE_LOG_ANALYTICS_RESOURCE_URI, credential);
-    }
-
-    console.log(JSON.stringify(req.oidc.user));
 
     const userProfileEmail = req.oidc?.user?.email || req.headers['x-ms-client-principal-name'] || 'unknown user';
 
@@ -134,19 +91,15 @@ router.post('/', async (req, res) => {
         "x-portkey-provider": requestedProvider};
     }
       
-    logToAzureLogAnalytics (logsIngestionClient, AZURE_LOG_ANALYTICS_REQ_LOGS_DS, requestId,
-      [{
-        requestId: requestId,
-        TimeGenerated: new Date().toISOString(),
-        environment: ENVIRONMENT,
+    logRequestRouter ("Chat Completions Request", requestId,
+      {
         principal: userProfileEmail,
         requestSize: req.headers['content-length'],
         model: requestPayload.model,
         provider: requestedProvider,
         purpose: requestPurpose,
-        
         headers: "" //JSON.stringify(req.headers),
-      }]);
+      });
 
 
     const apiReqHeaders = {
@@ -165,7 +118,7 @@ router.post('/', async (req, res) => {
     
     const requestModule = apiUrl.startsWith('https') ? https : http;
 
-    console.log(`${requestId}: Processing request from client principal '${userProfileEmail}', purpose: '${requestPurpose}' provider: '${provider}', model: '${req.body.model}'`);
+    //console.log(`${requestId}: Processing request from client principal '${userProfileEmail}', purpose: '${requestPurpose}' provider: '${provider}', model: '${req.body.model}'`);
 
     let apiResponseCode = undefined;
 
@@ -209,10 +162,6 @@ router.post('/', async (req, res) => {
       
           if (req.body.stream) {
             const receivedValue = chunk.toString();
-
-            // console.log("=====");
-            // console.log("receivedValue: " + receivedValue);
-            // console.log("^^^^^");
       
             // Handle OpenAI stream format
             if (provider === 'openai' || provider === 'portkey') {
@@ -266,11 +215,11 @@ router.post('/', async (req, res) => {
                     res.write(`data: {"content:"\n[MODEL STOPPED RESPONDING AS IT HAS MADE A FUNCTION CALL]"}\n\n`);
                   }
                   else {
-                    console.log (`${requestId}: ERROR parsing event stream, chunk item is a null object`);
+                    console.error (`${requestId}: ERROR parsing event stream, chunk item is a null object`);
                   }
                 }
                 else {
-                  console.log(`${requestId}: ERROR parsing event stream, unexpected chunk item type`);
+                  console.error(`${requestId}: ERROR parsing event stream, unexpected chunk item type`);
                 }
               });
                   
@@ -291,7 +240,7 @@ router.post('/', async (req, res) => {
                   } else if (data.type === 'message_stop') {
                     res.write('data: [DONE]\n\n');
 
-                    console.log(`${requestId}: Response stream completed`)
+                    //console.log(`${requestId}: Response stream completed`)
                     streamCompleted = true;
                   }
                 }
@@ -300,7 +249,7 @@ router.post('/', async (req, res) => {
           }
 
         if (req.socket.destroyed) {
-          // Handle the terminated connection
+          // Handle terminated connection
           console.log(`${requestId}: Client connection terminated, aborting the API request.`);
           apiRes.destroy();
           return;
@@ -353,27 +302,26 @@ router.post('/', async (req, res) => {
     });
 
     apiReq.on('close',async () => {
-      if (req.body.stream)
-         console.log(`${requestId}: Response closed. Stream completed: ${streamCompleted}. Response size sent: ${responseSizeDataChunks + 3} chunks (tokens?)`);
-      else
-         console.log(`${requestId}: Response closed`);
 
-      logToAzureLogAnalytics (logsIngestionClient, AZURE_LOG_ANALYTICS_RES_LOGS_DS, requestId,
-      [{
-        requestId: requestId,
-        TimeGenerated: new Date().toISOString(),
-        environment: ENVIRONMENT,
+      // if (req.body.stream)
+      //    console.log(`${requestId}: Response closed. Stream completed: ${streamCompleted}. Response size sent: ${responseSizeDataChunks + 3} chunks (tokens?)`);
+      // else
+      //    console.log(`${requestId}: Response closed`);
+
+      logRequestRouter ("Chat Completions Response", requestId,
+      {
         principal: userProfileEmail,
+        requestStreaming: req.body.stream,
         requestSize: req.headers['content-length'], // content-length could be a number, but we keep it as string - this is how we set up Data Collection Rules in ALA...
-        responseSize: responseSizeDataChunks.toString(),      // responseSize is a number, but convert it to string - this is how we set up Data Collection Rules in ALA...
+        responseSize: responseSizeDataChunks,       
+        responseSizeDataChunks: responseSizeDataChunks,
         model: requestPayload.model,
         provider: requestedProvider,
         purpose: requestPurpose,
         headers: "", //JSON.stringify(req.headers),
         apiResponseCode: apiResponseCode,
         streamCompleted: streamCompleted,
-      }]
-      );
+      });
     });
 
     apiReq.write(JSON.stringify(requestPayload));

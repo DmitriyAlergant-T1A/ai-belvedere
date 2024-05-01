@@ -7,7 +7,7 @@ import https from 'https';
 import http from 'http';
 
 import chatCompletionsApiRouter from './api/chatCompletions.js';
-import { configApiRouter } from './api/configApiRouter.js';
+import { configEndpointRouter } from './api/configEndpointRouter.js';
 
 import pkg from 'express-openid-connect';
 const { auth, requiresAuth } = pkg;
@@ -59,7 +59,7 @@ if (process.env.AUTH_AUTH0 === 'Y') {
 app.use('/api/chat/completions', conditionalAuth, chatCompletionsApiRouter);
 
 // Endpoint to retrieve server-side configuration items
-app.use('/api/config', conditionalAuth, configApiRouter());
+app.use('/api/config', conditionalAuth, configEndpointRouter());
 
 app.get('/api/profile', conditionalAuth, (req, res) => {
   if (process.env.AUTH_AUTH0 === 'Y') {
