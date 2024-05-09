@@ -6,9 +6,12 @@ import { _builtinAPIEndpoint } from '@constants/apiEndpoints';
 import { fetchAuthenticatedUserProfile } from '@utils/getAuthenticatedUserProfile';
 
 export const isAuthenticated = async () => {
-  const userProfile = fetchAuthenticatedUserProfile();
 
-  return (userProfile != null);
+  console.debug("Checking if user is authenticated")
+
+  const userProfile = await fetchAuthenticatedUserProfile();
+
+  return (userProfile != undefined);
 }
 
 export const redirectToLogin = async() => {
@@ -30,7 +33,8 @@ export const prepareApiHeaders = async (
   headers['x-model-provider'] = supportedModels[model].portkeyProvider;
 
   /* Built-in endpoint (/api/v1/chat/completions) */
-  if (apiEndpoint === _builtinAPIEndpoint && import.meta.env.VITE_CHECK_AAD_AUTH === 'Y')
+  if (apiEndpoint === _builtinAPIEndpoint && 
+      (import.meta.env.VITE_CHECK_AAD_AUTH === 'Y' || import.meta.env.AUTH_AUTH0 === 'Y'))
   {
     const isAuthenticatedUser = await isAuthenticated();
 

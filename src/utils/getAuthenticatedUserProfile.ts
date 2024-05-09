@@ -18,14 +18,16 @@ export const fetchAuthenticatedUserProfile = async (): Promise<OIDCUserProfile |
       try{
         const profileData = JSON.parse(profileResponseString);
 
+        console.debug('Fetched authenticated user profile: ', profileData);
+
         return profileData;
       }
       catch (error) {
-        console.debug ('/api/profile returned ' + profileResponseString + ' which is not JSON');
+        console.log ('/api/profile returned ' + profileResponseString + ' which is not a valid JSON');
         return undefined;
       }
     } catch (error) {
-      console.log('Error fetching authenticated principal user name: ', error);
+      console.log('Error fetching authenticated user profile: ', error);
       return undefined;
     }
 };
