@@ -21,7 +21,7 @@ const AuthenticationUpdater = () => {
 
 
   useEffect(() => {
-    if (import.meta.env.VITE_USE_AAD_AUTH === 'Y') {
+    if (import.meta.env.VITE_CHECK_AAD_AUTH === 'Y') {
       const interval = setInterval(() => {
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';

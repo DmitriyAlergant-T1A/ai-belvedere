@@ -100,7 +100,7 @@ Features that existed in the original project, but were hidden or removed
       ```
       VITE_COMPANY_NAME=(Your Company/Team/Family name)
       VITE_ANTHROPIC_ENABLE=Y
-      VITE_USE_AAD_AUTH=N
+      VITE_CHECK_AAD_AUTH=N
       ```
 
 5. Run `npm install`
@@ -132,7 +132,7 @@ Features that existed in the original project, but were hidden or removed
       ```
       VITE_COMPANY_NAME=(Your Company/Team/Family name)
       VITE_ANTHROPIC_ENABLE=Y
-      VITE_USE_AAD_AUTH=N
+      VITE_CHECK_AAD_AUTH=N
       ```
 
 5. Run `npm install`
