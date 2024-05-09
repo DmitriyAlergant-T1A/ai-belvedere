@@ -64,11 +64,11 @@ app.use('/api/config', conditionalAuth, configEndpointRouter());
 app.get('/api/profile', conditionalAuth, (req, res) => {
 
   res.set('Cache-Control', 'no-store');
-  
+
   if (process.env.AUTH_AUTH0 === 'Y') {
     res.send(JSON.stringify(req.oidc.user));
   } else if (process.env.AUTH_AAD_EXTERNAL === 'Y') {
-    res.send(JSON.stringify({"username":req.headers['x-ms-client-principal-name'] || "unknown user"}));
+    res.send(JSON.stringify({"name":req.headers['x-ms-client-principal-name'] || "unknown user"}));
   } else {
     res.send(JSON.stringify({ message: 'Authentication disabled' }));
   }
