@@ -3,19 +3,12 @@ import { supportedModels } from '@constants/chat';
 import { OpenAICompletionsConfig } from '@hooks/useSubmit';
 import useStore from '@store/store';
 import { _builtinAPIEndpoint } from '@constants/apiEndpoints';
+import { fetchAuthenticatedUserProfile } from '@utils/getAuthenticatedUserProfile';
 
 export const isAuthenticated = async () => {
-  try {
-    const response = await fetch('/api/profile');
-    if (response.ok) {
-      const data = await response.json();
-      return data.name != null;
-    }
-    return false;
-  } catch (error) {
-    console.error('Error checking authentication status:', error);
-    return false;
-  }
+  const userProfile = fetchAuthenticatedUserProfile();
+
+  return (userProfile != null);
 }
 
 export const redirectToLogin = async() => {
