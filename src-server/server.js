@@ -62,6 +62,9 @@ app.use('/api/chat/completions', conditionalAuth, chatCompletionsApiRouter);
 app.use('/api/config', conditionalAuth, configEndpointRouter());
 
 app.get('/api/profile', conditionalAuth, (req, res) => {
+
+  res.set('Cache-Control', 'no-store');
+  
   if (process.env.AUTH_AUTH0 === 'Y') {
     res.send(JSON.stringify(req.oidc.user));
   } else if (process.env.AUTH_AAD_EXTERNAL === 'Y') {
