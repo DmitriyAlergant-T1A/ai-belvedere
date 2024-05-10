@@ -18,6 +18,12 @@ console.log("main.tsx: is user authenticated: " + _isUserAuthenticated);
 // Render the appropriate component based on the authentication state
 root.render(
   <React.StrictMode>
-    { _isUserAuthenticated ? <App /> : <Welcome />}
+    { 
+      (import.meta.env.VITE_CHECK_AAD_AUTH != 'Y' && import.meta.env.AUTH_AUTH0 != 'Y')
+        || _isUserAuthenticated ? 
+          <App />     /*User authenticated, or no authentication is implemented at all -> go to the main page*/
+            : 
+          <Welcome />
+    }
   </React.StrictMode>
 );
