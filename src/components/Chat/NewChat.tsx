@@ -9,7 +9,7 @@ import { ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 import { replace } from 'lodash';
 
-const NewChat = ({ folder }: { folder?: string }) => {
+const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: boolean }) => {
   const { t } = useTranslation();
   const generating = useStore((state) => state.generating);
   const [isModelSelectionOpen, setIsModelSelectionOpen] = useState(false);
@@ -47,13 +47,14 @@ const NewChat = ({ folder }: { folder?: string }) => {
   useEffect(() => {
     // Add event listener for keydown
 
-    if (!folder)  //Only handle for the main "New Chat" button not additional ones under Folders
-      window.addEventListener('keydown', handleEnterKeyPress);
+    console.log("hotkeysEnabled=", hotkeysEnabled);
+
+    if (hotkeysEnabled && !folder)  //Only handle for the main "New Chat" button not additional ones under Folders
+      window.addEventListener('keypress', handleEnterKeyPress);
 
     // Cleanup function to remove event listener
     return () => {
-      if (!folder)
-        window.removeEventListener('keydown', handleEnterKeyPress);
+        window.removeEventListener('keypress', handleEnterKeyPress);
     };
   }, [generating, isModelSelectionOpen, defaultModel]); // Add dependencies here
 
