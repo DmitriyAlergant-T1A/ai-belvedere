@@ -16,7 +16,7 @@ export const _defaultSystemMessage =
   import.meta.env.VITE_DEFAULT_SYSTEM_MESSAGE ??
   `Carefully follow the user's instructions. Respond using Markdown. Respond briefly, elaborate further when asked. If asked for code writing, only give that code, withhold explanations until requested. If asked for code modification, only give the relevant or changed pieces of code. Unless specifically requested provide a complete snippet, then comply.`;
 
-export const defaultModel: ModelOptions = 'gpt-4-turbo-preview';
+export const defaultModel: ModelOptions = 'gpt-4o';
 
 export const defaultTitleGenModel: ModelOptions = 'gpt-3.5-turbo';
 
@@ -69,17 +69,32 @@ export const supportedModels: ModelsList = {
   'gpt-4-turbo': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4 Turbo (latest)',
+    displayName: 'GPT-4 Turbo',
     enabled: true,
-    apiAliasCurrent: 'gpt-4-turbo-preview',
+    apiAliasCurrent: 'gpt-4-turbo',
     portkeyProvider: 'openai',
     titleGenModel: 'gpt-3.5-turbo',
     cost: {
       prompt: { price: 10.00, unit: 1000000 },
       completion: { price: 30.00, unit: 1000000 },
     },
-    usage_description: "OpenAI's strongest model as of today. Industry leading. ",
+    usage_description: "OpenAI's previously leading model (GPT-4V Turbo). Likely obsolete. Use GPT-4o instead. ",
     cost_description: 'Cost: <b>20x</b> of GPT-3.5',
+  },
+  'gpt-4o': {
+    maxModelInputTokens: 128000-4096,
+    maxModelCompletionTokens: 4096,
+    displayName: 'GPT-4o (latest)',
+    enabled: true,
+    apiAliasCurrent: 'gpt-4o',
+    portkeyProvider: 'openai',
+    titleGenModel: 'gpt-3.5-turbo',
+    cost: {
+      prompt: { price: 5.00, unit: 1000000 },
+      completion: { price: 15.00, unit: 1000000 },
+    },
+    usage_description: "OpenAI's strongest model as of today. Industry leading. ",
+    cost_description: 'Cost: <b>10x</b> of GPT-3.5',
   },
   'claude-3-haiku': {
     maxModelInputTokens: 200000-4096,

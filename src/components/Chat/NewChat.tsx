@@ -9,7 +9,7 @@ import { ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 import { replace } from 'lodash';
 
-const NewChat = ({ folder }: { folder?: string }) => {
+const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: boolean }) => {
   const { t } = useTranslation();
   const generating = useStore((state) => state.generating);
   const [isModelSelectionOpen, setIsModelSelectionOpen] = useState(false);
@@ -47,13 +47,14 @@ const NewChat = ({ folder }: { folder?: string }) => {
   useEffect(() => {
     // Add event listener for keydown
 
-    if (!folder)  //Only handle for the main "New Chat" button not additional ones under Folders
-      window.addEventListener('keydown', handleEnterKeyPress);
+    console.log("hotkeysEnabled=", hotkeysEnabled);
+
+    if (hotkeysEnabled && !folder)  //Only handle for the main "New Chat" button not additional ones under Folders
+      window.addEventListener('keypress', handleEnterKeyPress);
 
     // Cleanup function to remove event listener
     return () => {
-      if (!folder)
-        window.removeEventListener('keydown', handleEnterKeyPress);
+        window.removeEventListener('keypress', handleEnterKeyPress);
     };
   }, [generating, isModelSelectionOpen, defaultModel]); // Add dependencies here
 
@@ -136,21 +137,21 @@ const NewChat = ({ folder }: { folder?: string }) => {
                       <ModelSelectionButton model='gpt-3.5-turbo'/>
                     </td>
                     <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-4' enabled={false}/>
+                      <ModelSelectionButton model='gpt-4-turbo'/>
                     </td>
                     <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-4-turbo'/>
+                      <ModelSelectionButton model='gpt-4o'/>
                     </td>                    
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].usage_description }}></td>
-                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].usage_description }}></td>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].usage_description }}></td>
+                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o'].usage_description }}></td>
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].cost_description }}></td>
-                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4'].cost_description }}></td>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].cost_description }}></td>
+                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o'].cost_description }}></td>
                 </tr>
 
                 <tr><td className='pt-6 text-lg' colSpan={3}></td></tr>

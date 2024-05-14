@@ -3,19 +3,15 @@ import { supportedModels } from '@constants/chat';
 import { OpenAICompletionsConfig } from '@hooks/useSubmit';
 import useStore from '@store/store';
 import { _builtinAPIEndpoint } from '@constants/apiEndpoints';
+import { fetchAuthenticatedUserProfile } from '@utils/getAuthenticatedUserProfile';
 
 export const isAuthenticated = async () => {
-  try {
-    const response = await fetch('/api/get-authenticated-principal-name');
-    if (response.ok) {
-      const data = await response.json();
-      return data.clientPrincipalName != null;
-    }
-    return false;
-  } catch (error) {
-    console.error('Error checking authentication status:', error);
-    return false;
-  }
+
+  console.debug("Checking if user is authenticated")
+
+  const userProfile = await fetchAuthenticatedUserProfile();
+
+  return (userProfile != undefined);
 }
 
 export const redirectToLogin = async() => {
@@ -37,7 +33,8 @@ export const prepareApiHeaders = async (
   headers['x-model-provider'] = supportedModels[model].portkeyProvider;
 
   /* Built-in endpoint (/api/v1/chat/completions) */
-  if (apiEndpoint === _builtinAPIEndpoint && import.meta.env.VITE_CHECK_AAD_AUTH === 'Y')
+  if (apiEndpoint === _builtinAPIEndpoint && 
+      (import.meta.env.VITE_CHECK_AAD_AUTH === 'Y' || import.meta.env.AUTH_AUTH0 === 'Y'))
   {
     const isAuthenticatedUser = await isAuthenticated();
 

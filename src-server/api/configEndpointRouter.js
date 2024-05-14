@@ -2,7 +2,7 @@
 
 import express from 'express';
 
-export const configApiRouter = () => {
+export const configEndpointRouter = () => {
 
     const router = express.Router();        
        
