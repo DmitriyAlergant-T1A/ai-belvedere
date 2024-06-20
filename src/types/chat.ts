@@ -60,7 +60,8 @@ export type ModelOptions =
   | 'gpt-4o'
   | 'claude-3-haiku'
   | 'claude-3-sonnet'
-  | 'claude-3-opus';
+  | 'claude-3-opus'
+  | 'claude-3.5-sonnet';
 
 export interface ModelDetails {
   maxModelInputTokens: number;
