@@ -78,13 +78,13 @@ export const supportedModels: ModelsList = {
       prompt: { price: 10.00, unit: 1000000 },
       completion: { price: 30.00, unit: 1000000 },
     },
-    usage_description: "OpenAI's previously leading model (GPT-4V Turbo). Likely obsolete. Use GPT-4o instead. ",
+    usage_description: "OpenAI's previously leading model (March 2024). Has Pros and Cons vs GPT-4o but is twice expensive.",
     cost_description: 'Cost: <b>20x</b> of GPT-3.5',
   },
   'gpt-4o': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4o (latest)',
+    displayName: 'GPT-4o',
     enabled: true,
     apiAliasCurrent: 'gpt-4o',
     portkeyProvider: 'openai',
@@ -93,7 +93,7 @@ export const supportedModels: ModelsList = {
       prompt: { price: 5.00, unit: 1000000 },
       completion: { price: 15.00, unit: 1000000 },
     },
-    usage_description: "OpenAI's strongest model as of today. Industry leading. ",
+    usage_description: "OpenAI's Industry leading model (May 2024). Reasonably priced.",
     cost_description: 'Cost: <b>10x</b> of GPT-3.5',
   },
   'claude-3-haiku': {
@@ -115,7 +115,7 @@ export const supportedModels: ModelsList = {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
     displayName: 'Claude 3 Sonnet',
-    enabled: true,
+    enabled: false,
     apiAliasCurrent: 'claude-3-sonnet-20240229',
     portkeyProvider: 'anthropic',
     titleGenModel: 'claude-3-haiku', 
@@ -138,8 +138,23 @@ export const supportedModels: ModelsList = {
       prompt: { price: 15.00, unit: 1000000 },
       completion: { price: 75.00, unit: 1000000 },
     },
-    usage_description: 'Strongest Anthropic model. Better then GPT-4 in some tasks. Expensive.',
+    usage_description: 'Strongest Anthropic model of the Claude 3 family (Feb 2024). Expensive.',
     cost_description: 'Cost: <b>30-50x</b> of GPT-3.5'
+  },
+  'claude-3.5-sonnet': {
+    maxModelInputTokens: 200000-4096,
+    maxModelCompletionTokens: 4096,
+    displayName: 'Claude 3.5 Sonnet (latest)',
+    enabled: true,
+    apiAliasCurrent: 'claude-3-5-sonnet-20240620',
+    portkeyProvider: 'anthropic',
+    titleGenModel: 'claude-3-haiku', 
+    cost: {
+      prompt: { price: 3.00, unit: 1000000 },
+      completion: { price: 15.00, unit: 1000000 },
+    },
+    usage_description: 'Newest model (June 2024). Claimed to outperform both Claude Opus and GPT4o (!). Try it.',
+    cost_description: 'Cost: <b>6-10x</b> of GPT-3.5'
   }
 };
 

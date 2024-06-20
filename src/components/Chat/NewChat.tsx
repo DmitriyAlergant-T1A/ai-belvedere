@@ -158,28 +158,30 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                 {(anthropicEnable=='Y') && (
                   <>
                     <tr><td className='pt-2 text-lg border-t' colSpan={3}><b>Claude 3: newest and hottest models by Anthropic</b></td></tr>
-                    <tr><td className='' colSpan={3}><a className={`text-indigo-500/80 hover:text-indigo-500/80 visited:text-indigo-700 dark:text-indigo-400/80 dark:hover:text-indigo-300/80 dark:visited:text-indigo-400`} 
-                        href="https://www.anthropic.com/news/claude-3-family">https://www.anthropic.com/news/claude-3-family</a></td></tr>
+                    <tr><td className='' colSpan={3}>
+                      <a className={`text-indigo-500/80 hover:text-indigo-500/80 visited:text-indigo-700 dark:text-indigo-400/80 dark:hover:text-indigo-300/80 dark:visited:text-indigo-400`} 
+                          href="https://www.anthropic.com/news/claude-3-5-sonnet">https://www.anthropic.com/news/claude-3-5-sonnet</a>
+                    </td></tr>
                     <tr>
                         <td style={{ paddingTop: '20px' }}>
                           <ModelSelectionButton model='claude-3-haiku'/>
                         </td>
                         <td style={{ paddingTop: '20px' }}>
-                          <ModelSelectionButton model='claude-3-sonnet'/>
+                          <ModelSelectionButton model='claude-3-opus'/>
                         </td>
                         <td style={{ paddingTop: '20px' }}>
-                          <ModelSelectionButton model='claude-3-opus'/>
+                          <ModelSelectionButton model='claude-3.5-sonnet'/>
                         </td>  
                     </tr>
                     <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
                       <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].usage_description }}></td>
-                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-sonnet'].usage_description }}></td>
                       <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-opus'].usage_description }}></td>
+                      <td className="p-2 text-red-800" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3.5-sonnet'].usage_description }}></td>
                     </tr>
                     <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
                       <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].cost_description }}></td>
-                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-sonnet'].cost_description }}></td>
                       <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-opus'].cost_description }}></td>
+                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3.5-sonnet'].cost_description }}></td>
                     </tr>
 
                   </>
