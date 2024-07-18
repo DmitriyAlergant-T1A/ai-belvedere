@@ -25,7 +25,7 @@ export const supportedModels: ModelsList = {
     maxModelInputTokens: 16384-4096,
     maxModelCompletionTokens: 4096,
     displayName: 'GPT-3.5',
-    enabled: true,
+    enabled: false,
     apiAliasCurrent: 'gpt-3.5-turbo',
     portkeyProvider: 'openai',
     titleGenModel: 'gpt-3.5-turbo',
@@ -33,8 +33,8 @@ export const supportedModels: ModelsList = {
       prompt: { price: 0.5, unit: 1000000 },
       completion: { price: 1.5, unit: 1000000 },
     },
-    usage_description: 'Same as on "free" ChatGPT site. Obsolete. Try Haiku instead.',
-    cost_description: 'Cost: <b>Baseline</b>'
+    usage_description: '',
+    cost_description: ''
   },
   'gpt-4': {
     maxModelInputTokens: 8192,
@@ -43,12 +43,12 @@ export const supportedModels: ModelsList = {
     enabled: false,
     apiAliasCurrent: 'gpt-4',
     portkeyProvider: 'openai',
-    titleGenModel: 'gpt-3.5-turbo',
+    titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 30.00, unit: 1000000 },
       completion: { price: 60.00, unit: 1000000 },
     },
-    usage_description:  'Obsolete, Disabled.<br/>Try Claude models.',
+    usage_description:  '',
     cost_description: ''
   },
   'gpt-4-turbo-preview': {
@@ -58,58 +58,13 @@ export const supportedModels: ModelsList = {
     enabled: false,
     apiAliasCurrent: 'gpt-4-turbo-preview',
     portkeyProvider: 'openai',
-    titleGenModel: 'gpt-3.5-turbo',
+    titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 10.00, unit: 1000000 },
       completion: { price: 30.00, unit: 1000000 },
     },
-    usage_description: "",
-    cost_description: 'Cost: <b>20x</b> of GPT-3.5',
-  },
-  'gpt-4-turbo': {
-    maxModelInputTokens: 128000-4096,
-    maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4 Turbo',
-    enabled: true,
-    apiAliasCurrent: 'gpt-4-turbo',
-    portkeyProvider: 'openai',
-    titleGenModel: 'gpt-3.5-turbo',
-    cost: {
-      prompt: { price: 10.00, unit: 1000000 },
-      completion: { price: 30.00, unit: 1000000 },
-    },
-    usage_description: "OpenAI's previously leading model (March 2024). Has Pros and Cons vs GPT-4o but is twice expensive.",
-    cost_description: 'Cost: <b>20x</b> of GPT-3.5',
-  },
-  'gpt-4o': {
-    maxModelInputTokens: 128000-4096,
-    maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4o',
-    enabled: true,
-    apiAliasCurrent: 'gpt-4o',
-    portkeyProvider: 'openai',
-    titleGenModel: 'gpt-3.5-turbo',
-    cost: {
-      prompt: { price: 5.00, unit: 1000000 },
-      completion: { price: 15.00, unit: 1000000 },
-    },
-    usage_description: "OpenAI's Industry leading model (May 2024). Reasonably priced.",
-    cost_description: 'Cost: <b>10x</b> of GPT-3.5',
-  },
-  'claude-3-haiku': {
-    maxModelInputTokens: 200000-4096,
-    maxModelCompletionTokens: 4096,
-    displayName: 'Claude 3 Haiku',
-    enabled: true,
-    apiAliasCurrent: 'claude-3-haiku-20240307',
-    portkeyProvider: 'anthropic',
-    titleGenModel: 'claude-3-haiku',
-    cost: {
-      prompt: { price: 0.25, unit: 1000000 },
-      completion: { price: 1.25, unit: 1000000 },
-    },
-    usage_description: 'Best of "fast & cheap" models. Very good. Often it is enough!',
-    cost_description: 'Cost: <b>0.6-0.8x</b> of GPT-3.5<br/><b>Cheaper but better!</b>'
+    usage_description: '',
+    cost_description: '',
   },
   'claude-3-sonnet': {
     maxModelInputTokens: 200000-4096,
@@ -123,8 +78,68 @@ export const supportedModels: ModelsList = {
       prompt: { price: 3.00, unit: 1000000 },
       completion: { price: 15.00, unit: 1000000 },
     },
-    usage_description: 'Strong mid-range model. Great for coding. Balanced cost.',
-    cost_description: 'Cost: <b>6-10x</b> of GPT-3.5'
+    usage_description: '',
+    cost_description: ''
+  },
+  'gpt-4o-mini': {
+    maxModelInputTokens: 128000-4096,
+    maxModelCompletionTokens: 4096,
+    displayName: 'GPT-4o Mini',
+    enabled: true,
+    apiAliasCurrent: 'gpt-3.5-turbo',
+    portkeyProvider: 'openai',
+    titleGenModel: 'gpt-3.5-turbo',
+    cost: {
+      prompt: { price: 0.15, unit: 1000000 },
+      completion: { price: 0.6, unit: 1000000 },
+    },
+    usage_description: "Latest and greatest small class model, they use it now in 'free' ChatGPT since July 2024",
+    cost_description: 'Cost: <b>baseline</b>'
+  },
+  'gpt-4-turbo': {
+    maxModelInputTokens: 128000-4096,
+    maxModelCompletionTokens: 4096,
+    displayName: 'GPT-4 Turbo',
+    enabled: true,
+    apiAliasCurrent: 'gpt-4-turbo',
+    portkeyProvider: 'openai',
+    titleGenModel: 'gpt-4o-mini',
+    cost: {
+      prompt: { price: 10.00, unit: 1000000 },
+      completion: { price: 30.00, unit: 1000000 },
+    },
+    usage_description: "OpenAI's previous generation flagship, March 2024.</b> May still beat GPT-4o in some use-cases.",
+    cost_description: 'Cost: <b>60x</b> baseline',
+  },
+  'gpt-4o': {
+    maxModelInputTokens: 128000-4096,
+    maxModelCompletionTokens: 4096,
+    displayName: 'GPT-4o',
+    enabled: true,
+    apiAliasCurrent: 'gpt-4o',
+    portkeyProvider: 'openai',
+    titleGenModel: 'gpt-4o-mini',
+    cost: {
+      prompt: { price: 5.00, unit: 1000000 },
+      completion: { price: 15.00, unit: 1000000 },
+    },
+    usage_description: "OpenAI's current flagship model, industry leading. May 2024. Very strong but reasonably priced.",
+    cost_description: 'Cost: <b>30x</b> baseline',
+  },
+  'claude-3-haiku': {
+    maxModelInputTokens: 200000-4096,
+    maxModelCompletionTokens: 4096,
+    displayName: 'Claude 3 Haiku',
+    enabled: true,
+    apiAliasCurrent: 'claude-3-haiku-20240307',
+    portkeyProvider: 'anthropic',
+    titleGenModel: 'claude-3-haiku',
+    cost: {
+      prompt: { price: 0.25, unit: 1000000 },
+      completion: { price: 1.25, unit: 1000000 },
+    },
+    usage_description: 'Strong small-class model (fast and cheap) by Anthropic, works great for many use-cases',
+    cost_description: 'Cost: <b>2x</b> baseline'
   },
   'claude-3-opus': {
     maxModelInputTokens: 200000-4096,
@@ -138,13 +153,13 @@ export const supportedModels: ModelsList = {
       prompt: { price: 15.00, unit: 1000000 },
       completion: { price: 75.00, unit: 1000000 },
     },
-    usage_description: 'Strongest Anthropic model of the Claude 3 family (Feb 2024). Expensive.',
-    cost_description: 'Cost: <b>30-50x</b> of GPT-3.5'
+    usage_description: "Anthropic's previous flagship, Feb 2024. Intelligent but expensive. Still shines in some use-cases.",
+    cost_description: 'Cost: <b>100x</b> baseline'
   },
   'claude-3.5-sonnet': {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'Claude 3.5 Sonnet (latest)',
+    displayName: 'Claude 3.5 Sonnet',
     enabled: true,
     apiAliasCurrent: 'claude-3-5-sonnet-20240620',
     portkeyProvider: 'anthropic',
@@ -153,8 +168,8 @@ export const supportedModels: ModelsList = {
       prompt: { price: 3.00, unit: 1000000 },
       completion: { price: 15.00, unit: 1000000 },
     },
-    usage_description: 'Newest model (June 2024). Claimed to outperform both Claude Opus and GPT4o (!). Try it.',
-    cost_description: 'Cost: <b>6-10x</b> of GPT-3.5'
+    usage_description: "Anthropic's newest mid-class flagship, June 2024. Competes head-to-head with gpt-4o.",
+    cost_description: 'Cost: <b>20x</b> baseline'
   }
 };
 

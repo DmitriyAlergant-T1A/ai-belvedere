@@ -134,7 +134,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                 <tr><td className='pt-2 text-lg' colSpan={3}><b>OpenAI: iconic language models that started it all</b></td></tr>
                 <tr>
                     <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-3.5-turbo'/>
+                      <ModelSelectionButton model='gpt-4o-mini'/>
                     </td>
                     <td style={{ paddingTop: '20px' }}>
                       <ModelSelectionButton model='gpt-4-turbo'/>
@@ -144,12 +144,12 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                     </td>                    
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].usage_description }}></td>
+                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o-mini'].usage_description }}></td>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].usage_description }}></td>
                   <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o'].usage_description }}></td>
                 </tr>
                 <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
-                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-3.5-turbo'].cost_description }}></td>
+                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o-mini'].cost_description }}></td>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].cost_description }}></td>
                   <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o'].cost_description }}></td>
                 </tr>
@@ -176,7 +176,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                     <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
                       <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].usage_description }}></td>
                       <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-opus'].usage_description }}></td>
-                      <td className="p-2 text-red-800" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3.5-sonnet'].usage_description }}></td>
+                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3.5-sonnet'].usage_description }}></td>
                     </tr>
                     <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
                       <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].cost_description }}></td>
