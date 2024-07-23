@@ -94,6 +94,26 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
       </td>
     );
   };
+
+  const ModelRow = ({ provider, description, models }: { provider: string; description: string; models: ModelOptions[] }) => (
+    <>
+      <tr className="md:hidden">
+        <td colSpan={3} className="p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
+          {provider}
+          <div className="font-normal text-sm">{description}</div>
+        </td>
+      </tr>
+      <tr>
+        <td className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
+          {provider}
+          <div className="font-normal text-sm">{description}</div>
+        </td>
+        {models.map((model) => (
+          <ModelCell key={model} model={model} />
+        ))}
+      </tr>
+    </>
+  );
   
 
   const anthropicEnable:string = import.meta.env.VITE_ANTHROPIC_ENABLE || "N";
@@ -136,42 +156,38 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                   <div>See "Drop active chat when New Chat is created" toggle in Settings.</div>
                 </div>
               </div>
-            )}
-            <table className='w-full text-left align-middle text-sm text-center border-none'>
-              <thead>
-                <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
-                  <th className="w-1/4 p-2 border-none"></th>
-                  <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Small-Class models. Cheap, fast, efficient - but not smartest. Works well in simpler use-cases.</th>
-                  <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete but may still shine in some niche situations.</th>
-                  <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Current flagship models. Today's best AI intelligence leading in most use-cases.</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
-                      OpenAI Industry Leading Models that started it all.
-                  </td>
-                  <ModelCell model='gpt-4o-mini' />
-                  <ModelCell model='gpt-4-turbo' />
-                  <ModelCell model='gpt-4o' />
-                </tr>
-                {(anthropicEnable=='Y') && (
-                  <tr>
-                    <td className="p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
-                        Anthropic Models are a very strong alternative.<br/>Great for Coding!
-                    </td>
-                    <ModelCell model='claude-3-haiku' />
-                    <ModelCell model='claude-3-opus' />
-                    <ModelCell model='claude-3.5-sonnet' />
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </PopupModal>
-      )}
-    </>
-  );
-};
+             )}
+             <div className="overflow-x-auto">
+               <table className='w-full text-left align-middle text-sm text-center border-none'>
+                 <thead className="hidden md:table-header-group">
+                   <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
+                     <th className="w-1/4 p-2 border-none"></th>
+                     <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Small-Class models. Cheap, fast, efficient - but not smartest. Works well in simpler use-cases.</th>
+                     <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete but may still shine in some niche situations.</th>
+                     <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Current flagship models. Today's best AI intelligence leading in most use-cases.</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <ModelRow 
+                     provider="OpenAI Models"
+                     description="Industry leading models that started it all."
+                     models={['gpt-4o-mini', 'gpt-4-turbo', 'gpt-4o']}
+                   />
+                   {(anthropicEnable === 'Y') && (
+                     <ModelRow 
+                       provider="Anthropic Models"
+                       description="A very strong alternative. Best for Coding!"
+                       models={['claude-3-haiku', 'claude-3-opus', 'claude-3.5-sonnet']}
+                     />
+                   )}
+                 </tbody>
+               </table>
+             </div>
+           </div>
+         </PopupModal>
+       )}
+     </>
+   );
+ };
 
 export default NewChat;
