@@ -86,15 +86,16 @@ export const supportedModels: ModelsList = {
     maxModelCompletionTokens: 4096,
     displayName: 'GPT-4o Mini',
     enabled: true,
-    apiAliasCurrent: 'gpt-3.5-turbo',
+    apiAliasCurrent: 'gpt-4o-mini',
     portkeyProvider: 'openai',
-    titleGenModel: 'gpt-3.5-turbo',
+    titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 0.15, unit: 1000000 },
       completion: { price: 0.6, unit: 1000000 },
     },
-    usage_description: "Latest and greatest small class model, they use it now in 'free' ChatGPT since July 2024",
-    cost_description: 'Cost: <b>baseline</b>'
+    usage_description: "New leader in 'small' class. It now serves free ChatGPT users.",
+    released_description: 'July 2024',
+    cost_description: 'baseline'
   },
   'gpt-4-turbo': {
     maxModelInputTokens: 128000-4096,
@@ -108,8 +109,9 @@ export const supportedModels: ModelsList = {
       prompt: { price: 10.00, unit: 1000000 },
       completion: { price: 30.00, unit: 1000000 },
     },
-    usage_description: "OpenAI's previous generation flagship, March 2024.</b> May still beat GPT-4o in some use-cases.",
-    cost_description: 'Cost: <b>60x</b> baseline',
+    usage_description: "An improvement of the original GPT-4.",
+    released_description: 'March 2024',
+    cost_description: '60x baseline',
   },
   'gpt-4o': {
     maxModelInputTokens: 128000-4096,
@@ -123,8 +125,9 @@ export const supportedModels: ModelsList = {
       prompt: { price: 5.00, unit: 1000000 },
       completion: { price: 15.00, unit: 1000000 },
     },
-    usage_description: "OpenAI's current flagship model, industry leading. May 2024. Very strong but reasonably priced.",
-    cost_description: 'Cost: <b>30x</b> baseline',
+    usage_description: "Current flagship, industry leading model.",
+    released_description: 'May 2024',
+    cost_description: '30x baseline',
   },
   'claude-3-haiku': {
     maxModelInputTokens: 200000-4096,
@@ -138,8 +141,9 @@ export const supportedModels: ModelsList = {
       prompt: { price: 0.25, unit: 1000000 },
       completion: { price: 1.25, unit: 1000000 },
     },
-    usage_description: 'Strong small-class model (fast and cheap) by Anthropic, works great for many use-cases',
-    cost_description: 'Cost: <b>2x</b> baseline'
+    usage_description: 'Was an impressive small model at its time, but gpt-4o-mini is stronger now.',
+    released_description: 'February 2024',
+    cost_description: '2x baseline'
   },
   'claude-3-opus': {
     maxModelInputTokens: 200000-4096,
@@ -153,8 +157,9 @@ export const supportedModels: ModelsList = {
       prompt: { price: 15.00, unit: 1000000 },
       completion: { price: 75.00, unit: 1000000 },
     },
-    usage_description: "Anthropic's previous flagship, Feb 2024. Intelligent but expensive. Still shines in some use-cases.",
-    cost_description: 'Cost: <b>100x</b> baseline'
+    usage_description: "Was most intelligent but expensive model at its time, and may still have some still.",
+    released_description: 'February 2024',
+    cost_description: '100x baseline'
   },
   'claude-3.5-sonnet': {
     maxModelInputTokens: 200000-4096,
@@ -168,8 +173,9 @@ export const supportedModels: ModelsList = {
       prompt: { price: 3.00, unit: 1000000 },
       completion: { price: 15.00, unit: 1000000 },
     },
-    usage_description: "Anthropic's newest mid-class flagship, June 2024. Competes head-to-head with gpt-4o.",
-    cost_description: 'Cost: <b>20x</b> baseline'
+    usage_description: "On par with GPT-4o in most benchmark. Best for Coding.",
+    released_description: 'June 2024',
+    cost_description: '20x baseline'
   }
 };
 

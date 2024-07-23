@@ -8,6 +8,7 @@ import PopupModal from '@components/PopupModal'; // Ensure this is correctly imp
 import { ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 import { replace } from 'lodash';
+import ReactMarkdown from 'react-markdown';
 
 const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: boolean }) => {
   const { t } = useTranslation();
@@ -59,22 +60,38 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
   }, [generating, isModelSelectionOpen, defaultModel]); // Add dependencies here
 
 
-  const ModelSelectionButton = ({ model, enabled = true }: { model: ModelOptions; enabled?: boolean }) => {
+  const ModelSelectionButton = ({ model }: { model: ModelOptions }) => {
     return (
       <div className='flex justify-center'>
         <button
           className={`btn h-16 w-28 p-2 text-center justify-center rounded-lg md:border 
           ${
-            enabled ? 'btn-neutral border-gray-900 dark:border-gray-200' 
-              : 
-                      'btn-disabled bg-gray-100 text-gray-500 border-gray-300 dark:bg-gray-700 dark:border-gray-500/70 dark:text-gray-500/70'
+            supportedModels[model].enabled ? 'btn-neutral border-gray-900 dark:border-gray-200 font-semibold' 
+              : 'btn-disabled bg-gray-100 text-gray-400 border-gray-300 dark:bg-gray-700 dark:border-gray-500/70 dark:text-gray-500/70'
           }`}
-          disabled={!enabled}
-          onClick={() => enabled && handleModelSelect(model)}
+          disabled={!supportedModels[model].enabled}
+          onClick={() => supportedModels[model].enabled && handleModelSelect(model)}
         >
           {supportedModels[model].displayName.trim()}
         </button>
       </div>
+    );
+  };
+
+  const ModelCell = ({ model }: { model: ModelOptions }) => {
+    const modelDetails = supportedModels[model];
+    return (
+      <td className="p-4 text-center align-top border border-slate-400 dark:border-gray-400 ">
+        <ModelSelectionButton model={model} />
+        <div className={`${supportedModels[model].enabled ? 'text-gray-800 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500/70'}`}>
+          <div className="mt-1">
+            <ReactMarkdown>{'**Released:** ' + modelDetails.released_description ?? ''}</ReactMarkdown>
+          </div>
+          <div className="mt-1">
+            <ReactMarkdown>{'**Cost:** ' + modelDetails.cost_description}</ReactMarkdown>
+          </div>
+        </div>
+      </td>
     );
   };
   
@@ -111,85 +128,46 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
           setIsModalOpen={setIsModelSelectionOpen}
           cancelButton={true}
         >
-          <>
-            <style>
-            {`
-                .min-w-btn {
-                    min-width: 160px; /* Adjust this value based on your needs */
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            `}
-            </style>
-            { replaceCurrentChat && (
-            <div className='flex flex-col items-center text-center mt-4 mb-2 text-lg font-medium text-red-700'>
+          <div className='w-full'>
+            {replaceCurrentChat && (
+              <div className='flex flex-col items-center text-center mt-4 mb-2 text-lg font-medium text-red-700'>
                 <div className='border-2 border-red-700 p-2'>
                   <div>Warning: currently active chat will be dropped, replaced with new chat.</div>
                   <div>See "Drop active chat when New Chat is created" toggle in Settings.</div>
                 </div>
-            </div>)}
-            <table className='w-full text-center text-gray-700 dark:text-gray-300' style={{ tableLayout: 'fixed' }}>
-                <tbody>
-                <tr><td className='pt-2 text-lg' colSpan={3}><b>OpenAI: iconic language models that started it all</b></td></tr>
+              </div>
+            )}
+            <table className='w-full text-left align-middle text-sm text-center border-none'>
+              <thead>
+                <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
+                  <th className="w-1/4 p-2 border-none"></th>
+                  <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Small-Class models. Cheap, fast, efficient - but not smartest. Works well in simpler use-cases.</th>
+                  <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete but may still shine in some niche situations.</th>
+                  <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Current flagship models. Today's best AI intelligence leading in most use-cases.</th>
+                </tr>
+              </thead>
+              <tbody>
                 <tr>
-                    <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-4o-mini'/>
-                    </td>
-                    <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-4-turbo'/>
-                    </td>
-                    <td style={{ paddingTop: '20px' }}>
-                      <ModelSelectionButton model='gpt-4o'/>
-                    </td>                    
+                  <td className="p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
+                      OpenAI Industry Leading Models that started it all.
+                  </td>
+                  <ModelCell model='gpt-4o-mini' />
+                  <ModelCell model='gpt-4-turbo' />
+                  <ModelCell model='gpt-4o' />
                 </tr>
-                <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o-mini'].usage_description }}></td>
-                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].usage_description }}></td>
-                  <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o'].usage_description }}></td>
-                </tr>
-                <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
-                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o-mini'].cost_description }}></td>
-                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4-turbo'].cost_description }}></td>
-                  <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['gpt-4o'].cost_description }}></td>
-                </tr>
-
-                <tr><td className='pt-6 text-lg' colSpan={3}></td></tr>
                 {(anthropicEnable=='Y') && (
-                  <>
-                    <tr><td className='pt-2 text-lg border-t' colSpan={3}><b>Claude 3: newest and hottest models by Anthropic</b></td></tr>
-                    <tr><td className='' colSpan={3}>
-                      <a className={`text-indigo-500/80 hover:text-indigo-500/80 visited:text-indigo-700 dark:text-indigo-400/80 dark:hover:text-indigo-300/80 dark:visited:text-indigo-400`} 
-                          href="https://www.anthropic.com/news/claude-3-5-sonnet">https://www.anthropic.com/news/claude-3-5-sonnet</a>
-                    </td></tr>
-                    <tr>
-                        <td style={{ paddingTop: '20px' }}>
-                          <ModelSelectionButton model='claude-3-haiku'/>
-                        </td>
-                        <td style={{ paddingTop: '20px' }}>
-                          <ModelSelectionButton model='claude-3-opus'/>
-                        </td>
-                        <td style={{ paddingTop: '20px' }}>
-                          <ModelSelectionButton model='claude-3.5-sonnet'/>
-                        </td>  
-                    </tr>
-                    <tr style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].usage_description }}></td>
-                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-opus'].usage_description }}></td>
-                      <td className="p-2" dangerouslySetInnerHTML={{ __html: supportedModels['claude-3.5-sonnet'].usage_description }}></td>
-                    </tr>
-                    <tr style={{ paddingTop: '20px', paddingBottom: '20px', verticalAlign: 'top' }}>
-                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-haiku'].cost_description }}></td>
-                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3-opus'].cost_description }}></td>
-                      <td style={{ paddingTop: '10px' }} dangerouslySetInnerHTML={{ __html: supportedModels['claude-3.5-sonnet'].cost_description }}></td>
-                    </tr>
-
-                  </>
+                  <tr>
+                    <td className="p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
+                        Anthropic Models are a very strong alternative.<br/>Great for Coding!
+                    </td>
+                    <ModelCell model='claude-3-haiku' />
+                    <ModelCell model='claude-3-opus' />
+                    <ModelCell model='claude-3.5-sonnet' />
+                  </tr>
                 )}
-                </tbody>
+              </tbody>
             </table>
-            
-          </>
+          </div>
         </PopupModal>
       )}
     </>

@@ -79,6 +79,7 @@ export interface ModelDetails {
     completion: { price: number; unit: number };
   };
   usage_description: string;
+  released_description?: string;
   cost_description: string;
 }
 
