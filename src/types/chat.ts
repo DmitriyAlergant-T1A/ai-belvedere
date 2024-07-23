@@ -54,6 +54,7 @@ export interface Folder {
 
 export type ModelOptions =
   'gpt-3.5-turbo'
+  | 'gpt-4o-mini'
   | 'gpt-4'
   | 'gpt-4-turbo-preview'
   | 'gpt-4-turbo'
@@ -78,6 +79,7 @@ export interface ModelDetails {
     completion: { price: number; unit: number };
   };
   usage_description: string;
+  released_description?: string;
   cost_description: string;
 }
 

@@ -26,6 +26,6 @@
     "label": "Frequency Penalty",
     "description": "Number between -2.0 and 2.0. Positive values penalise new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. (Default: 0)"
   },
-  "defaultChatConfig": "Model Settings for New Chats",
+  "defaultChatConfig": "Default Settings for New Chats",
   "resetToDefault": "Reset To Default"
 }

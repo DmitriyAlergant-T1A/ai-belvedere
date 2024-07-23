@@ -31,7 +31,6 @@ export const handleNewMessageDraftBufferPersist = (whoCalled: string = "unknown"
         setChats(updatedChats);
 
         //console.debug(`handleNewMessageDraftBufferPersist (by ${whoCalled}): persisted buffer "${newMessageDraft}" for chatId= ${newMessageDraftChatIndex} title= ${updatedChats[newMessageDraftChatIndex].title}`);
-
     }
 };
 

@@ -49,23 +49,21 @@ const SettingsMenu = () => {
           title={t('setting') as string}
           cancelButton={false}
         >
-          <div className='p-6 border-b border-gray-200 dark:border-gray-600 flex-col flex-col items-start gap-4 w-96'>
+          <div className='ml-4 mr-4 mt-2 border-b border-gray-200 dark:border-gray-600 flex-col flex-col items-start gap-4 w-96'>
             <SystemPromptConfig />
-            <div className='p-1'><></></div>
             <LanguageSelector />
-            <div className='p-1'><></></div>
-            <div className='flex flex-col gap-3'>
+            <div className='flex flex-col gap-3 mt-4'>
                 <ShowSystemPromptToggle />
                 <AutoTitleToggle />
                 <ChatNamesAsPageTitlesToggle/>
                 <EnterToSubmitToggle />
-                <TotalTokenCostToggle />
+                {/* <TotalTokenCostToggle /> */}
                 <RequestTokensCountToggle />
                 <ReplaceCurrentChatToggle />
                 {/* <InlineLatexToggle /> */}
             </div>
             <div className = "block">
-              <div className='p-1 mt-4'><ThemeSwitcher /></div>
+              <div className='p-1 mt-2'><ThemeSwitcher /></div>
               <div className='p-1'><PromptLibraryMenu /></div>
               <div className='p-1'><ChatConfigMenu /></div>
               <div className='p-1'><ApiButton /></div>
