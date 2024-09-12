@@ -1,85 +1,99 @@
-<h1 align="center"><b>New AI Assistant UI</b></h1>
+<h1 align="center"><b>AI Belvedere: Chatbot UI for families and small companies</b></h1>
 
 <p align="center">
-    <a href="https://bettergpt.chat" target="_blank"><img src="public/apple-touch-icon.png" width="100" /></a>
+    <img src="public/apple-touch-icon.png" width="100" />
 </p>
 
 
-## 👋🏻 New AI Assistant UI for Teams, Groups, or Families
+## 👋🏻 
 
-A new ChatBot UI Front-End indended to provide Pay-as-you-Go access to best AI LLM models for small teams or private groups (families).
+AI Belvedere: Chatbot UI for Teams, Small Companies, or Families
 
-Focuses on reduced complexity, easy selection of best supported models (currently by OpenAI and Anthropic) for each new chat.
-
-Server-side handling of API Keys (coming from Environment Variables), and basic logging (for usage analysis, who used how much).
-
-Currently made for deployment into an Azure Container App with Azure AD Authentication, but that may evolve soon.
+A self-hosted chatbot UI indended to facilitate PAYG (Pay-As-You-Go) access to frontier AI LLM models for smaller companies and private groups (friends, families). Focuses on reduced complexity, easy selection of best supported models (currently by OpenAI and Anthropic) for each new chat.
 
 Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjhz/BetterChatGPT), but at this point it was significantly modified with little possibility to merge upstream.
 
 # 🔥 Features
 
-- Currently supports OpenAI and Anthropic models; Anthropic models support is configurable (can be enabled or disabled).
-- Server-Side Proxy to secure the API keys, and implement basic usage logging (only metadata, not conversations content)
-- Basic support for Azure AD authentication by Azure Container Apps: logout button, authentication redirect on session expiration.
+- Currently supports OpenAI and Anthropic models (Google Gemini is TBD)
+- Server-Side secure management the API keys, and implement basic usage logging (only metadata, not conversations content)
+- Containerized build is tested with deployment to Azure Container Apps (CI/CD workflow provided),
+including support for Azure AD Single Sign-On authentication
+- Containerized build is tested with deployment to self-hosted Docker environment with authentication with Auth0. This is a good choice for personal and familt deployments.
 - Prompt Library
 - Dark Mode
 - Add Clarification button to quickly amending the previous message (instead of lengtherning the thread)
 - Organize chats into folders (with colours), filter chats and folders
 - Keeps track and displays tokens count and pricing estimates
 - Quick model selection window for new chats (with hotkeys)
-- Chat title generation (uses GPT-3.5 or Haiku)
+- Chat title auto-generation
 - Chats, and unsent message drafts are automatically persisted to browser's local storage
-- Import / Export
-- Download chat (markdown, json, PNG)
-- Multiple language support (i18n) -> currently narrowed down to English and Russian
-    (other languages i18n existed in the upstream project, but these translations were not maintained with fork changes)
+- Import / Export of chat history
+- Download Chat (markdown, json, PNG)
+- Multiple language support (i18n) -> currently narrowed down to English and Russian (other languages i18n existed in the upstream project, but these translations were not maintained with fork changes)
 
 Features that existed in the original project, but were hidden or removed
 - Conversation publishing to ShareGPT - removed for privacy considerations
 - Conversations sync to Google Drive  - removed for privacy considerations
-- Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and did not play well with Anthropic.
+- Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and it did not work with Anthropic models.
 
-# 🛠️ Deployment to Azure
+# 🛠️ Docker deployment to self-hosted AWS Lightsails VM
 
-   ```
-      1. Create a Resource Group
-      2. Create Azure Container Registry (Basic Tier)
-         - Enable Admin Access (but no need to retain the password)
-      3. Build, tag and push docker image
-         - See command examples in the `./github/workflows/docker-image-to-acr.yml` pipeline
-      4. Create Azure Key Vault
-         - IAM policy type
-         - Grant yourself an IAM role Secrets Officer
-         - Create secrets with `openai-api-key`, `anthropic-api-key`
-      5. Create a Log Analytics Workspace
-         - Create a Data Collection Endpoint in Azure Monitor
-         - Create Custom Tables in Log Analytics (which will automatically create a Data Collection Rule)
-      6. Create Azure Container App (and let it automatically create a Container App Environment)
-         - Select a container from ACR
-         - Define environment variables:
-         - `OPENAI_API_URL=https://api.openai.com/v1/chat/completions`
-         - `OPENAI_API_KEY=placeholder`
-         - `ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages`
-         - `ANTHROPIC_API_KEY=placeholder`
-         - `AZURE_LOG_ANALYTICS_RESOURCE_URI=https://your-data-collectionendpoint.eastus-1.ingest.monitor.azure.com`
-         - `AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID=dcr-immutable-id-of-data-collection-rule`
-         - `AZURE_LOG_ANALYTICS_REQ_LOGS_DS=Custom-chatbot_app_api_requests_CL`
-         - `AZURE_LOG_ANALYTICS_RES_LOGS_DS=Custom-chatbot_app_api_responses_CL`
-         - Enable Ingress to port 5500 (public)
-      7. After the Container App is deployed:
-         - Configure Scaling (1 .. 1)
-         - Define "Secrets" (`openai-api-key`, `anthropic-api-key`) as references to a Key Vault
-         - Adjust environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) to reference these secrets
-         - Enable Authentication with Azure AD Entra ID (details TBD)
-      8. Enable Managed Identities and grant IAM Roles:
-         - on Key Vault to the Container App [Key Vault Secrets User]
-         - on ACR to the Container App [Role: AcrPull Role]
-         - on Data Collection Rule (!) to the Container App [Role: something something Metrics Publisher]
-   ```
+   TBD
 
-# 🛠️ Running it locally
-## Client-Side is pre-built and statically served by the Server
+# 🛠️ Docker deployment to Google Cloud Run
+
+   TBD
+   
+# 🛠️ Deployment to Azure Container Apps: Step by Step Guide
+
+   1. Create a Resource Group
+   2. Create Azure Container Registry (Basic Tier)
+      - Enable Admin Access (but no need to retain the password)
+   3. Build, tag and push docker image
+      - See command examples in the `./github/workflows/docker-image-to-acr.yml` pipeline
+   4. Create Azure Key Vault
+      - IAM policy type
+      - Grant yourself an IAM role Secrets Officer
+      - Create secrets named `openai-api-key`, `anthropic-api-key`
+   6. Create Azure Container App (and let it automatically create a Container App Environment)
+      - Select a container from ACR
+      - Define environment variables for the app:
+      ```
+      AUTH_AAD_EXTERNAL=Y
+      AUTH_AUTH0=N
+      OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+      OPENAI_API_KEY=placeholder
+      ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages
+      ANTHROPIC_API_KEY=placeholder
+      LOG_DESTINATION_AZURE_LOG_ANALYTICS=N
+      LOG_DESTINATION_POSTGRESQL=N
+      LOG_DESTINATION_CONSOLE=Y
+      COMPANY_SYSTEM_PROMPT="... default system prompt"
+      ```
+      - Enable Ingress to port 5500 (public)
+   7. After the Container App is deployed:
+      - Configure Scaling (1 .. 1)
+      - Define "Secrets" (`openai-api-key`, `anthropic-api-key`) as references to a Key Vault
+      - Adjust environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) to reference these secrets
+      - Enable Authentication with Azure Entra ID (details TBD)
+   8. Enable Managed Identities and grant IAM Roles:
+      - on Key Vault to the Container App [Key Vault Secrets User]
+      - on ACR to the Container App [Role: AcrPull Role]
+
+# 🛠️ For Azure Container Apps, enabling logging to Azure Logs Analytics workspace (optional)
+
+   TBD step-by-step guide on creating ALA Workspace, Data Collection Endpoint, and Data Source tables;
+   
+   TBD configuring environment variables;
+
+   TBD managed identity grants
+
+   TBD validation and recommended Kusto queries
+
+# 🛠️ Running it locally with client app pre-built and statically served
+
+This local running mode is useful for testing authentication-related code and configurations (ex. with Auth0)
 
 1. Ensure that you have the following installed:
 
@@ -94,11 +108,20 @@ Features that existed in the original project, but were hidden or removed
       OPENAI_API_KEY=...
       ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages
       ANTHROPIC_API_KEY=...
+
+      LOG_DESTINATION_AZURE_LOG_ANALYTICS=N;
+      LOG_DESTINATION_POSTGRESQL=N;
+      LOG_DESTINATION_CONSOLE=Y;
+
+      COMPANY_SYSTEM_PROMPT="... default system prompt"
+
+      AUTH_AUTH0=N
+      AUTH_AAD_EXTERNAL=N
       ```
 
 4. Create .env.production file to configure client-side build
       ```
-      VITE_COMPANY_NAME=(Your Company/Team/Family name)
+      VITE_COMPANY_NAME=(Your Preferred Company/Group/Family name)
       VITE_ANTHROPIC_ENABLE=Y
       VITE_CHECK_AAD_AUTH=N
       ```
@@ -110,8 +133,9 @@ Features that existed in the original project, but were hidden or removed
 7. Navigate to http://localhost:5500
    
 
-# 🛠️ Running it locally for client-side debugging  (Vite)
-## (Server-Side provides the API, Client-Side is served through Vite)
+# 🛠️ Running it locally for client-side debugging through Vite
+
+This local running mode is useful for debugging React client code
 
 1. Ensure that you have the following installed:
 
@@ -120,20 +144,9 @@ Features that existed in the original project, but were hidden or removed
 
 2. Clone this repository
 
-3. **Create .env.server.local file** to configure server-side
-      ```
-      OPENAI_API_URL=https://api.openai.com/v1/chat/completions
-      OPENAI_API_KEY=...
-      ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages
-      ANTHROPIC_API_KEY=...
-      ```
+3. Create .env.server.local and .env.develipment files
 
-4. **Create .env.develipment file** to configure client-side
-      ```
-      VITE_COMPANY_NAME=(Your Company/Team/Family name)
-      VITE_ANTHROPIC_ENABLE=Y
-      VITE_CHECK_AAD_AUTH=N
-      ```
+   Same as above. See previous chapter "Running it locally with client app built and statically served by the Server"
 
 5. Run `npm install`
 
@@ -141,6 +154,4 @@ Features that existed in the original project, but were hidden or removed
 
 7. Navigate to http://localhost:5173
 
-8. In Settings -> API Settings, select Development Endpoint (localhost:5500/api)
-
-   
+8. **When the app loads, in Settings -> API Settings, chose "Development Endpoint" (localhost:5500/api)**

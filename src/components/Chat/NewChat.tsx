@@ -95,7 +95,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
     );
   };
 
-  const ModelRow = ({ provider, description, models }: { provider: string; description: string; models: ModelOptions[] }) => (
+  const ModelRow = ({ provider, description, models }: { provider: string; description: string; models: (ModelOptions | null)[] }) => (
     <>
       <tr className="md:hidden">
         <td colSpan={3} className="p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
@@ -108,8 +108,8 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
           {provider}
           <div className="font-normal text-sm">{description}</div>
         </td>
-        {models.map((model) => (
-          <ModelCell key={model} model={model} />
+        {models.map((model, index) => (
+          model ? <ModelCell key={model} model={model} /> : <td key={`empty-${index}`} className="border border-slate-400 dark:border-gray-400"></td>
         ))}
       </tr>
     </>
@@ -173,10 +173,15 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                      description="Industry leading models that started it all."
                      models={['gpt-4o-mini', 'gpt-4-turbo', 'gpt-4o']}
                    />
+                   <ModelRow 
+                     provider="OpenAI o1"
+                     description='Newest "reasoning" models designed to spend more time thinking before they respond. For complex tasks and harder problems in science, coding, and math. See https://openai.com/o1/'
+                     models={['o1-mini', null, 'o1-preview']}
+                   />
                    {(anthropicEnable === 'Y') && (
                      <ModelRow 
                        provider="Anthropic Models"
-                       description="A very strong alternative. Best for Coding!"
+                       description="A very strong alternative. Great for Coding!"
                        models={['claude-3-haiku', 'claude-3-opus', 'claude-3.5-sonnet']}
                      />
                    )}

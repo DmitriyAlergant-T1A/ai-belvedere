@@ -59,6 +59,8 @@ export type ModelOptions =
   | 'gpt-4-turbo-preview'
   | 'gpt-4-turbo'
   | 'gpt-4o'
+  | 'o1-preview'
+  | 'o1-mini'
   | 'claude-3-haiku'
   | 'claude-3-sonnet'
   | 'claude-3-opus'
