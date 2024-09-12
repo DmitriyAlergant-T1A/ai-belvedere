@@ -83,6 +83,12 @@ export interface ModelDetails {
   usage_description: string;
   released_description?: string;
   cost_description: string;
+  use_system_prompt: boolean;
+  use_stream: boolean;
+  force_temperature?: number;
+  force_presence_penalty?: number;
+  force_top_p?: number;
+  force_frequency_penalty?: number;
 }
 
 export type ModelsList = {

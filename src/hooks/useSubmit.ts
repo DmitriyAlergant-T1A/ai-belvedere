@@ -1,5 +1,3 @@
-//useSubmit.ts
-
 import useStore from '@store/store';
 import { ChatInterface, MessageInterface } from '@type/chat';
 import { prepareApiHeaders, getChatCompletion, getChatCompletionStream, handleStream } from '@src/api-helpers/api';
@@ -8,7 +6,7 @@ import { supportedModels, _defaultChatConfig } from '@constants/chat';
 
 export interface OpenAICompletionsConfig {
   model: string;
-  max_tokens: number,
+  max_completion_tokens: number,
   temperature: number;
   presence_penalty: number;
   top_p: number;
@@ -75,44 +73,60 @@ const useSubmit = () =>
       _currentMessageIndex = updatedChats[currentChatIndex].messages.length - 1;
 
       setChats(updatedChats);
-      /************/
 
       /* Select context messages for submission */
-      const [inputMessagesLimited, systemTokenCount, chatTokenCount, lastMessageTokens] = limitMessageTokens(
+      let [inputMessagesLimited, systemTokenCount, chatTokenCount, lastMessageTokens] = limitMessageTokens(
         currChats[currentChatIndex].messages,
         currChats[currentChatIndex].config.maxPromptTokens,
         currChats[currentChatIndex].config.model
       );
+      /* TBD refactor... The limitMessageTokens was already called once during validation phase */
 
-      // TBD refactor... 
-      // The limitMessageTokens was already called once during validation phase
+      /* Some models (OpenAI o-1) do not support System Prompt, will replace it with User Message*/
+      if (!supportedModels[currChats[currentChatIndex].config.model].use_system_prompt) {
+        inputMessagesLimited = inputMessagesLimited.map(message => 
+          message.role === 'system' ? { ...message, role: 'user' } : message
+        );
+      }
 
-      /************/
-
-
-      let stream;
-      
       const completionsConfig: OpenAICompletionsConfig = {
-        model: supportedModels[currChats[currentChatIndex].config.model].apiAliasCurrent,
-        max_tokens: currChats[currentChatIndex].config.maxGenerationTokens,
-        temperature: currChats[currentChatIndex].config.temperature,
-        presence_penalty: currChats[currentChatIndex].config.presence_penalty,
-        top_p: currChats[currentChatIndex].config.top_p,
-        frequency_penalty: currChats[currentChatIndex].config.frequency_penalty
+        
+        //NOTE: this is API-specific model alias, not our internal model reference
+        model: supportedModels[currChats[currentChatIndex].config.model].apiAliasCurrent, 
+        
+        max_completion_tokens: currChats[currentChatIndex].config.maxGenerationTokens,
+        temperature: supportedModels[currChats[currentChatIndex].config.model].force_temperature ?? currChats[currentChatIndex].config.temperature,
+        presence_penalty: supportedModels[currChats[currentChatIndex].config.model].force_presence_penalty ?? currChats[currentChatIndex].config.presence_penalty,
+        top_p: supportedModels[currChats[currentChatIndex].config.model].force_top_p ?? currChats[currentChatIndex].config.top_p,
+        frequency_penalty: supportedModels[currChats[currentChatIndex].config.model].force_frequency_penalty ?? currChats[currentChatIndex].config.frequency_penalty
       };
 
       const headers = await prepareApiHeaders(currChats[currentChatIndex].config.model, inputMessagesLimited, 'Chat Submission');    
       
-      // Usage
-      stream = await getChatCompletionStream(
-        useStore.getState().apiEndpoint + "/chat/completions",
-        inputMessagesLimited,
-        completionsConfig,
-        headers.headers
-      );
+      if (supportedModels[currChats[currentChatIndex].config.model].use_stream) {
+        // Streaming method
+        const stream = await getChatCompletionStream(
+          useStore.getState().apiEndpoint + "/chat/completions",
+          inputMessagesLimited,
+          completionsConfig,
+          headers.headers
+        );
 
-      if (headers && stream)    
-        await handleStream(stream, addAssistantContent);
+        if (headers && stream)    
+          await handleStream(stream, addAssistantContent);
+      } else {
+        // Batch method
+        const response = await getChatCompletion(
+          useStore.getState().apiEndpoint + "/chat/completions",
+          inputMessagesLimited,
+          completionsConfig,
+          headers.headers
+        );
+
+        if (response && response.message) {
+          addAssistantContent(response.message.content);
+        }
+      }
 
       // update tokens used in chatting
 
@@ -153,8 +167,6 @@ const useSubmit = () =>
     setGenerating(false);
   };
 
-
-
   const generateChatTitle = async () => {
 
     console.debug('Chat title generation request initiated...');
@@ -192,8 +204,11 @@ const useSubmit = () =>
       const titleGenModel = supportedModels[currChats[currentChatIndex].config.model].titleGenModel;
 
       const titleGenConfig: OpenAICompletionsConfig = {
+
+        //NOTE: this is API-specific model alias, not our internal model reference
         model: supportedModels[titleGenModel].apiAliasCurrent,
-        max_tokens: 100,
+        
+        max_completion_tokens: 100,
         temperature: _defaultChatConfig.temperature,
         presence_penalty: _defaultChatConfig.presence_penalty,
         top_p: _defaultChatConfig.top_p,

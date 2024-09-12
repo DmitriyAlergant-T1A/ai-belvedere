@@ -34,7 +34,9 @@ export const supportedModels: ModelsList = {
       completion: { price: 1.5, unit: 1000000 },
     },
     usage_description: '',
-    cost_description: ''
+    cost_description: '',
+    use_system_prompt: true,
+    use_stream: true
   },
   'gpt-4': {
     maxModelInputTokens: 8192,
@@ -49,7 +51,9 @@ export const supportedModels: ModelsList = {
       completion: { price: 60.00, unit: 1000000 },
     },
     usage_description:  '',
-    cost_description: ''
+    cost_description: '',
+    use_system_prompt: true,
+    use_stream: true
   },
   'gpt-4-turbo-preview': {
     maxModelInputTokens: 128000-4096,
@@ -65,6 +69,8 @@ export const supportedModels: ModelsList = {
     },
     usage_description: '',
     cost_description: '',
+    use_system_prompt: true,
+    use_stream: true
   },
   'claude-3-sonnet': {
     maxModelInputTokens: 200000-4096,
@@ -79,7 +85,9 @@ export const supportedModels: ModelsList = {
       completion: { price: 15.00, unit: 1000000 },
     },
     usage_description: '',
-    cost_description: ''
+    cost_description: '',
+    use_system_prompt: true,
+    use_stream: true
   },
   'gpt-4o-mini': {
     maxModelInputTokens: 128000-4096,
@@ -95,7 +103,9 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "New leader in 'small' class. It now serves free ChatGPT users.",
     released_description: 'July 2024',
-    cost_description: 'baseline'
+    cost_description: 'baseline',
+    use_system_prompt: true,
+    use_stream: true
   },
   'gpt-4-turbo': {
     maxModelInputTokens: 128000-4096,
@@ -112,6 +122,8 @@ export const supportedModels: ModelsList = {
     usage_description: "An improvement of the original GPT-4.",
     released_description: 'March 2024',
     cost_description: '60x baseline',
+    use_system_prompt: true,
+    use_stream: true
   },
   'gpt-4o': {
     maxModelInputTokens: 128000-4096,
@@ -128,6 +140,8 @@ export const supportedModels: ModelsList = {
     usage_description: "Current flagship, industry leading model.",
     released_description: 'May 2024',
     cost_description: '17x baseline',
+    use_system_prompt: true,
+    use_stream: true
   },
   'o1-preview': {
     maxModelInputTokens: 128000-4096,
@@ -143,7 +157,13 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "New reasoning model for complex tasks that require broad general knowledge",
     released_description: 'Sep 2024',
-    cost_description: '100x baseline',
+    cost_description: '100x baseline (!) and slow response',
+    use_system_prompt: false,
+    use_stream: false,
+    force_temperature: 1,
+    force_top_p: 1,
+    force_presence_penalty: 0,
+    force_frequency_penalty: 0
   },
   'o1-mini': {
     maxModelInputTokens: 128000-4096,
@@ -160,6 +180,12 @@ export const supportedModels: ModelsList = {
     usage_description: "Fast, cost-efficient reasoning model tailored to coding, math, and science use cases",
     released_description: 'Sep 2024',
     cost_description: '20x baseline',
+    use_system_prompt: false,
+    use_stream: false,
+    force_temperature: 1,
+    force_top_p: 1,
+    force_presence_penalty: 0,
+    force_frequency_penalty: 0
   },
   'claude-3-haiku': {
     maxModelInputTokens: 200000-4096,
@@ -175,7 +201,9 @@ export const supportedModels: ModelsList = {
     },
     usage_description: 'Was an impressive small model at its time, but gpt-4o-mini is stronger now.',
     released_description: 'February 2024',
-    cost_description: '2x baseline'
+    cost_description: '2x baseline',
+    use_system_prompt: true,
+    use_stream: true
   },
   'claude-3-opus': {
     maxModelInputTokens: 200000-4096,
@@ -191,7 +219,9 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "Was most intelligent but expensive model at its time, and may still have some still.",
     released_description: 'February 2024',
-    cost_description: '100x baseline'
+    cost_description: '100x baseline',
+    use_system_prompt: true,
+    use_stream: true
   },
   'claude-3.5-sonnet': {
     maxModelInputTokens: 200000-4096,
@@ -207,9 +237,12 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "On par with GPT-4o in most benchmark. Best for Coding.",
     released_description: 'June 2024',
-    cost_description: '20x baseline'
+    cost_description: '20x baseline',
+    use_system_prompt: true,
+    use_stream: true
   }
 };
+
 
 export const _defaultChatConfig: ConfigInterface = {
   model: defaultModel,

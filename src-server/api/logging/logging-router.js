@@ -9,15 +9,15 @@ const logRequestRouter = async(streamName, requestId, logsData) => {
     const LOG_DESTINATION_POSTGRESQL=process.env.LOG_DESTINATION_POSTGRESQL;
     const LOG_DESTINATION_CONSOLE=process.env.LOG_DESTINATION_CONSOLE;
     
-    if (LOG_DESTINATION_AZURE_LOG_ANALYTICS) {
+    if (LOG_DESTINATION_AZURE_LOG_ANALYTICS=='Y') {
         logToAzureLogAnalytics(streamName, requestId, logsData);
     }
 
-    if (LOG_DESTINATION_CONSOLE) {
+    if (LOG_DESTINATION_CONSOLE=='Y') {
         logToConsole(streamName, requestId, logsData);
     }
 
-    if (LOG_DESTINATION_POSTGRESQL) {
+    if (LOG_DESTINATION_POSTGRESQL=='Y') {
         logToPgsql(streamName, requestId, logsData);
     }
 };

@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
 
       //Anthropic-specific headers body preprocessing
 
-      const { messages, model, temperature, top_p, frequency_penalty, presence_penalty, max_tokens, stream, ...restBody } = req.body; // decompose the request body
+      const { messages, model, temperature, top_p, frequency_penalty, presence_penalty, max_completion_tokens, stream, ...restBody } = req.body; // decompose the request body
 
       // Anthropic API does not accept 'system' role messages, so we need to extract them and send them as a separate field
       const systemMessage = messages.find(msg => msg.role === 'system')?.content || '';
@@ -80,7 +80,7 @@ router.post('/', async (req, res) => {
         temperature: temperature,
         top_p: top_p,
         stream: stream,
-        max_tokens: max_tokens,
+        max_tokens: max_completion_tokens,
         messages: filteredMessages
       };
     }
