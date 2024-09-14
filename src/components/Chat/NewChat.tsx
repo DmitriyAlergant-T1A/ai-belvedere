@@ -48,7 +48,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
   useEffect(() => {
     // Add event listener for keydown
 
-    console.log("hotkeysEnabled=", hotkeysEnabled);
+    //console.log("hotkeysEnabled=", hotkeysEnabled);
 
     if (hotkeysEnabled && !folder)  //Only handle for the main "New Chat" button not additional ones under Folders
       window.addEventListener('keypress', handleEnterKeyPress);
@@ -148,7 +148,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
           setIsModalOpen={setIsModelSelectionOpen}
           cancelButton={true}
         >
-          <div className='w-full'>
+          <div className='w-4xl'>
             {replaceCurrentChat && (
               <div className='flex flex-col items-center text-center mt-4 mb-2 text-lg font-medium text-red-700'>
                 <div className='border-2 border-red-700 p-2'>
@@ -158,31 +158,32 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
               </div>
              )}
              <div className="overflow-x-auto">
-               <table className='w-full text-left align-middle text-sm text-center border-none'>
+               <table className='w-4xl text-left align-middle text-sm text-center border-none'>
                  <thead className="hidden md:table-header-group">
                    <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
-                     <th className="w-1/4 p-2 border-none"></th>
-                     <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Small-Class models. Cheap, fast, efficient - but not smartest. Works well in simpler use-cases.</th>
-                     <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete but may still shine in some niche situations.</th>
-                     <th className="w-1/4 p-2 border border-slate-400 dark:border-gray-400">Current flagship models. Today's best AI intelligence leading in most use-cases.</th>
+                     <th className="w-1/5 p-2 border-none"></th>
+                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Small-Class models. Cheap, fast, efficient - but not smartest. Works well in simpler use-cases.</th>
+                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete, but may still shine in some niche situations.</th>
+                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Advanced "reasoning" with silent iterative chain-of-thought thinking before responding for most demanding needs. </th>
+                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Current flagship models. Leading AI intelligence for most use-cases. Default choice.</th>
                    </tr>
                  </thead>
                  <tbody>
                    <ModelRow 
                      provider="OpenAI Models"
                      description="Industry leading models that started it all."
-                     models={['gpt-4o-mini', 'gpt-4-turbo', 'gpt-4o']}
+                     models={['gpt-4o-mini', 'gpt-4-turbo', 'o1-mini', 'gpt-4o']}
                    />
                    <ModelRow 
-                     provider="OpenAI o1"
-                     description='Newest "reasoning" models designed to spend more time thinking before they respond. For complex tasks and harder problems in science, coding, and math. See https://openai.com/o1/'
-                     models={['o1-mini', null, 'o1-preview']}
+                     provider="OpenAI o1 Models"
+                     description='https://openai.com/o1/ see for more details. Silent reasoning improves performance in complex Match, Science, Coding'
+                     models={[null, null, 'o1-preview', null]}
                    />
                    {(anthropicEnable === 'Y') && (
                      <ModelRow 
                        provider="Anthropic Models"
                        description="A very strong alternative. Great for Coding!"
-                       models={['claude-3-haiku', 'claude-3-opus', 'claude-3.5-sonnet']}
+                       models={['claude-3-haiku', 'claude-3-opus', null, 'claude-3.5-sonnet']}
                      />
                    )}
                  </tbody>

@@ -20,10 +20,21 @@ export interface ChatInterface {
   newMessageDraft?: string;
 }
 
+// Application internal  interface, has more parameters
 export interface ConfigInterface {
   model: ModelOptions;
   maxPromptTokens: number,
   maxGenerationTokens: number;
+  temperature: number;
+  presence_penalty: number;
+  top_p: number;
+  frequency_penalty: number;
+}
+
+// API endpoint interface, only has the parameters supported by OpenAI endpoint
+export interface OpenAICompletionsConfig {
+  model: string;
+  max_completion_tokens: number,
   temperature: number;
   presence_penalty: number;
   top_p: number;

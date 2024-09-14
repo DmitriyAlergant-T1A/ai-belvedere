@@ -1,9 +1,7 @@
-import { MessageInterface, ModelOptions, TotalTokenUsed } from '@type/chat';
-
-import store from '@store/store';
-import useStore from '@store/store';
-
+import { MessageInterface, ModelOptions } from '@type/chat';
 import { Tiktoken } from '@dqbd/tiktoken/lite';
+import store from '@store/store';
+
 const cl100k_base = await import('@dqbd/tiktoken/encoders/cl100k_base.json');
 
 const encoder = new Tiktoken(
@@ -46,7 +44,7 @@ export const getChatGPTEncoding = (
   pass "true" when requesting a final tokens calculation for the full messages array  
   pass "false" when requesting message calculation for one message only (for estimation) */
 
-const countTokens = (messages: MessageInterface[], model: ModelOptions, includeAssistantRequest: boolean) => {
+export const countTokens = (messages: MessageInterface[], model: ModelOptions, includeAssistantRequest: boolean) => {
   //if (messages.length === 0) return 0;
   return getChatGPTEncoding(messages, model, includeAssistantRequest).length;
 };
@@ -155,30 +153,3 @@ export const limitMessageTokens = (
 
   return [limitedMessages, systemTokenCount, chatTokenCount, lastMessageTokens];
 };
-
-export const updateTotalTokenUsed = (
-  model: ModelOptions,
-  promptMessages: MessageInterface[],
-  completionMessage: MessageInterface
-): [number, number] => { // returns new tokens used by the message and completion
-  const setTotalTokenUsed = useStore.getState().setTotalTokenUsed;
-  const updatedTotalTokenUsed: TotalTokenUsed = JSON.parse(
-    JSON.stringify(useStore.getState().totalTokenUsed)
-  );
-
-  const newPromptTokens = countTokens(promptMessages, model, true);
-  const newCompletionTokens = countTokens([completionMessage], model, false);
-
-  const { promptTokens = 0, completionTokens = 0 } =
-    updatedTotalTokenUsed[model] ?? {};
-
-  updatedTotalTokenUsed[model] = {
-    promptTokens: promptTokens + newPromptTokens,
-    completionTokens: completionTokens + newCompletionTokens,
-  };
-  setTotalTokenUsed(updatedTotalTokenUsed);
-
-  return [newPromptTokens, newCompletionTokens]
-};
-
-export default countTokens;

@@ -1,6 +1,5 @@
-import { MessageInterface, ModelOptions } from '@type/chat';
+import { MessageInterface, ModelOptions, OpenAICompletionsConfig } from '@type/chat';
 import { supportedModels } from '@constants/chat';
-import { OpenAICompletionsConfig } from '@hooks/useSubmit';
 import useStore from '@store/store';
 import { _builtinAPIEndpoint } from '@constants/apiEndpoints';
 import { fetchAuthenticatedUserProfile } from '@utils/getAuthenticatedUserProfile';

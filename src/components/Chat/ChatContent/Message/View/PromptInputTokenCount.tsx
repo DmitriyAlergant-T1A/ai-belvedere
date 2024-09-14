@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import useStore from '@store/store';
-import countTokens from '@utils/messageUtils';
+import { countTokens } from '@utils/messageUtils';
 import { _defaultChatConfig, supportedModels } from '@constants/chat';
 
 interface TokenCountProps {
