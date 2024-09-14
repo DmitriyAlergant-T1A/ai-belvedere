@@ -81,6 +81,7 @@ export interface ModelDetails {
   maxModelInputTokens: number;
   maxModelCompletionTokens: number;
   displayName: string;
+  choiceButtonColor?: string;
   enabled: boolean;
   apiAliasCurrent: string;
   portkeyProvider: string;

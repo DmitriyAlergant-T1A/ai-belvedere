@@ -60,7 +60,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
   }, [generating, isModelSelectionOpen, defaultModel]); // Add dependencies here
 
 
-  const ModelSelectionButton = ({ model }: { model: ModelOptions }) => {
+  const ModelSelectionButton = ({ model, backgroundColor }: { model: ModelOptions; backgroundColor?: string }) => {
     return (
       <div className='flex justify-center'>
         <button
@@ -68,7 +68,8 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
           ${
             supportedModels[model].enabled ? 'btn-neutral border-gray-900 dark:border-gray-200 font-semibold' 
               : 'btn-disabled bg-gray-100 text-gray-400 border-gray-300 dark:bg-gray-700 dark:border-gray-500/70 dark:text-gray-500/70'
-          }`}
+          }
+          ${backgroundColor || ''}`}
           disabled={!supportedModels[model].enabled}
           onClick={() => supportedModels[model].enabled && handleModelSelect(model)}
         >
@@ -77,39 +78,38 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
       </div>
     );
   };
+  
+  
 
-  const ModelCell = ({ model }: { model: ModelOptions }) => {
+  const ModelCell = ({ model, backgroundColor }: { model: ModelOptions; backgroundColor?: string }) => {
     const modelDetails = supportedModels[model];
     return (
       <td className="p-4 text-center align-top border border-slate-400 dark:border-gray-400 ">
-        <ModelSelectionButton model={model} />
+        <ModelSelectionButton model={model} backgroundColor={backgroundColor} />
         <div className={`${supportedModels[model].enabled ? 'text-gray-800 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500/70'}`}>
-          <div className="mt-1">
-            <ReactMarkdown>{'**Released:** ' + modelDetails.released_description ?? ''}</ReactMarkdown>
-          </div>
-          <div className="mt-1">
-            <ReactMarkdown>{'**Cost:** ' + modelDetails.cost_description}</ReactMarkdown>
-          </div>
+          <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>Released:</strong> ${modelDetails.released_description ?? ''}` }} />
+          <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>Cost:</strong> ${modelDetails.cost_description}` }} />
         </div>
       </td>
     );
   };
 
+
   const ModelRow = ({ provider, description, models }: { provider: string; description: string; models: (ModelOptions | null)[] }) => (
     <>
-      <tr className="md:hidden">
-        <td colSpan={3} className="p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
-          {provider}
-          <div className="font-normal text-sm">{description}</div>
-        </td>
-      </tr>
       <tr>
         <td className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
           {provider}
-          <div className="font-normal text-sm">{description}</div>
+          <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_a]:hover:underline" dangerouslySetInnerHTML={{ __html: `${description}` }} />
         </td>
         {models.map((model, index) => (
-          model ? <ModelCell key={model} model={model} /> : <td key={`empty-${index}`} className="border border-slate-400 dark:border-gray-400"></td>
+          model ? 
+            <ModelCell 
+              key={model} 
+              model={model} 
+              backgroundColor={supportedModels[model].choiceButtonColor} 
+            /> : 
+            <td key={`empty-${index}`} className="border border-slate-400 dark:border-gray-400"></td>
         ))}
       </tr>
     </>
@@ -161,28 +161,28 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                <table className='w-4xl text-left align-middle text-sm text-center border-none'>
                  <thead className="hidden md:table-header-group">
                    <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
-                     <th className="w-1/5 p-2 border-none"></th>
-                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Small-Class models. Cheap, fast, efficient - but not smartest. Works well in simpler use-cases.</th>
-                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete, but may still shine in some niche situations.</th>
-                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Advanced "reasoning" with silent iterative chain-of-thought thinking before responding for most demanding needs. </th>
-                     <th className="w-1/5 p-2 border border-slate-400 dark:border-gray-400">Current flagship models. Leading AI intelligence for most use-cases. Default choice.</th>
+                     <th className="w-[28%] p-2 border-none"></th>
+                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">Smaller class models: cheap, fast, efficient. In most use-cases perform similarly or close to the leaders.</th>
+                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete, but may still shine in some niche situations.</th>
+                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">OpenAI's new most advanced "reasoning" model. Expensive and slow. Try o1-mini and/or Sonnet 3.5 first</th>
+                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">Current flagship LLM models. Effecient intelligence for most use-cases. Suggested as a first choice.</th>
                    </tr>
                  </thead>
                  <tbody>
                    <ModelRow 
-                     provider="OpenAI Models"
-                     description="Industry leading models that started it all."
-                     models={['gpt-4o-mini', 'gpt-4-turbo', 'o1-mini', 'gpt-4o']}
+                     provider="OpenAI GPT-4 Models"
+                     description="Well-known models that started it all."
+                     models={['gpt-4o-mini', 'gpt-4-turbo', null, 'gpt-4o']}
                    />
                    <ModelRow 
-                     provider="OpenAI o1 Models"
-                     description='https://openai.com/o1/ see for more details. Silent reasoning improves performance in complex Match, Science, Coding'
-                     models={[null, null, 'o1-preview', null]}
+                     provider="OpenAI o1 Reasoning Models"
+                     description='<a href="https://openai.com/o1/" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">See https://openai.com/o1/</a><br/><br/>Reasoning models "think" before responding. Major boost in complex Match, Science, Coding capabilities.'
+                     models={['o1-mini', null, 'o1-preview', null]}
                    />
                    {(anthropicEnable === 'Y') && (
                      <ModelRow 
                        provider="Anthropic Models"
-                       description="A very strong alternative. Great for Coding!"
+                       description="Very strong alternative. Great for Coding!"
                        models={['claude-3-haiku', 'claude-3-opus', null, 'claude-3.5-sonnet']}
                      />
                    )}
