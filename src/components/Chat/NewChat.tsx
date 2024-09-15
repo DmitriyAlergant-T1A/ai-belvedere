@@ -77,47 +77,60 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
         </button>
       </div>
     );
-  };
-  
-  
+  };  
 
   const ModelCell = ({ model, backgroundColor }: { model: ModelOptions; backgroundColor?: string }) => {
     const modelDetails = supportedModels[model];
     return (
-      <td className="p-4 text-center align-top border border-slate-400 dark:border-gray-400 ">
+      <div className="ml-1 mr-1 text-center align-top">
         <ModelSelectionButton model={model} backgroundColor={backgroundColor} />
         <div className={`${supportedModels[model].enabled ? 'text-gray-800 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500/70'}`}>
-          <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>Released:</strong> ${modelDetails.released_description ?? ''}` }} />
+          <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>From:</strong> ${modelDetails.released_description ?? ''}` }} />
           <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>Cost:</strong> ${modelDetails.cost_description}` }} />
         </div>
-      </td>
+      </div>
     );
   };
-
-
-  const ModelRow = ({ provider, description, models }: { provider: string; description: string; models: (ModelOptions | null)[] }) => (
-    <>
-      <tr>
-        <td className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
-          {provider}
-          <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_a]:hover:underline" dangerouslySetInnerHTML={{ __html: `${description}` }} />
+  
+  const ModelGroup = ({ models }: { models: (ModelOptions | null)[] }) => {
+    if (models.length === 1 && models[0]) {
+      return <ModelCell model={models[0]} backgroundColor={supportedModels[models[0]].choiceButtonColor} />;
+    }
+    if (models.length === 2) {
+      return (
+        <table className="w-full h-full border-collapse">
+          <tbody>
+            <tr>
+              {models.map((model, index) => (
+                <td key={index} className="p-0 w-1/2">
+                  {model && <ModelCell model={model} backgroundColor={supportedModels[model].choiceButtonColor} />}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      );
+    }
+    return null;
+  };
+  
+  const ModelRow = ({ provider, description, models }: { provider: string; description: string; models: (ModelOptions | null)[][] }) => (
+    <tr>
+      <td className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300">
+        {provider}
+        <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_a]:hover:underline" dangerouslySetInnerHTML={{ __html: description }} />
+      </td>
+      {models.map((modelGroup, index) => (
+        <td key={index} className="p-2 border border-slate-400 dark:border-gray-400">
+          {modelGroup ? <ModelGroup models={modelGroup} /> : null}
         </td>
-        {models.map((model, index) => (
-          model ? 
-            <ModelCell 
-              key={model} 
-              model={model} 
-              backgroundColor={supportedModels[model].choiceButtonColor} 
-            /> : 
-            <td key={`empty-${index}`} className="border border-slate-400 dark:border-gray-400"></td>
-        ))}
-      </tr>
-    </>
+      ))}
+    </tr>
   );
   
 
-  const anthropicEnable:string = import.meta.env.VITE_ANTHROPIC_ENABLE || "N";
-  // console.log(`Anthropic Enable: ${anthropicEnable}`)
+  const anthropic_Enable:string = import.meta.env.VITE_ANTHROPIC_ENABLE || "N";
+  const openai_o1_Enable:string = import.meta.env.VITE_OPENAI_O1_ENABLE || "N";
 
   return (
     <>
@@ -148,7 +161,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
           setIsModalOpen={setIsModelSelectionOpen}
           cancelButton={true}
         >
-          <div className='w-4xl'>
+          <div className='w-3xl'>
             {replaceCurrentChat && (
               <div className='flex flex-col items-center text-center mt-4 mb-2 text-lg font-medium text-red-700'>
                 <div className='border-2 border-red-700 p-2'>
@@ -158,34 +171,26 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
               </div>
              )}
              <div className="overflow-x-auto">
-               <table className='w-4xl text-left align-middle text-sm text-center border-none'>
+               <table className='w-3xl text-left align-middle text-sm text-center border-none'>
                  <thead className="hidden md:table-header-group">
                    <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
-                     <th className="w-[28%] p-2 border-none"></th>
-                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">Smaller class models: cheap, fast, efficient. In most use-cases perform similarly or close to the leaders.</th>
-                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">Earlier generation flagships. Mostly obsolete, but may still shine in some niche situations.</th>
-                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">OpenAI's new most advanced "reasoning" model. Expensive and slow. Try o1-mini and/or Sonnet 3.5 first</th>
-                     <th className="w-[18%] p-2 border border-slate-400 dark:border-gray-400">Current flagship LLM models. Effecient intelligence for most use-cases. Suggested as a first choice.</th>
+                     <th className="w-[25%] p-2 border-none"></th>
+                     <th className="w-[15%] p-2 border border-slate-400 dark:border-gray-400">Smaller class. Cheap, efficient, but still surprisingly good</th>
+                     <th className="w-[25%] p-2 border border-slate-400 dark:border-gray-400">Leading frontier models. Strongest artificial intelligence available to us today.</th>
                    </tr>
                  </thead>
                  <tbody>
                    <ModelRow 
-                     provider="OpenAI GPT-4 Models"
-                     description="Well-known models that started it all."
-                     models={['gpt-4o-mini', 'gpt-4-turbo', null, 'gpt-4o']}
+                     provider="Traditional LLM models"
+                     description="Rely on attention mechanism and pre-trained world knowledge for immediate and continous responding token-by-token. Refined intelligence."
+                     models={[['gpt-4o-mini'], ['gpt-4o', 'claude-3.5-sonnet']]}
                    />
-                   <ModelRow 
-                     provider="OpenAI o1 Reasoning Models"
-                     description='<a href="https://openai.com/o1/" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">See https://openai.com/o1/</a><br/><br/>Reasoning models "think" before responding. Major boost in complex Match, Science, Coding capabilities.'
-                     models={['o1-mini', null, 'o1-preview', null]}
-                   />
-                   {(anthropicEnable === 'Y') && (
-                     <ModelRow 
-                       provider="Anthropic Models"
-                       description="Very strong alternative. Great for Coding!"
-                       models={['claude-3-haiku', 'claude-3-opus', null, 'claude-3.5-sonnet']}
-                     />
-                   )}
+                  <ModelRow 
+                    provider="Reasoning and Iterative Models"
+                    description='Reasoning model "thinks" before responding. It uses its underlying base LLM to plan a multi-step thought process, 
+                      think "aloud" (internally), iterate multiple times until satisfied to respond. This requires more compute.'
+                    models={[['o1-mini'], ['o1-preview', null]]}
+                  />
                  </tbody>
                </table>
              </div>

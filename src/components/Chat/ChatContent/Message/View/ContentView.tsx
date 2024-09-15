@@ -181,7 +181,7 @@ const ContentView = memo(
                 </>
               )}
 
-              {role === 'user' || role === 'assistant' && <EditButton setIsEdit={setIsEdit} />}
+              {(role === 'user' || role === 'assistant') && <EditButton setIsEdit={setIsEdit} />}
               {role === 'assistant' && <MarkdownModeButton />}
 
               {role === 'user'      && <DeleteButton setIsDelete={setIsDelete} />}

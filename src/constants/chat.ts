@@ -92,7 +92,7 @@ export const supportedModels: ModelsList = {
   'gpt-4o-mini': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4o Mini',
+    displayName: 'OpenAI GPT 4o Mini',
     enabled: true,
     apiAliasCurrent: 'gpt-4o-mini',
     portkeyProvider: 'openai',
@@ -103,14 +103,14 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "New leader in 'small' class. It now serves free ChatGPT users.",
     released_description: 'July 2024',
-    cost_description: 'baseline',
+    cost_description: 'baseline<br/>"<i>too cheap to meter</i>"',
     use_system_prompt: true,
     use_stream: true
   },
   'gpt-4-turbo': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4 Turbo',
+    displayName: 'OpenAI GPT-4 Turbo',
     enabled: true,
     apiAliasCurrent: 'gpt-4-turbo',
     portkeyProvider: 'openai',
@@ -128,7 +128,7 @@ export const supportedModels: ModelsList = {
   'gpt-4o': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'GPT-4o latest',
+    displayName: 'OpenAI GPT 4o (latest)',
     choiceButtonColor: 'bg-emerald-100 dark:bg-emerald-700',
     enabled: true,
     apiAliasCurrent: 'chatgpt-4o-latest',
@@ -140,15 +140,15 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "Current flagship, industry leading model.",
     released_description: 'May 2024',
-    cost_description: '17x baseline',
+    cost_description: '17x baseline<br/><i>.</i>',
     use_system_prompt: true,
     use_stream: true
   },
   'o1-preview': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'o1-preview Reasoning',
-    enabled: true,
+    displayName: 'OpenAI GPT o1 (preview) w/Reasoning',
+    enabled: (import.meta.env.VITE_OPENAI_O1_ENABLE=='Y'),
     apiAliasCurrent: 'o1-preview',
     portkeyProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
@@ -157,8 +157,8 @@ export const supportedModels: ModelsList = {
       completion: { price: 60.00, unit: 1000000 },
     },
     usage_description: "Reasoning model for complex tasks that require broad general knowledge",
-    released_description: 'Sep 2024',
-    cost_description: '<span class="text-red-700 dark:text-red-400">200-500x (!)</span>',
+    released_description: 'Sep 2024', 
+    cost_description: '<span class="text-red-700 dark:text-red-400">noticeable</span><br/><i>(watch the meter)</i>',
     use_system_prompt: false,
     use_stream: false,
     force_temperature: 1,
@@ -169,9 +169,9 @@ export const supportedModels: ModelsList = {
   'o1-mini': {
     maxModelInputTokens: 128000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'o1-mini Reasoning',
+    displayName: 'OpenAI GPT o1 Mini w/Reasoning',
     choiceButtonColor: 'bg-sky-100 dark:bg-sky-900',
-    enabled: true,
+    enabled: (import.meta.env.VITE_OPENAI_O1_ENABLE=='Y'),
     apiAliasCurrent: 'o1-mini',
     portkeyProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
@@ -181,7 +181,7 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "Cost-balanced reasoning model tailored to coding, math, and science use cases",
     released_description: 'Sep 2024',
-    cost_description: '50-100x (!)',
+    cost_description: '50-100x baseline<br/><i>.</i>',
     use_system_prompt: false,
     use_stream: false,
     force_temperature: 1,
@@ -228,9 +228,9 @@ export const supportedModels: ModelsList = {
   'claude-3.5-sonnet': {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'Claude 3.5 Sonnet',
+    displayName: 'Antropic Claude 3.5 Sonnet',
     choiceButtonColor: 'bg-emerald-100 dark:bg-emerald-700',
-    enabled: true,
+    enabled: (import.meta.env.VITE_ANTHROPIC_ENABLE=='Y'),
     apiAliasCurrent: 'claude-3-5-sonnet-20240620',
     portkeyProvider: 'anthropic',
     titleGenModel: 'claude-3-haiku', 
@@ -240,10 +240,10 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "On par with GPT-4o in most benchmark. Best for Coding.",
     released_description: 'Jun 2024',
-    cost_description: '20x baseline',
+    cost_description: '20x baseline<br/><i>.</i>',
     use_system_prompt: true,
     use_stream: true
-  }
+  },
 };
 
 

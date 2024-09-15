@@ -123,6 +123,7 @@ This local running mode is useful for testing authentication-related code and co
       ```
       VITE_COMPANY_NAME=(Your Preferred Company/Group/Family name)
       VITE_ANTHROPIC_ENABLE=Y
+      VITE_OPENAI_O1_ENABLE=Y
       VITE_CHECK_AAD_AUTH=N
       ```
 
