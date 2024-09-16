@@ -173,7 +173,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                      <th className="w-1/4 p-1 border-none"></th>
                      <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Smaller class: cheaper and faster models, still suprisingly strong.</th>
                      <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Leading frontier models. Best artificial intelligence for productive daily use.</th>
-                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">SpecOps. Experimental heavy compute models for hardest logical and scientific challenges.</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Experimental heavy compute models for hardest logical and scientific challenges.</th>
                    </tr>
                  </thead>
                  <tbody>
