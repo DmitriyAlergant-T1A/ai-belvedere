@@ -163,7 +163,7 @@ export const supportedModels: ModelsList = {
   'claude-3-haiku': {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'Claude 3 Haiku',
+    displayName: 'Antropic Claude 3 Haiku',
     enabled: false,
     apiAliasCurrent: 'claude-3-haiku-20240307',
     portkeyProvider: 'anthropic',
@@ -181,7 +181,7 @@ export const supportedModels: ModelsList = {
   'claude-3-opus': {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'Claude 3 Opus',
+    displayName: 'Antropic Claude 3 Opus',
     enabled: true,
     apiAliasCurrent: 'claude-3-opus-20240229',
     portkeyProvider: 'anthropic',

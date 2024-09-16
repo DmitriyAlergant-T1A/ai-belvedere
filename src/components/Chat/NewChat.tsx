@@ -199,7 +199,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                   <ModelRow 
                     provider="Reasoning and Iterative Models"
                     description='Reasoning model "thinks" before responding. It uses its underlying LLM to plan a multi-step thought process, 
-                      think "aloud" (internally), iterate many times until satisfied to respond.'
+                      think "aloud" (internally), and iterate many times - until satisfied to respond.'
                     models={[['o1-mini'], ['o1-preview', null]]}
                   />
                  </tbody>
