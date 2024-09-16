@@ -50,13 +50,19 @@ const ChatHeader = React.memo(() => {
           setIsModalOpen(true);
         }}
       >
-        <div className='text-center whitespace-nowrap p-1 rounded-md bg-gray-300/20 dark:bg-gray-900/10 hover:bg-gray-300/50 dark:hover:bg-gray-900/50'>
+        <div className='text-center whitespace-nowrap p-1 rounded-md bg-gray-300/20 dark:bg-gray-900/10 hover:bg-gray-300/50 dark:hover:bg-gray-900/50'
+          title="Currently selected model for this chat."
+        >
           {t('model')}: {config.model ? supportedModels[config.model].displayName : 'Select a model'}
         </div>
-        <div className='text-center truncate whitespace-nowrap p-1 rounded-md bg-gray-300/20 dark:bg-gray-900/10 hover:bg-gray-300/50 dark:hover:bg-gray-900/50'>
+        <div className='text-center truncate whitespace-nowrap p-1 rounded-md bg-gray-300/20 dark:bg-gray-900/10 hover:bg-gray-300/50 dark:hover:bg-gray-900/50'
+           title="Maximum number of tokens from the chat context (including the latest prompt) that will be sent to the model."
+        >
           {t('maxPromptTokens.label')}: {config.maxPromptTokens}
         </div>
-        <div className='text-center truncate whitespace-nowrap p-1 rounded-md bg-gray-300/20 dark:bg-gray-900/10 hover:bg-gray-300/50 dark:hover:bg-gray-900/50'>
+        <div className='text-center truncate whitespace-nowrap p-1 rounded-md bg-gray-300/20 dark:bg-gray-900/10 hover:bg-gray-300/50 dark:hover:bg-gray-900/50'
+          title="Maximum number of tokens that the model is allowed to generate. For reasoning models this includes Internal Reasoning Tokens (invisible) and Output Tokens."
+        >
           {t('maxGenerationTokens.label')}: {config.maxGenerationTokens}
         </div>
       </div>

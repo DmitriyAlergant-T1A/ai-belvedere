@@ -70,6 +70,7 @@ export type ModelOptions =
   | 'gpt-4-turbo-preview'
   | 'gpt-4-turbo'
   | 'gpt-4o'
+  | 'gpt-4o-latest'
   | 'o1-preview'
   | 'o1-mini'
   | 'claude-3-haiku'
@@ -82,6 +83,7 @@ export interface ModelDetails {
   maxModelCompletionTokens: number;
   displayName: string;
   choiceButtonColor?: string;
+  choiceConfirmationPrompt?: string;
   enabled: boolean;
   apiAliasCurrent: string;
   portkeyProvider: string;
