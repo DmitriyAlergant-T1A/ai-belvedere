@@ -171,9 +171,9 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                  <thead className="hidden md:table-header-group">
                    <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
                      <th className="w-1/4 p-1 border-none"></th>
-                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Smaller class: cheaper and faster models, still suprisingly strong</th>
-                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Leading frontier models. Best artificial intelligence for everyday use</th>
-                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">SpecOps. Experimental compute heavy models for hardest logical and scientific challenges</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Smaller class: cheaper and faster models, still suprisingly strong.</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Leading frontier models. Best artificial intelligence for productive daily use.</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">SpecOps. Experimental heavy compute models for hardest logical and scientific challenges.</th>
                    </tr>
                  </thead>
                  <tbody>
@@ -182,7 +182,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                         Traditional LLM models
                         <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_br]:block [&_br]:mb-2 [&_br]:mt-2
                                           [&_br]:block [&_br]:mb-2">
-                          Rely on attention mechanism and pre-trained world knowledge for immediate and continous responding token-by-token. Refined intelligence.
+                          Rely on context window attention mechanism and pre-trained world knowledge for immediate and continous response token-by-token. Refined intelligence.
                         </div>
                     </td>
                     <ModelRow models={[['gpt-4o-mini'], ['gpt-4o', 'claude-3.5-sonnet']]} />
