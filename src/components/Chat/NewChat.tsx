@@ -189,7 +189,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                   </tr>
                   <tr>
                     <td colSpan={2}className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300 align-top">
-                        "Reasoning and Iterative Models"
+                        Reasoning and Iterative Models
                         <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_br]:block [&_br]:mb-2 [&_br]:mt-2
                                           [&_br]:block [&_br]:mb-2">
                           Reasoning model "thinks" before responding. It uses its underlying LLM (4o-mini or 4o accordingly) to plan a multi-step thought process, 
