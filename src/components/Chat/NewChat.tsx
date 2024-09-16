@@ -93,8 +93,8 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
       <div className="ml-1 mr-1 text-center align-top">
         <ModelSelectionButton model={model} backgroundColor={backgroundColor} />
         <div className={`${supportedModels[model].enabled ? 'text-gray-800 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500/70'}`}>
-          <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>From:</strong> ${modelDetails.released_description ?? ''}` }} />
-          <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>Cost:</strong> ${modelDetails.cost_description}` }} />
+          {/* <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>From:</strong> ${modelDetails.released_description ?? ''}` }} />
+          <div className="mt-1" dangerouslySetInnerHTML={{ __html: `<strong>Cost:</strong> ${modelDetails.cost_description}` }} /> */}
         </div>
       </div>
     );
@@ -106,42 +106,27 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
     }
     if (models.length === 2) {
       return (
-        <table className="w-full h-full border-collapse">
-          <tbody>
-            <tr>
-              {models.map((model, index) => (
-                <td key={index} className="p-0 w-1/2">
-                  {model && <ModelCell model={model} backgroundColor={supportedModels[model].choiceButtonColor} />}
-                </td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
+        <div className="flex flex-col w-full justify-center items-center">
+          {models.map((model, index) => (
+            <div key={index} className="w-full sm:w-1/2 p-1 flex justify-center items-center">
+              {model && <ModelCell model={model} backgroundColor={supportedModels[model].choiceButtonColor} />}
+            </div>
+          ))}
+        </div>
       );
     }
     return null;
   };
   
-  const ModelRow = ({ provider, description, models }: { provider: string; description: string; models: (ModelOptions | null)[][] }) => (
-    <tr>
-      <td className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300 align-top">
-        {provider}
-        <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_br]:block [&_br]:mb-2 [&_br]:mt-2
-                          [&_br]:block [&_br]:mb-2" 
-          dangerouslySetInnerHTML={{ __html: description }} 
-        />
-      </td>
+  const ModelRow = ({ models }: { models: (ModelOptions | null)[][] }) => (
+    <>
       {models.map((modelGroup, index) => (
-        <td key={index} className="p-2 border border-slate-400 dark:border-gray-400 align-top">
+        <td key={index} className="p-2 border border-slate-400 dark:border-gray-400 align-middle">
           {modelGroup ? <ModelGroup models={modelGroup} /> : null}
         </td>
       ))}
-    </tr>
+    </>
   );
-  
-
-  const anthropic_Enable:string = import.meta.env.VITE_ANTHROPIC_ENABLE || "N";
-  const openai_o1_Enable:string = import.meta.env.VITE_OPENAI_O1_ENABLE || "N";
 
   return (
     <>
@@ -185,23 +170,34 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                <table className='w-3xl text-left align-middle text-sm text-center border-none'>
                  <thead className="hidden md:table-header-group">
                    <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
-                     <th className="w-[25%] p-2 border-none"></th>
-                     <th className="w-[15%] p-2 border border-slate-400 dark:border-gray-400">Smaller class: cheaper and faster models, still very strong</th>
-                     <th className="w-[25%] p-2 border border-slate-400 dark:border-gray-400">Leading frontier models. Best artificial intelligence available to us today.</th>
+                     <th className="w-1/4 p-1 border-none"></th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Smaller class: cheaper and faster models, still suprisingly strong</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Leading frontier models. Best artificial intelligence for everyday use</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">SpecOps. Experimental compute heavy models for hardest logical and scientific challenges</th>
                    </tr>
                  </thead>
                  <tbody>
-                   <ModelRow 
-                     provider="Traditional LLM models"
-                     description="Rely on attention mechanism and pre-trained world knowledge for immediate and continous responding token-by-token. Refined intelligence."
-                     models={[['gpt-4o-mini'], ['gpt-4o', 'claude-3.5-sonnet']]}
-                   />
-                  <ModelRow 
-                    provider="Reasoning and Iterative Models"
-                    description='Reasoning model "thinks" before responding. It uses its underlying LLM to plan a multi-step thought process, 
-                      think "aloud" (internally), and iterate many times - until satisfied to respond.'
-                    models={[['o1-mini'], ['o1-preview', null]]}
-                  />
+                  <tr>
+                    <td className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300 align-top">
+                        Traditional LLM models
+                        <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_br]:block [&_br]:mb-2 [&_br]:mt-2
+                                          [&_br]:block [&_br]:mb-2">
+                          Rely on attention mechanism and pre-trained world knowledge for immediate and continous responding token-by-token. Refined intelligence.
+                        </div>
+                    </td>
+                    <ModelRow models={[['gpt-4o-mini'], ['gpt-4o', 'claude-3.5-sonnet']]} />
+                  </tr>
+                  <tr>
+                    <td colSpan={2}className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300 align-top">
+                        "Reasoning and Iterative Models"
+                        <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_br]:block [&_br]:mb-2 [&_br]:mt-2
+                                          [&_br]:block [&_br]:mb-2">
+                          Reasoning model "thinks" before responding. It uses its underlying LLM (4o-mini or 4o accordingly) to plan a multi-step thought process, 
+                          think "aloud" (internally), and internally iterate few times until satisfied with the answer and ready to respond. 
+                        </div>
+                    </td>
+                    <ModelRow models={[['o1-mini'], ['o1-preview']]} />
+                  </tr>
                  </tbody>
                </table>
              </div>

@@ -80,8 +80,10 @@ export const supportedModels: ModelsList = {
     maxModelInputTokens: 131072-32768,
     maxModelCompletionTokens: 32768,
     displayName: 'OpenAI GPT o1 (preview) w/Reasoning',
-    choiceButtonColor: 'bg-orange-50 dark:bg-red-900',
-    choiceConfirmationPrompt: 'This is a powerful model, which may consume a significant amount of compute resources, and will take time to respond. It is recommended to use this model when smaller models did not solve the problem.<br/>Make sure your prompt is concise, detailed, and has all the neccessary context.<br/>Each request may cost approximately $0.15 to $0.60, please watch the costs indicator.<br/>Let us know the feedback, we will love to hear your examples of situations where regular LLMs failed, and then a Reasoning model has solved it.',
+    choiceConfirmationPrompt: 'This is a powerful model, which may consume a significant amount of compute resources, and will take time to respond.' 
+      + 'It is recommended to use this model when smaller models did not solve the problem.<br/>Make sure your prompt is concise, detailed, and has all the neccessary context.<br/>' 
+      + 'Each request may cost approximately $0.20 to $1.00 (though could be less or more), please keep an eye on the accumulatedcosts indicator.<br/>' 
+      + 'Let us know the feedback, we will love to hear your examples of situations where regular LLMs (like Claude 3.5 Sonnet) have failed, and then this Reasoning model has performed substantially better.',
     enabled: (import.meta.env.VITE_OPENAI_O1_ENABLE=='Y'),
     apiAliasCurrent: 'o1-preview',
     portkeyProvider: 'openai',
