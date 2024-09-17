@@ -33,9 +33,8 @@ const useSubmit = () =>
 
     const addAssistantContent = (content: string) => 
     {
-      const updatedChats: ChatInterface[] = JSON.parse(
-        JSON.stringify(useStore.getState().chats)
-      );
+      const updatedChats: ChatInterface[] = useStore.getState().chats || [];
+
       const updatedMessages = updatedChats[_currentChatIndex].messages;
 
       //Removing "Generating..." placeholder
@@ -45,6 +44,31 @@ const useSubmit = () =>
       updatedMessages[_currentMessageIndex].content += content;
       setChats(updatedChats);
     }
+
+    /*Simulated Streaming for printing of batch responses. Better for perceived "liveness" of the o1 reasoning model */
+
+    const simulateStreaming = async (content: string, addAssistantContent: (content: string) => void) => {
+      const minChunkSize = 30;
+      const maxChunkSize = 100;
+      const minDelay = 40;
+      const maxDelay = 100;
+
+      const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+      let index = 0;
+      while (index < content.length) {
+        const chunkSize = Math.floor(Math.random() * (maxChunkSize - minChunkSize + 1)) + minChunkSize;
+        const chunk = content.slice(index, index + chunkSize);
+        addAssistantContent(chunk);
+        index += chunkSize;
+        await sleep(Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay);
+
+        if (!useStore.getState().generating) {
+          console.debug('Simulated streaming response printing interrupted by user');
+          break;
+        }
+      }
+    };
 
     try {
 
@@ -133,7 +157,7 @@ const useSubmit = () =>
         );
 
         if (response && response.message) {
-          addAssistantContent(response.message.content);
+          await simulateStreaming(response.message.content, addAssistantContent);
         }
 
         if (response && countTotalTokens)
