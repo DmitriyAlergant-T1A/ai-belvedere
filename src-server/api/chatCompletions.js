@@ -46,10 +46,11 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
   let responseSizeDataChunks = 0;
   let streamCompleted = false;
   let apiResponseCode;
+  let promptTokens, completionTokens, reasoningTokens;
 
   const apiReq = https.request(apiReqHeaders, (apiRes) => {
     apiResponseCode = apiRes.statusCode;
-    console.log(`${requestId}: Response received... status: ${apiRes.statusCode}.`);
+    console.log(`${requestId}: APIResponse received... status: ${apiRes.statusCode}.`);
 
     if (apiRes.statusCode !== 200) {
       handleErrorResponse(res, apiRes);
@@ -92,7 +93,13 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
       } else {
         //BATCH RESPONSE COMPLETED
         const universalResponse = providerModule.formatBatchResponse(batchResponseData, provider);
+        promptTokens = universalResponse.usage.prompt_tokens;
+        completionTokens = universalResponse.usage.completion_tokens;
+        reasoningTokens = universalResponse.usage.reasoning_tokens;
+
         res.status(apiRes.statusCode).send(universalResponse);
+
+        streamCompleted = true;
       }
     });
   });
@@ -115,6 +122,9 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
       headers: "",
       apiResponseCode: apiResponseCode,
       streamCompleted: streamCompleted,
+      promptTokens: promptTokens,
+      completionTokens: completionTokens,
+      reasoningTokens: reasoningTokens,
     });
   });
 
