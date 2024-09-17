@@ -15,8 +15,6 @@ const logToAzureLogAnalytics = async(streamName, requestId, logsData) => {
 
     const ENVIRONMENT = process.env.ENVIRONMENT || os.hostname();
 
-    console.log ("ENVIRONMENT for ALA LOGGING: " + ENVIRONMENT);
-
     if (AZURE_LOG_ANALYTICS_RESOURCE_URI && AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID) {
 
         if (!azureCredential || !logsIngestionClient) {
@@ -38,6 +36,8 @@ const logToAzureLogAnalytics = async(streamName, requestId, logsData) => {
         console.error(`ERROR: logToAzureLogAnalytics - unknown streamName ${streamName}`)
         return;
       }
+
+      console.log(`${requestId} Logging to ALA stream ${alaStreamName} with data: ${JSON.stringify(_logsData)}`);
         
       logsIngestionClient.upload(AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID, alaStreamName, [_logsData])
       .catch(e => {
