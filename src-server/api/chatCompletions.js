@@ -43,11 +43,10 @@ router.post('/', async (req, res) => {
 });
 
 async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provider, requestId, userProfileEmail, requestPurpose, providerModule) {
-  let responseSizeDataChunks = 0;
+  let responseSize = 0, responseSizeDataChunks = 0;
   let streamCompleted = false;
   let apiResponseCode;
   let promptTokens = 0, completionTokens = 0, reasoningTokens = 0;
-  let responseSize = 0;  // Initialize here
 
   const apiReq = https.request(apiReqHeaders, (apiRes) => {
     apiResponseCode = apiRes.statusCode;
@@ -119,7 +118,7 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
       principal: userProfileEmail,
       requestStreaming: req.body.stream,
       requestSize: req.headers['content-length'],
-      responseSize: responseSize,
+      responseSize: responseSize.toString(),
       responseSizeDataChunks: responseSizeDataChunks,
       model: requestPayload.model,
       provider: provider,
@@ -127,9 +126,9 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
       headers: "",
       apiResponseCode: apiResponseCode,
       streamCompleted: streamCompleted,
-      promptTokens: promptTokens,
-      completionTokens: completionTokens,
-      reasoningTokens: reasoningTokens,
+      batchTokensPrompt: promptTokens,
+      batchTokensCompletion: completionTokens,
+      batchTokensReasoning: reasoningTokens,
     });
   });
 
