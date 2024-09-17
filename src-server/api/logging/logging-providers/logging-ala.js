@@ -15,6 +15,8 @@ const logToAzureLogAnalytics = async(streamName, requestId, logsData) => {
 
     const ENVIRONMENT = process.env.ENVIRONMENT || os.hostname();
 
+    console.log ("ENVIRONMENT for ALA LOGGING: " + ENVIRONMENT);
+
     if (AZURE_LOG_ANALYTICS_RESOURCE_URI && AZURE_LOG_ANALYTICS_DCR_IMMUTABLE_ID) {
 
         if (!azureCredential || !logsIngestionClient) {
