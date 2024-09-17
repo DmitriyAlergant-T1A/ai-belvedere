@@ -21,7 +21,7 @@ export function prepareRequest(req) {
     return { provider, apiUrl, apiKey, authHeader, requestPayload };
   }
   
-  export function handleStreamChunk(res, chunk, partial, responseSizeDataChunks, streamCompleted, provider) {
+  export function handleStreamChunk(res, chunk, partial, responseSize, responseSizeDataChunks, streamCompleted) {
     const receivedValue = chunk.toString();
     const accumulatedData = partial + receivedValue;
     
@@ -55,6 +55,7 @@ export function prepareRequest(req) {
           res.write(`data: ${JSON.stringify({ content })}\n\n`);
           partial = '';
           responseSizeDataChunks += 1;
+          responseSize += content.length;
         } else if (item.choices[0]?.finish_reason === 'stop' || item.choices[0]?.finish_reason === 'length') {
           // Normal stop, ignore
         } else if (item.choices[0]?.finish_reason === 'content_filter') {
@@ -65,7 +66,7 @@ export function prepareRequest(req) {
       }
     });
   
-    return { partial, responseSizeDataChunks, streamCompleted };
+    return { partial, responseSize, responseSizeDataChunks, streamCompleted };
   }
   
   export function formatBatchResponse(batchResponseData, provider) {

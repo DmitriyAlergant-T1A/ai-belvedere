@@ -185,7 +185,7 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                           Rely on context window attention mechanism and pre-trained world knowledge for immediate and continous response token-by-token. Refined intelligence.
                         </div>
                     </td>
-                    <ModelRow models={[['gpt-4o-mini'], ['gpt-4o', 'claude-3.5-sonnet']]} />
+                    <ModelRow models={[['gpt-4o-mini'], ['chatgpt-4o-latest', 'claude-3.5-sonnet']]} />
                   </tr>
                   <tr>
                     <td colSpan={2}className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300 align-top">

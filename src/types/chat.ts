@@ -70,7 +70,7 @@ export type ModelOptions =
   | 'gpt-4-turbo-preview'
   | 'gpt-4-turbo'
   | 'gpt-4o'
-  | 'gpt-4o-latest'
+  | 'chatgpt-4o-latest'
   | 'o1-preview'
   | 'o1-mini'
   | 'claude-3-haiku'

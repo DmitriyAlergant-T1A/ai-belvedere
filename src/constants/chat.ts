@@ -16,9 +16,9 @@ export const _defaultSystemMessage =
   import.meta.env.VITE_DEFAULT_SYSTEM_MESSAGE ??
   `Carefully follow the user's instructions. Respond using Markdown. Respond briefly, elaborate further when asked. If asked for code writing, only give that code, withhold explanations until requested. If asked for code modification, only give the relevant or changed pieces of code. Unless specifically requested provide a complete snippet, then comply.`;
 
-export const defaultModel: ModelOptions = 'gpt-4o';
+export const defaultModel: ModelOptions = 'chatgpt-4o-latest';
 
-export const defaultTitleGenModel: ModelOptions = 'gpt-3.5-turbo';
+export const defaultTitleGenModel: ModelOptions = 'gpt-4o-mini';
 
 export const supportedModels: ModelsList = {
   'gpt-4o-mini': {
@@ -42,37 +42,38 @@ export const supportedModels: ModelsList = {
   'gpt-4o': {
     maxModelInputTokens: 128000-16384,
     maxModelCompletionTokens: 16384,
-    displayName: 'OpenAI GPT 4o',
+    displayName: 'OpenAI GPT 4o (2024-05-13)',
     choiceButtonColor: 'bg-green-100 dark:bg-green-800',
     enabled: true,
     apiAliasCurrent: 'gpt-4o-2024-08-06',
     portkeyProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
-      prompt: { price: 2.50, unit: 1000000 },
-      completion: { price: 10.00, unit: 1000000 },
+      prompt: { price: 5.0, unit: 1000000 },
+      completion: { price: 15.00, unit: 1000000 },
     },
     usage_description: "Current flagship, industry leading model.",
     released_description: 'May 2024',
-    cost_description: '17x baseline<br/>',
+    cost_description: '30x baseline<br/>',
     use_system_prompt: true,
     use_stream: true
   },
-  'gpt-4o-latest': {
+  'chatgpt-4o-latest': {
     maxModelInputTokens: 128000-16384,
     maxModelCompletionTokens: 16384,
-    displayName: 'OpenAI GPT 4o (Latest)',
+    displayName: 'OpenAI ChatGPT 4o (Latest)',
+    choiceButtonColor: 'bg-green-100 dark:bg-green-800',
     enabled: true,
-    apiAliasCurrent: 'chatgpt-4o-latest	',
+    apiAliasCurrent: 'chatgpt-4o-latest',
     portkeyProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
-      prompt: { price: 2.50, unit: 1000000 },
-      completion: { price: 10.00, unit: 1000000 },
+      prompt: { price: 5.0, unit: 1000000 },
+      completion: { price: 15.00, unit: 1000000 },
     },
     usage_description: "Current flagship, industry leading model.",
     released_description: 'May 2024',
-    cost_description: '17x baseline<br/>',
+    cost_description: '30x baseline<br/>',
     use_system_prompt: true,
     use_stream: true
   },
@@ -107,7 +108,7 @@ export const supportedModels: ModelsList = {
     maxModelInputTokens: 65536,
     maxModelCompletionTokens: 65536,
     displayName: 'OpenAI GPT o1 Mini w/Reasoning',
-    choiceButtonColor: 'bg-lime-50 dark:bg-sky-900',
+    choiceButtonColor: 'bg-yellow-100 dark:bg-sky-900',
     enabled: (import.meta.env.VITE_OPENAI_O1_ENABLE=='Y'),
     apiAliasCurrent: 'o1-mini',
     portkeyProvider: 'openai',
@@ -130,7 +131,7 @@ export const supportedModels: ModelsList = {
     maxModelInputTokens: 200000-8192,
     maxModelCompletionTokens: 8192,
     displayName: 'Antropic Claude 3.5 Sonnet',
-    choiceButtonColor: 'bg-green-100 dark:bg-green-800',
+    choiceButtonColor: 'bg-lime-100 dark:bg-lime-800',
     enabled: (import.meta.env.VITE_ANTHROPIC_ENABLE=='Y'),
     apiAliasCurrent: 'claude-3-5-sonnet-20240620',
     portkeyProvider: 'anthropic',

@@ -46,7 +46,8 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
   let responseSizeDataChunks = 0;
   let streamCompleted = false;
   let apiResponseCode;
-  let promptTokens, completionTokens, reasoningTokens;
+  let promptTokens = 0, completionTokens = 0, reasoningTokens = 0;
+  let responseSize = 0;  // Initialize here
 
   const apiReq = https.request(apiReqHeaders, (apiRes) => {
     apiResponseCode = apiRes.statusCode;
@@ -69,11 +70,15 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
     let partial = '';
 
     apiRes.on('data', (chunk) => {
+      /* BATCH RESPONSE */
       if (!req.body.stream) {
         batchResponseData += chunk.toString();
-      } else {
-        ({ partial, responseSizeDataChunks, streamCompleted } = 
-          providerModule.handleStreamChunk(res, chunk, partial, responseSizeDataChunks, streamCompleted, provider));
+        responseSize += chunk.length;
+      } 
+      /* STREAM RESPONSE */
+      else {
+        ({ partial, responseSize, responseSizeDataChunks, streamCompleted } = 
+          providerModule.handleStreamChunk(res, chunk, partial, responseSize, responseSizeDataChunks, streamCompleted));
       }
 
       if (req.socket.destroyed) {
@@ -114,7 +119,7 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
       principal: userProfileEmail,
       requestStreaming: req.body.stream,
       requestSize: req.headers['content-length'],
-      responseSize: responseSizeDataChunks,
+      responseSize: responseSize,
       responseSizeDataChunks: responseSizeDataChunks,
       model: requestPayload.model,
       provider: provider,
