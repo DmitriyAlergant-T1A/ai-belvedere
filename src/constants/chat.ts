@@ -84,7 +84,7 @@ export const supportedModels: ModelsList = {
     choiceConfirmationPrompt: 'This is a powerful model, which may consume a significant amount of compute resources, and will take time to respond.<br>' 
       + 'It is recommended to use this model when smaller models including o1 Mini did not solve the problem.<br/>' 
       + 'Make sure your prompt is concise with all neccessary context. See <a href="https://platform.openai.com/docs/guides/reasoning/advice-on-prompting" target="_blank" class="text-blue-600 dark:text-blue-400">Advice on Prompting</a>.<br/>' 
-      + 'One request may cost approximately $0.20 to $1.00, please keep an eye on the costs indicator.<br/>' 
+      + 'One request may cost approximately $0.15 to $0.80, please keep an eye on the costs indicator.<br/>' 
       + 'Let us know your feedback! We will love to hear <u>specific examples</u> of situations where regular LLMs (like Claude 3.5 Sonnet) have failed, and then this Reasoning model has performed substantially better.',
     enabled: (import.meta.env.VITE_OPENAI_O1_ENABLE=='Y'),
     apiAliasCurrent: 'o1-preview',
