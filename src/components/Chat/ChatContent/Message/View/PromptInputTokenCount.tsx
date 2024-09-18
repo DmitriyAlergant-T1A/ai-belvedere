@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import useStore from '@store/store';
 import { countTokens } from '@utils/messageUtils';
 import { _defaultChatConfig, supportedModels } from '@constants/chat';
+import { useTranslation } from 'react-i18next';
 
 interface TokenCountProps {
   content: string;
@@ -9,6 +10,7 @@ interface TokenCountProps {
 }
 
 const PromptInputTokenCount = React.memo<TokenCountProps>(({ content, role }) => {
+  const { t } = useTranslation('main');
 
   const [tokenCount, setTokenCount] = useState<number>(0);
 
@@ -54,7 +56,7 @@ const PromptInputTokenCount = React.memo<TokenCountProps>(({ content, role }) =>
   return (
     <div className='top-[-16px] left-0'>
       <div className='text-xs italic text-gray-900 dark:text-gray-300'>
-        This prompt is approximately {tokenCount} tokens plus size of the previously accummulated chat context
+        {t('promptTokenCount', { count: tokenCount })}
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import { ModelOptions } from '@type/chat';
 import { supportedModels } from '@constants/chat';
 
 const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: boolean }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['main', 'model']);
   const generating = useStore((state) => state.generating);
   const [isModelSelectionOpen, setIsModelSelectionOpen] = useState(false);
   const [confirmationModel, setConfirmationModel] = useState<ModelOptions | null>(null);
@@ -137,23 +137,23 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
         onClick={() => {
           if (!generating) setIsModelSelectionOpen(true);
         }}
-        title={folder ? String(t('newChat')) : 'Hotkey: Ctrl + /'}
+        title={folder ? t('main:newChat') || 'New Chat' : t('main:newChatHotkey') || 'Hotkey: Ctrl + /'}
       >
         {folder ? (
           <div className='max-h-0 parent-sibling-hover:max-h-10 hover:max-h-10 parent-sibling-hover:py-2 hover:py-2 px-2 overflow-hidden transition-all duration-200 delay-500 text-sm flex gap-3 items-center text-gray-100'>
-            <PlusIcon /> {t('newChat')}
+            <PlusIcon /> {t('main:newChat')}
           </div>
         ) : (
           <>
             <PlusIcon />
-            <span className='inline-flex text-white text-sm'>{t('newChat')}</span>
+            <span className='inline-flex text-white text-sm'>{t('main:newChat')}</span>
           </>
         )}
       </a>
 
       {isModelSelectionOpen && (
         <PopupModal
-          title="New Chat: Select Model"
+          title={t('model:newChatSelectModel') || 'New Chat: Select Model'}
           setIsModalOpen={setIsModelSelectionOpen}
           cancelButton={true}
         >
@@ -161,8 +161,8 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
             {replaceCurrentChat && (
               <div className='flex flex-col items-center text-center mt-4 mb-2 text-lg font-medium text-red-700'>
                 <div className='border-2 border-red-700 p-2'>
-                  <div>Warning: currently active chat will be dropped, replaced with new chat.</div>
-                  <div>See "Drop active chat when New Chat is created" toggle in Settings.</div>
+                  <div>{t('model:warningActiveChat')}</div>
+                  <div>{t('model:seeDropActiveChat')}</div>
                 </div>
               </div>
              )}
@@ -171,29 +171,28 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
                  <thead className="hidden md:table-header-group">
                    <tr className="bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-600 text-gray-800 dark:text-gray-300">
                      <th className="w-1/4 p-1 border-none"></th>
-                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Smaller class: cheaper and faster models, still suprisingly strong.</th>
-                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Leading frontier models. Best artificial intelligence for productive daily use.</th>
-                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">Experimental heavy compute models for hardest logical and scientific challenges.</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">{t('model:smallerClass')}</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">{t('model:leadingFrontier')}</th>
+                     <th className="w-[15%] p-1 border border-slate-400 dark:border-gray-400">{t('model:experimentalHeavy')}</th>
                    </tr>
                  </thead>
                  <tbody>
                   <tr>
                     <td className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300 align-top">
-                        Traditional LLM models
+                        {t('model:traditionalLLM')}
                         <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_br]:block [&_br]:mb-2 [&_br]:mt-2
                                           [&_br]:block [&_br]:mb-2">
-                          Rely on context window attention mechanism and pre-trained world knowledge for immediate and continous response token-by-token. Refined intelligence.
+                          {t('model:traditionalLLMDescription')}
                         </div>
                     </td>
                     <ModelRow models={[['gpt-4o-mini'], ['chatgpt-4o-latest', 'claude-3.5-sonnet']]} />
                   </tr>
                   <tr>
                     <td colSpan={2}className="hidden md:table-cell p-2 text-left font-semibold bg-gray-100 dark:bg-gray-800 border border-slate-400 dark:border-gray-300 text-gray-800 dark:text-gray-300 align-top">
-                        Reasoning and Iterative Models
+                        {t('model:reasoningIterative')}
                         <div className="font-normal text-sm mt-2 [&_a]:text-blue-600 [&_a]:dark:text-blue-400 [&_br]:block [&_br]:mb-2 [&_br]:mt-2
                                           [&_br]:block [&_br]:mb-2">
-                          Reasoning model "thinks" before responding. It uses its underlying LLM (4o-mini or 4o accordingly) to plan a multi-step thought process, 
-                          think "aloud" (internally), and internally iterate few times until satisfied with the answer and ready to respond. 
+                          {t('model:reasoningIterativeDescription')}
                         </div>
                     </td>
                     <ModelRow models={[['o1-mini'], ['o1-preview']]} />
@@ -207,27 +206,27 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
 
       {confirmationModel && (
         <PopupModal
-          title={`Confirmation: ${supportedModels[confirmationModel].displayName}`}
+          title={t('model:confirmationTitle', { model: supportedModels[confirmationModel].displayName }) || `Confirmation: ${supportedModels[confirmationModel].displayName}`}
           setIsModalOpen={() => setConfirmationModel(null)}
           cancelButton={false}
         >
           <div className='p-4 text-left'>
             <p 
               className='[&_br]:content-[""] [&_br]:block [&_br]:mb-2 text-gray-800 dark:text-gray-200'
-              dangerouslySetInnerHTML={{ __html: supportedModels[confirmationModel].choiceConfirmationPrompt ?? '' }} 
+              dangerouslySetInnerHTML={{ __html: t('model:choiceConfirmationPrompt', { prompt: supportedModels[confirmationModel].choiceConfirmationPrompt }) }} 
             />
             <div className='mt-4 flex justify-center space-x-4'>
               <button
                 className='btn btn-neutral'
                 onClick={() => handleConfirmation(false)}
               >
-                Cancel
+                {t('main:cancel')}
               </button>
               <button
                 className='btn btn-primary'
                 onClick={() => handleConfirmation(true)}
               >
-                Proceed
+                {t('main:proceed')}
               </button>
             </div>
           </div>

@@ -30,7 +30,7 @@
   "total": "Total",
   "enterToSubmit": "Enter to Submit",
   "showSystemPromptToggle": "Show System Prompt",
-  "addCompanyPromptToggle": "Use In New Chats",
+  "addCompanyPromptToggle": "Use Built-In System Prompt",
   "countTotalTokens": "Show Accumulated Costs",
   "requestTokensCount": "Show Request Tokens Count",
   "chatNamesAsPageTitles": "Use Chat Names as Page Titles",
@@ -53,5 +53,8 @@
   "accumulatedCostPreambleProse.div4":  "Please note the 'Edit' button for your messages. Often it is more effecient to edit your message and resubmit, then to keep adding new messages with clarifications to the thread.",
   "accumulatedCostPreambleProse.div5":  "Consider smaller model ('GPT-4o-mini') when questions are simple and you may not need full power.",
   "accumulatedCostPreambleProse.div6":  "The AI LLMs are helping us working effeciently; Use it as much as needed!",
-  "replaceCurrentChatToggle": "Drop active chat when New Chat is created"
+  "replaceCurrentChatToggle": "Drop active chat when New Chat is created",
+  "newChatHotkey": "Hotkey: Ctrl + /",
+  "proceed": "Proceed",
+  "promptTokenCount": "This prompt is approximately {{count}} tokens plus size of the previously accumulated chat context"
 }

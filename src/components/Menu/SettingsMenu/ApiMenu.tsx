@@ -86,7 +86,7 @@ const ApiMenu = ({
             :
             (
             <p>This is only used for local development changes to this UI application, to connect to the locally-run middleware backend (NodeJS).
-            You would need to provide your own API keys in environment variables. See <a href="https://github.com/DmitriyAlergant-T1A/BetterChatGPT-t1a/" 
+            You would need to provide your own API keys in environment variables. See <a href="https://github.com/DmitriyAlergant-T1A/ai-belvedere/" 
               className="font-medium text-blue-600 dark:text-blue-500 hover:underline">GitHub repository</a> for more information.
             </p>
             )
