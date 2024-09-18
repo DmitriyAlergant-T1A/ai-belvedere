@@ -206,14 +206,14 @@ const NewChat = ({ folder, hotkeysEnabled }: { folder?: string; hotkeysEnabled: 
 
       {confirmationModel && (
         <PopupModal
-          title={t('model:confirmationTitle', { model: supportedModels[confirmationModel].displayName }) || `Confirmation: ${supportedModels[confirmationModel].displayName}`}
+          title={`${t('model:confirmationTitle')}: ${supportedModels[confirmationModel].displayName}`}
           setIsModalOpen={() => setConfirmationModel(null)}
           cancelButton={false}
         >
           <div className='p-4 text-left'>
             <p 
               className='[&_br]:content-[""] [&_br]:block [&_br]:mb-2 text-gray-800 dark:text-gray-200'
-              dangerouslySetInnerHTML={{ __html: t('model:choiceConfirmationPrompt', { prompt: supportedModels[confirmationModel].choiceConfirmationPrompt }) }} 
+              dangerouslySetInnerHTML={{ __html: supportedModels[confirmationModel].choiceConfirmationPrompt ?? '' }} 
             />
             <div className='mt-4 flex justify-center space-x-4'>
               <button

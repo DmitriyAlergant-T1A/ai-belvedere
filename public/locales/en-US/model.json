@@ -9,6 +9,6 @@
   "traditionalLLMDescription": "Rely on context window attention mechanism and pre-trained world knowledge for immediate and continuous response token-by-token. Refined intelligence.",
   "reasoningIterative": "Reasoning and Iterative Models",
   "reasoningIterativeDescription": "Reasoning model \"thinks\" before responding. It uses its underlying LLM (4o-mini or 4o accordingly) to plan a multi-step thought process, think \"aloud\" (internally), and internally iterate few times until satisfied with the answer and ready to respond.",
-  "confirmationTitle": "Confirmation: {{model}}",
+  "confirmationTitle": "Confirmation",
   "choiceConfirmationPrompt": "{{prompt}}"
 }
