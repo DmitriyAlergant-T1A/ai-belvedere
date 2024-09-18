@@ -3,16 +3,16 @@
   "model": "Model",
   "maxGenerationTokens": {
     "label": "Max Gen Tokens",
-    "description": "Maximum number of tokens to generate by the LLM in the chat completion. This value is passed to the LLM API provider to limit how much the model is allowed to generate."
+    "description": "Maximum number of tokens to generate by the LLM in the chat completion. This value instructs the model how much output it is allowed to generate. For reasoning models (o1) this also includes tokens produced during internal reasoning."
   },
   "maxPromptTokens": {
     "label": "Max Input Tokens",
-    "description": "Maximum number of 'input' tokens to submit to LLM. This includes your latest message, the System Prompt, and previous conversation context messages (starting from most recent) - as much as fits."
+    "description": "Maximum number of 'input' tokens to submit to LLM. This includes your latest message, the System Prompt, and previous conversation context messages (starting from most recent), as much as fits. For longer conversations which exceeded the limit, the earlier messages will not be included in next submission."
   },
   "default": "Default",
   "temperature": {
     "label": "Temperature",
-    "description": "What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more variable and explorative, lower values like 0.2 will make it more focused and deterministic."
+    "description": "What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more variable and explorative, lower values like 0.2 will make it more focused and deterministic. Not supported for o1-mini and o1-preview models."
   },
   "presencePenalty": {
     "label": "Presence Penalty",

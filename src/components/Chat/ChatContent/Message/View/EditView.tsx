@@ -10,6 +10,7 @@ import { ChatInterface } from '@type/chat';
 import PopupModal from '@components/PopupModal';
 import CommandPrompt from '../CommandPrompt';
 import { MessageInterface } from '@type/chat';
+import PromptInputTokenCount from './PromptInputTokenCount';
 
 export function findLastUserMessageIndex(updatedMessages: MessageInterface[], messageIndex: number): number {
   for (let i = messageIndex - 1; i >= 0; i--) {
@@ -346,12 +347,18 @@ const EditView = ({
             </button>
           )}
         </div>
+        
 
         {/* There was one more Tokens Counter display */}
         {/* {sticky && <TokenCount />} */}
 
         <CommandPrompt _addPromptContent={_addPromptContent} />
+        
 
+      </div>
+
+      <div className="flex justify-center">
+        <PromptInputTokenCount content={__content} role={inputRole} />
       </div>
 
       {isModalOpen && (

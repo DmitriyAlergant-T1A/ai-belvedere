@@ -20,10 +20,21 @@ export interface ChatInterface {
   newMessageDraft?: string;
 }
 
+// Application internal  interface, has more parameters
 export interface ConfigInterface {
   model: ModelOptions;
   maxPromptTokens: number,
   maxGenerationTokens: number;
+  temperature: number;
+  presence_penalty: number;
+  top_p: number;
+  frequency_penalty: number;
+}
+
+// API endpoint interface, only has the parameters supported by OpenAI endpoint
+export interface OpenAICompletionsConfig {
+  model: string;
+  max_completion_tokens: number,
   temperature: number;
   presence_penalty: number;
   top_p: number;
@@ -59,6 +70,9 @@ export type ModelOptions =
   | 'gpt-4-turbo-preview'
   | 'gpt-4-turbo'
   | 'gpt-4o'
+  | 'chatgpt-4o-latest'
+  | 'o1-preview'
+  | 'o1-mini'
   | 'claude-3-haiku'
   | 'claude-3-sonnet'
   | 'claude-3-opus'
@@ -68,6 +82,8 @@ export interface ModelDetails {
   maxModelInputTokens: number;
   maxModelCompletionTokens: number;
   displayName: string;
+  choiceButtonColor?: string;
+  choiceConfirmationPrompt?: string;
   enabled: boolean;
   apiAliasCurrent: string;
   portkeyProvider: string;
@@ -81,6 +97,12 @@ export interface ModelDetails {
   usage_description: string;
   released_description?: string;
   cost_description: string;
+  use_system_prompt: boolean;
+  use_stream: boolean;
+  force_temperature?: number;
+  force_presence_penalty?: number;
+  force_top_p?: number;
+  force_frequency_penalty?: number;
 }
 
 export type ModelsList = {

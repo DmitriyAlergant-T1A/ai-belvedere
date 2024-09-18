@@ -63,18 +63,7 @@ const TokensTotalCost = () => {
             </tr>
           </thead>
           <tbody>
-            {costMapping.sort((a, b) => {
-                const nameA = supportedModels[a.model as ModelOptions].displayName.toUpperCase(); // get displayName and convert to uppercase for uniform comparison
-                const nameB = supportedModels[b.model as ModelOptions].displayName.toUpperCase(); // same for b
-                if (nameA <= nameB) {
-                  return -1;
-                }
-                if (nameA > nameB) {
-                  return 1;
-                }
-                else
-                  return 0;
-              }).map(({ model, cost }) => (
+            {costMapping.sort((a, b) => b.cost - a.cost).map(({ model, cost }) => (
               <tr
                 key={model}
                 className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'

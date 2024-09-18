@@ -1,4 +1,3 @@
-
 import { isAggregateLogsUploadError, LogsIngestionClient } from "@azure/monitor-ingestion";
 import { getAzureCredential } from './azure-credentials.js';
 import os from 'os';

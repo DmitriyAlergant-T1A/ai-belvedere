@@ -1,6 +1,6 @@
 import React from 'react';
 import useStore from '@store/store';
-import { generateDefaultChat } from '@constants/chat';
+import { generateDefaultChat, supportedModels } from '@constants/chat';
 import { ChatInterface, ModelOptions } from '@type/chat';
 import { handleNewMessageDraftBufferPersist } from '@utils/handleNewMessageDraftsPersistence';
 
@@ -28,10 +28,12 @@ const useAddChat = () => {
     }
 
     const newChat = generateDefaultChat(title, folder);
+
     if (model) {
       newChat.config = { ...newChat.config, model };
+      newChat.config.maxGenerationTokens = supportedModels[model].maxModelCompletionTokens;
     }  
-    
+
     if (replaceCurrentChat)
       updatedChats[currentChatIndex] = newChat;
     else

@@ -66,14 +66,17 @@ const ChatConfigMenu = ({
           _model={_model}
           _translationItem='maxGenerationTokens'
           _maxModelTokens={supportedModels[_model].maxModelCompletionTokens}
-          _absoluteMaxTokens={16384}
+          _absoluteMaxTokens={65536}
         />
         <TemperatureSlider
           _temperature={_temperature}
           _setTemperature={_setTemperature}
         />
-        <TopPSlider _topP={_topP} _setTopP={_setTopP} />
-        {/* <PresencePenaltySlider
+       
+        {/* 
+         <TopPSlider _topP={_topP} _setTopP={_setTopP} />
+         
+         <PresencePenaltySlider
           _presencePenalty={_presencePenalty}
           _setPresencePenalty={_setPresencePenalty}
         />
