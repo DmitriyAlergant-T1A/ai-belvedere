@@ -1,4 +1,4 @@
-export function prepareRequest(req) {
+export function prepareRequest(req, userProfileEmail) {
     const apiUrl = process.env.OPENAI_API_URL;
     const apiKey = process.env.OPENAI_API_KEY;
 
@@ -15,10 +15,25 @@ export function prepareRequest(req) {
     if (provider === 'portkey') {
       authHeader['x-portkey-provider'] = 'openai';
     }
+
+    const allowedAttributes = [
+      'messages',
+      'model',
+      'max_completion_tokens',
+      'temperature',
+      'presence_penalty',
+      'top_p',
+      'frequency_penalty',
+      'stream'
+    ];
   
-    const requestPayload = req.body;
-  
-    return { provider, apiUrl, apiKey, authHeader, requestPayload };
+    const requestPayload =  Object.fromEntries(
+      Object.entries(req.body).filter(([key]) => allowedAttributes.includes(key))
+    );
+
+    requestPayload["user"] = userProfileEmail;
+
+    return { provider, apiUrl, authHeader, requestPayload };
   }
   
   export function handleStreamChunk(res, chunk, partial, responseSize, responseSizeDataChunks, streamCompleted) {

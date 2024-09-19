@@ -2,6 +2,7 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import logRequestRouter from './logging/logging-router.js';
 import https from 'https';
+import os from 'os';
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.post('/', async (req, res) => {
 
     const providerModule = await import(`./api-providers/api-provider-${requestedProvider}.js`);
 
-    const { provider, apiUrl, apiKey, authHeader, requestPayload } = providerModule.prepareRequest(req);
+    const { provider, apiUrl, authHeader, requestPayload } = providerModule.prepareRequest(req, userProfileEmail);
 
     logRequestRouter("Chat Completions Request", requestId, {
       principal: userProfileEmail,
@@ -46,11 +47,16 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
   let responseSize = 0, responseSizeDataChunks = 0;
   let streamCompleted = false;
   let apiResponseCode;
+  let apiRequestID;
   let promptTokens = 0, completionTokens = 0, reasoningTokens = 0;
+  
 
   const apiReq = https.request(apiReqHeaders, (apiRes) => {
     apiResponseCode = apiRes.statusCode;
     console.log(`${requestId}: APIResponse received... status: ${apiRes.statusCode}.`);
+
+    /* This may only be available in OpenAI */
+    apiRequestID = apiRes.headers['x-request-id'];
 
     if (apiRes.statusCode !== 200) {
       handleErrorResponse(res, apiRes);
@@ -88,6 +94,7 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
     });
 
     apiRes.on('end', () => {
+
       if (req.body.stream) {
         //STREAM COMPLETED
         if (res.statusCode === 200) {
@@ -125,6 +132,7 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
       purpose: requestPurpose,
       headers: "",
       apiResponseCode: apiResponseCode,
+      apiRequestID: apiRequestID,
       streamCompleted: streamCompleted,
       batchTokensPrompt: promptTokens,
       batchTokensCompletion: completionTokens,
@@ -137,7 +145,9 @@ async function handleApiRequest(req, res, apiReqHeaders, requestPayload, provide
 }
 
 function extractRequestInfo(req) {
-  const userProfileEmail = req.oidc?.user?.email || req.headers['x-ms-client-principal-name'] || 'unknown user';
+  const userProfileEmail = req.oidc?.user?.email || req.headers['x-ms-client-principal-name'] 
+    || `unknown user (${os.userInfo().username}@${os.hostname()})`;
+
   const requestPurpose = req.headers['x-purpose'];
   const requestedProvider = req.headers['x-model-provider'];
   return { requestedProvider, userProfileEmail, requestPurpose };

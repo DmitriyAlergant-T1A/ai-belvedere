@@ -1,4 +1,4 @@
-export function prepareRequest(req) {
+export function prepareRequest(req, userProfileEmail) {
     const apiUrl = process.env.ANTHROPIC_API_URL;
     const apiKey = process.env.ANTHROPIC_API_KEY;
   
@@ -29,7 +29,8 @@ export function prepareRequest(req) {
       top_p: top_p,
       stream: stream,
       max_tokens: max_completion_tokens,
-      messages: filteredMessages
+      messages: filteredMessages,
+      // user: userProfileEmail   /*Anthropic does not currently support user attribution*/
     };
   
     return { provider, apiUrl, apiKey, authHeader, requestPayload };
