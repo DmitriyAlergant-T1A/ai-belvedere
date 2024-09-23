@@ -15,27 +15,27 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
 
 # 🔥 Features
 
-- Currently supports OpenAI and Anthropic models (Google Gemini is TBD)
+- Supports Anthropic and OpenAI models, including o1 (configurable, can be enabled or disabled)
 - Server-Side secure management the API keys, and implement basic usage logging (only metadata, not conversations content)
-- Containerized build is tested with deployment to Azure Container Apps (CI/CD workflow provided),
-including support for Azure AD Single Sign-On authentication
-- Containerized build is tested with deployment to self-hosted Docker environment with authentication with Auth0. This is a good choice for personal and familt deployments.
+- Containerized build is tested with deployment to Azure Container Apps (CI/CD workflow provided) including support for Azure AD Single Sign-On authentication
+- Containerized build is tested with deployment to self-hosted Docker environment with authentication with Auth0. This is a good choice for personal and family deployments
 - Prompt Library
 - Dark Mode
-- Add Clarification button to quickly amending the previous message (instead of lengtherning the thread)
+- Add Clarification button with a hotkey to quickly amending the previous message (instead of lengtherning the thread)
 - Organize chats into folders (with colours), filter chats and folders
-- Keeps track and displays tokens count and pricing estimates
+- Keeps track and displays tokens count and accumulated cost estimates
 - Quick model selection window for new chats (with hotkeys)
 - Chat title auto-generation
-- Chats, and unsent message drafts are automatically persisted to browser's local storage
+- Chats, and unsent message drafts are persisted to browser's local storage
 - Import / Export of chat history
-- Download Chat (markdown, json, PNG)
-- Multiple language support (i18n) -> currently narrowed down to English and Russian (other languages i18n existed in the upstream project, but these translations were not maintained with fork changes)
+- Download Chat (markdown, json, png)
+- Multiple language support (i18n) -> currently narrowed down to English and Russian. Other languages i18n existed in the upstream project, but these translations were not maintained with fork changes, and currently removed
 
-Features that existed in the original project, but were hidden or removed
-- Conversation publishing to ShareGPT - removed for privacy considerations
-- Conversations sync to Google Drive  - removed for privacy considerations
-- Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and it did not work with Anthropic models.
+# ⏳ Future Roadmap. Features not currently available, planned aspirationally
+- Attached Images support (Vision capability)
+- Improve local content storage using IndexedDB. Currently the application becomes sluggish with many stored chats, and periodic chat history cleanups are recommended for smooth experience. This may be improved in the future.
+- Add support for Google Gemini API models, and keep evolving the model selection window to keep up with the evolving landscape of frontier models 
+- Integration with PostrgreSQL for server-side storage of user settings, prompt library, etc. Settings are currently only stored on device.
 
 # 🛠️ Deployment to Koyeb.com + Auth0
 
