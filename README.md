@@ -38,9 +38,13 @@ Features that existed in the original project, but were hidden or removed
 - Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and it did not work with Anthropic models.
 
 # 🛠️ Docker deployment to Koyeb.com. 
-## As of September 2024, Koyeb.com serverless platform provides Free Tier plan that is sufficient for this deployment 
-## Similar free tier are available at Render.com and few other providers - but these will be spinning down the application when it's was not used and will have a significant cold start delay.
-## Koyeb.com free tier appears to have a negligible cold start delay; And the lowerst "Eco Nano" paid instance is just $1.61/month and should have no cold start delay at all
+
+### Why Koyeb.com? 
+- As of September 2024, Koyeb.com serverless platform provides Free Tier plan that is sufficient for this deployment 
+- Similar free tier are available at Render.com and few other providers - but these will be spinning down the application when it's was not used and will have a significant cold start delay.
+- Koyeb.com free tier appears to have a negligible cold start delay; And the lowerst "Eco Nano" paid instance is just $1.61/month and should have no cold start delay at all
+
+## Deployment Guide
 
    1. Register on Koyeb.com, free "hobbyist" plan is enough
    
