@@ -88,7 +88,7 @@ Features that existed in the original project, but were hidden or removed
       - Allowed Callback URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/callback
 
       - Allowed Logout URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/
-        **Note: trailing / slash, it is important**
+        **Note: trailing / is important**
 
       - Allowed Web Origins: https://gleaming-creater-something-something-213123432423.koyeb.app
         **Note: no trailing slashes**
