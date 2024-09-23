@@ -112,7 +112,7 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
          
 
    
-# 🛠️ Deployment to Azure Container Apps: Step by Step Guide
+# 🛠️ Deployment to Azure Container Apps
 
    1. Create a Resource Group
    2. Create Azure Container Registry (Basic Tier)
@@ -143,7 +143,7 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
       - Configure Scaling (1 .. 1)
       - Define "Secrets" (`openai-api-key`, `anthropic-api-key`) as references to a Key Vault
       - Adjust environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) to reference these secrets
-      - Enable Authentication with Azure Entra ID (details TBD)
+      - Enable Authentication with Azure Entra ID ** Details TBD **
    8. Enable Managed Identities and grant IAM Roles:
       - on Key Vault to the Container App [Key Vault Secrets User]
       - on ACR to the Container App [Role: AcrPull Role]
