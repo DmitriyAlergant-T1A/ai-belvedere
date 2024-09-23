@@ -157,6 +157,7 @@ const useSubmit = () =>
         );
 
         if (response && response.message) {
+          console.log("Batch response received. Starting simulating streaming...");
           await simulateStreaming(response.message.content, addAssistantContent);
         }
 

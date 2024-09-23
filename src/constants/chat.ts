@@ -10,8 +10,6 @@ const dateString =
   '-' +
   ('0' + date.getDate()).slice(-2);
 
-const companyName:string = import.meta.env.VITE_COMPANY_NAME || "";
-
 export const _defaultSystemMessage =
   import.meta.env.VITE_DEFAULT_SYSTEM_MESSAGE ??
   `Carefully follow the user's instructions. Respond using Markdown. Respond briefly, elaborate further when asked. If asked for code writing, only give that code, withhold explanations until requested. If asked for code modification, only give the relevant or changed pieces of code. Unless specifically requested provide a complete snippet, then comply.`;
@@ -27,7 +25,7 @@ export const supportedModels: ModelsList = {
     displayName: 'OpenAI GPT 4o Mini',
     enabled: true,
     apiAliasCurrent: 'gpt-4o-mini',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 0.15, unit: 1000000 },
@@ -46,7 +44,7 @@ export const supportedModels: ModelsList = {
     choiceButtonColor: 'bg-green-100 dark:bg-green-800',
     enabled: true,
     apiAliasCurrent: 'gpt-4o-2024-08-06',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 5.0, unit: 1000000 },
@@ -65,7 +63,7 @@ export const supportedModels: ModelsList = {
     choiceButtonColor: 'bg-green-100 dark:bg-green-800',
     enabled: true,
     apiAliasCurrent: 'chatgpt-4o-latest',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 5.0, unit: 1000000 },
@@ -87,9 +85,9 @@ export const supportedModels: ModelsList = {
       + 'Each request may cost approximately <b>$0.15 to $1.00</b>, please keep an eye on the costs indicator.<br/>'
       + 'Also have you tried the <b>o1 Mini</b> reasoning model? It is comparable in capabilities but 5x cheaper.<br/>' 
       + 'Let us know your feedback! We will love to hear <u>specific examples</u> of situations where regular LLMs (like <b>Claude 3.5 Sonnet</b>) have failed, and then this Reasoning model has performed substantially better?',
-    enabled: (import.meta.env.VITE_OPENAI_O1_ENABLE=='Y'),
+    enabled: import.meta.env.VITE_OPENAI_O1_ENABLE=='Y',
     apiAliasCurrent: 'o1-preview',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 15.00, unit: 1000000 },
@@ -110,9 +108,9 @@ export const supportedModels: ModelsList = {
     maxModelCompletionTokens: 65536,
     displayName: 'OpenAI GPT o1 Mini w/Reasoning',
     choiceButtonColor: 'bg-yellow-100 dark:bg-sky-900',
-    enabled: (import.meta.env.VITE_OPENAI_O1_ENABLE=='Y'),
+    enabled: import.meta.env.VITE_OPENAI_O1_ENABLE=='Y',
     apiAliasCurrent: 'o1-mini',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 3.00, unit: 1000000 },
@@ -133,9 +131,9 @@ export const supportedModels: ModelsList = {
     maxModelCompletionTokens: 8192,
     displayName: 'Antropic Claude 3.5 Sonnet',
     choiceButtonColor: 'bg-lime-100 dark:bg-lime-800',
-    enabled: (import.meta.env.VITE_ANTHROPIC_ENABLE=='Y'),
+    enabled: import.meta.env.VITE_ANTHROPIC_ENABLE=='Y',
     apiAliasCurrent: 'claude-3-5-sonnet-20240620',
-    portkeyProvider: 'anthropic',
+    modelProvider: 'anthropic',
     titleGenModel: 'claude-3-haiku', 
     cost: {
       prompt: { price: 3.00, unit: 1000000 },
@@ -153,7 +151,7 @@ export const supportedModels: ModelsList = {
     displayName: 'OpenAI GPT-4 Turbo',
     enabled: true,
     apiAliasCurrent: 'gpt-4-turbo',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 10.00, unit: 1000000 },
@@ -171,7 +169,7 @@ export const supportedModels: ModelsList = {
     displayName: 'Antropic Claude 3 Haiku',
     enabled: false,
     apiAliasCurrent: 'claude-3-haiku-20240307',
-    portkeyProvider: 'anthropic',
+    modelProvider: 'anthropic',
     titleGenModel: 'claude-3-haiku',
     cost: {
       prompt: { price: 0.25, unit: 1000000 },
@@ -187,9 +185,9 @@ export const supportedModels: ModelsList = {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
     displayName: 'Antropic Claude 3 Opus',
-    enabled: true,
+    enabled: import.meta.env.VITE_ANTHROPIC_ENABLE=='Y',
     apiAliasCurrent: 'claude-3-opus-20240229',
-    portkeyProvider: 'anthropic',
+    modelProvider: 'anthropic',
     titleGenModel: 'claude-3-haiku', 
     cost: {
       prompt: { price: 15.00, unit: 1000000 },
@@ -207,7 +205,7 @@ export const supportedModels: ModelsList = {
     displayName: 'GPT-3.5',
     enabled: false,
     apiAliasCurrent: 'gpt-3.5-turbo',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-3.5-turbo',
     cost: {
       prompt: { price: 0.5, unit: 1000000 },
@@ -224,7 +222,7 @@ export const supportedModels: ModelsList = {
     displayName: 'GPT-4 Original',
     enabled: false,
     apiAliasCurrent: 'gpt-4',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 30.00, unit: 1000000 },
@@ -241,7 +239,7 @@ export const supportedModels: ModelsList = {
     displayName: 'GPT-4 Turbo Preview (legacy)',
     enabled: false,
     apiAliasCurrent: 'gpt-4-turbo-preview',
-    portkeyProvider: 'openai',
+    modelProvider: 'openai',
     titleGenModel: 'gpt-4o-mini',
     cost: {
       prompt: { price: 10.00, unit: 1000000 },
@@ -258,7 +256,7 @@ export const supportedModels: ModelsList = {
     displayName: 'Claude 3 Sonnet',
     enabled: false,
     apiAliasCurrent: 'claude-3-sonnet-20240229',
-    portkeyProvider: 'anthropic',
+    modelProvider: 'anthropic',
     titleGenModel: 'claude-3-haiku', 
     cost: {
       prompt: { price: 3.00, unit: 1000000 },

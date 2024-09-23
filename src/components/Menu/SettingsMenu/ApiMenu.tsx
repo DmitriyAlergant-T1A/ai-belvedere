@@ -15,7 +15,7 @@ const ApiMenu = ({
 }) => {
   const { t } = useTranslation(['main', 'api']);
 
-  const companyName:string = import.meta.env.VITE_COMPANY_NAME || "";
+  const companyName:string = useStore.getState().companyName || "";
 
   const apiEndpoint = useStore((state) => state.apiEndpoint);
   const setApiEndpoint = useStore((state) => state.setApiEndpoint);

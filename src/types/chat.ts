@@ -86,7 +86,7 @@ export interface ModelDetails {
   choiceConfirmationPrompt?: string;
   enabled: boolean;
   apiAliasCurrent: string;
-  portkeyProvider: string;
+  modelProvider: string;
   titleGenModel: ModelOptions;  
             /* Which model to use for chats title generation. 
                 Should be cheapest fastest option from the same provider - in case current API Keys situation may not allow to talk to another provider */

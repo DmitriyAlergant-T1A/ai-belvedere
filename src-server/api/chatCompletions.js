@@ -12,8 +12,13 @@ router.post('/', async (req, res) => {
   try {
     const { requestedProvider, userProfileEmail, requestPurpose } = extractRequestInfo(req);
 
-    const providerName = process.env.DEMO_MODE=='Y' ? 'demo' : requestedProvider;
-    const providerModule = await import(`./api-providers/api-provider-${providerName}.js`);
+    if (process.env.DEMO_MODE=='Y') {
+      const demoProviderModule = await import(`./api-providers/api-provider-demo.js`)
+      await demoProviderModule.handleDemoRequest(req, res, requestPurpose);
+      return; 
+    }
+
+    const providerModule = await import(`./api-providers/api-provider-${requestedProvider}.js`);    
 
     const { provider, apiUrl, authHeader, requestPayload } = providerModule.prepareRequest(req, userProfileEmail);
 
@@ -27,20 +32,17 @@ router.post('/', async (req, res) => {
     });
 
     let result;
-    if (process.env.DEMO_MODE=='Y') {
-      result = await providerModule.handleDemoRequest(req, res);
-    } else {
-      const apiReqHeaders = {
-        hostname: new URL(apiUrl).hostname,
-        path: new URL(apiUrl).pathname,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...authHeader
-        },
-      };
-      result = await handleApiRequest(req, res, apiReqHeaders, requestPayload, provider, requestId, userProfileEmail, requestPurpose, providerModule);
-    }
+
+    const apiReqHeaders = {
+      hostname: new URL(apiUrl).hostname,
+      path: new URL(apiUrl).pathname,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...authHeader
+      },
+    };
+    result = await handleApiRequest(req, res, apiReqHeaders, requestPayload, provider, requestId, userProfileEmail, requestPurpose, providerModule);
 
     logRequestRouter("Chat Completions Response", requestId, {
       principal: userProfileEmail,

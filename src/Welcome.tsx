@@ -14,7 +14,7 @@ const Welcome = () => {
         <img src="favicon-516x516.png" alt="App Logo" className="h-48" />
         
         <div className="mt-12 mb-4">
-            <h1 className="text-4xl font-bold text-gray-800">{import.meta.env.VITE_COMPANY_NAME} AI Chat Assistant</h1>
+            <h1 className="text-4xl font-bold text-gray-800">{useStore.getState().companyName} AI Chat Assistant</h1>
         </div>
         </div>
         <a
