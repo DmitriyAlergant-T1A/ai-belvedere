@@ -16,17 +16,15 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
 # 🔥 Features
 
 - Supports Anthropic and OpenAI models, including o1 (configurable, can be enabled or disabled)
-- Server-Side secure management the API keys, and implement basic usage logging (only metadata, not conversations content)
-- Containerized build is tested with deployment to Azure Container Apps (CI/CD workflow provided) including support for Azure AD Single Sign-On authentication
-- Containerized build is tested with deployment to self-hosted Docker environment with authentication with Auth0. This is a good choice for personal and family deployments
+- Server-Side handling of API keys, with basic usage logging (only metadata, not conversations content)
+- Containerized build is tested with deployment to Azure Container Apps (CI/CD workflow provided) with Azure AD Single Sign-On authentication, and metadata logging to Azure Logs Analytics workspace. Great for corporate deployment.
+- Containerized build is tested with deployment to self-hosted Docker environment and to serverless full stack hosting platforms such as Render.com and Koyeb.com, and supports multi-user authentication with Auth0. This is a good choice for personal and family deployments.
 - Prompt Library
 - Dark Mode
 - Add Clarification button with a hotkey to quickly amending the previous message (instead of lengtherning the thread)
-- Organize chats into folders (with colours), filter chats and folders
 - Keeps track and displays tokens count and accumulated cost estimates
 - Quick model selection window for new chats (with hotkeys)
-- Chat title auto-generation
-- Chats, and unsent message drafts are persisted to browser's local storage
+- Chats, and unsent message drafts are persisted to browser's local storage. Not stored server-side and not availab
 - Import / Export of chat history
 - Download Chat (markdown, json, png)
 - Multiple language support (i18n) -> currently narrowed down to English and Russian. Other languages i18n existed in the upstream project, but these translations were not maintained with fork changes, and currently removed
