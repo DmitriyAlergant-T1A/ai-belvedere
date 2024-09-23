@@ -54,9 +54,9 @@ Features that existed in the original project, but were hidden or removed
       - Repository: `docker.io/aibelvedere/aibelvedere:latest`
       - Environment variables:
          - `OPENAI_API_URL=https://api.openai.com/v1/chat/completions`
-         - `OPENAI_API_KEY=placeholder`
+         - `OPENAI_API_KEY=(your project API key for OpenAI)`
          - `ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages`
-         - `ANTHROPIC_API_KEY=placeholder`
+         - `ANTHROPIC_API_KEY=(your API key for Anthropic)`
          - `LOG_DESTINATION_AZURE_LOG_ANALYTICS=N`
          - `LOG_DESTINATION_POSTGRESQL=N`
          - `LOG_DESTINATION_CONSOLE=Y`
