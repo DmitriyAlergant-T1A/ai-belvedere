@@ -102,14 +102,14 @@ Features that existed in the original project, but were hidden or removed
       
    3. In Auth0, **do not create Social login connectors**. If Google was enabled by default, remove it. With social logins enabled, Auth0 will not limit the users to a predefined list of allowed users: anyone on the web will be able to sign up and use LLM under your API keys. You don't want that.
 
-   4. In Auth0, in the User Management tab, create initial users with passwords
+   4. In Auth0, in the User Management tab, create initial users with passwords. They will need to verify their emails (a verification email should come automatically).
 
-   5. Go back to Koyeb app and add more environment variables to enable authentication with Auth0
+   5. Go back to Koyeb app and add the following environment variables to enable authentication with Auth0
 
       - `AUTH_AUTH0=Y`
       - `OIDC_BASEURL=https://gleaming-creater-something-something-213123432423.koyeb.app/`
       - `OIDC_CLIENTID=Your Auth0 ClientID from the application that was created there`
-      - `OIDC_ISSUERBASEURL=your Auth0 application URL, e.g. https://dev-llkj2l34kj34lj3455.us.auth0.com`
+      - `OIDC_ISSUERBASEURL=Your Auth0 application URL, e.g. https://dev-llkj2l34kj34lj3455.us.auth0.com`
 
    6. Test the app by navigating to the Koyeb-provided URL again. It should now require authentication.
          
