@@ -9,7 +9,8 @@
 
 AI Belvedere: Chatbot UI for Teams, Small Companies, or Families
 
-A self-hosted chatbot UI indended to facilitate PAYG (Pay-As-You-Go) access to frontier AI LLM models for smaller companies and private groups (friends, families). Focuses on reduced complexity, easy selection of best supported models (currently by OpenAI and Anthropic) for each new chat.
+A self-hosted chatbot UI indended to facilitate PAYG (Pay-As-You-Go) access to frontier AI LLM models for companies and small private groups (friends, families). Focuses on reduced complexity, easy selection of best supported models (currently by OpenAI and Anthropic).
+It is a full-stack app with a thin server-side part (API keys are server-side) and supports multi-user authentication by OpenID providers (Auth0 and Azure AD Single Sign-On) - but chat history is only stored locally on device and not logged by the back-end.
 
 Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjhz/BetterChatGPT), but at this point it was significantly modified with little possibility to merge upstream.
 
