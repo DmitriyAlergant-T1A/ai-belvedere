@@ -201,10 +201,7 @@ This local running mode is useful for testing authentication-related code and co
 
       COMPANY_SYSTEM_PROMPT=A brief defauly system prompt instrusting LLM of its name (e.g. Belvedere), its role as an AI assistant to your family; Introducing your family to the AI Belvedere chatbot: who you are, what languages you speak, etc.
       COMPANY_NAME=Your Company Name or Your Fmaily Name
-      ANTHROPIC_ENABLE=Y
-      OPENAI_O1_ENABLE=Y
       DEMO_MODE=N
-      CHECK_AAD_AUTH=N
       AUTH_AAD_EXTERNAL=N
       AUTH_AUTH0=N
       ```
