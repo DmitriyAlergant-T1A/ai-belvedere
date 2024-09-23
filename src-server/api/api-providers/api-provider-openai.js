@@ -87,7 +87,7 @@ export function prepareRequest(req, userProfileEmail) {
   export function formatBatchResponse(batchResponseData, provider) {
     const jsonResponseData = JSON.parse(batchResponseData);
 
-    return {
+    const response = {
       message: {
         role: jsonResponseData.choices[0].message.role,
         content: jsonResponseData.choices[0].message.content
@@ -97,6 +97,8 @@ export function prepareRequest(req, userProfileEmail) {
         completion_tokens: jsonResponseData.usage.completion_tokens,
         reasoning_tokens: jsonResponseData.usage?.completion_tokens_details?.reasoning_tokens ?? 0
       }
-    };
+    }
+    console.log('OpenAI Batch Response:', JSON.stringify(response, null, 2));
+
+    return response;
   }
-  
