@@ -97,9 +97,9 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
 
       - ID Token Expiration: 2592000
       
-   3. In Auth0, **do not create Social login connectors**. If Google was enabled by default, remove it. With social logins enabled, Auth0 will not limit the users to a predefined list of allowed users: anyone on the web will be able to sign up and use LLM under your API keys. You don't want that.
+   3. In Auth0, **do not create Social login connectors**. If Google was enabled by default, remove it. With social logins enabled, Auth0 will not limit the users to a predefined list of allowed users: anyone on the web will be able to sign up and use LLM under your API keys. You don't want that
 
-   4. In Auth0, in the User Management tab, create initial users with passwords. They will need to verify their emails (a verification email should come automatically).
+   4. In Auth0, in the User Management tab, create initial users with passwords. They will need to verify their emails (a verification email should come automatically)
 
    5. Go back to Koyeb app and add the following environment variables to enable authentication with Auth0
 
@@ -108,9 +108,7 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
       - `OIDC_CLIENTID=Your Auth0 ClientID from the application that was created there`
       - `OIDC_ISSUERBASEURL=Your Auth0 application URL, e.g. https://dev-llkj2l34kj34lj3455.us.auth0.com`
 
-   6. Test the app by navigating to the Koyeb-provided URL again. It should now properly authenticate users.
-         
-
+   6. Test the app by navigating to the Koyeb-provided URL again. It should now properly authenticate users
    
 # 🛠️ Deployment to Azure Container Apps
 
@@ -143,8 +141,9 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
       - Configure Scaling (1 .. 1)
       - Define "Secrets" (`openai-api-key`, `anthropic-api-key`) as references to a Key Vault
       - Adjust environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) to reference these secrets
-      - Enable Authentication with Azure Entra ID ** Details TBD **
-   8. Enable Managed Identities and grant IAM Roles:
+   8. Enable Authentication with Azure Entra ID
+      - Details TBD, requires registration of an Azure App
+   10. Enable Managed Identities and grant IAM Roles:
       - on Key Vault to the Container App [Key Vault Secrets User]
       - on ACR to the Container App [Role: AcrPull Role]
 
@@ -199,7 +198,6 @@ This local running mode is useful for testing authentication-related code and co
 6. Launch the app by running `**npm run client-build && npm run server**`
 
 7. Navigate to http://localhost:5500
-   
 
 # 🛠️ Running it locally for client-side debugging through Vite
 
