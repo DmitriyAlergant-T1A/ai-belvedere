@@ -37,13 +37,74 @@ Features that existed in the original project, but were hidden or removed
 - Conversations sync to Google Drive  - removed for privacy considerations
 - Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and it did not work with Anthropic models.
 
+# 🛠️ Docker deployment to Koyeb.com
+
+   1. Register on Koyeb.com, free "hobbyist" plan is enough - no credit card is required as of Sep 2024
+   
+   2. Create a Service - Web Service - Docker
+
+   3. Configure Docker 
+      - Repository: `docker.io/aibelvedere/aibelvedere:latest`
+      - Environment variables:
+         - `OPENAI_API_URL=https://api.openai.com/v1/chat/completions`
+         - `OPENAI_API_KEY=placeholder`
+         - `ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages`
+         - `ANTHROPIC_API_KEY=placeholder`
+         - `LOG_DESTINATION_AZURE_LOG_ANALYTICS=N`
+         - `LOG_DESTINATION_POSTGRESQL=N`
+         - `LOG_DESTINATION_CONSOLE=Y`
+         - `COMPANY_SYSTEM_PROMPT="A brief defauly system prompt instrusting LLM of its name (e.g. Belvedere), its role as an AI assistant to your family; Introducing your family to the AI Belvedere chatbot: who you are, what languages you speak, etc."`
+         - `AUTH_AUTH0=N` (for now, temporary, until Auth0 is configured)
+
+      - Exposed ports: 5500
+
+      - Validate app via the Koyeb-provided URL (e.g.: https://gleaming-creater-something-something-213123432423.koyeb.app/).
+      
+      - At this point it should work - but still does not require authentication
+
+   4. Optionally: upgrade to a Starter plan to attach a Custom Domain
+
+      -  You will need to purchase a domain separately with any domain registrar, and point it to Koyeb
+
+      -  See https://www.koyeb.com/docs/run-and-scale/domains#create-and-assign-your-domain-to-a-koyeb-app for more details
+
+   5. Create an account on Auth0.com, create an Application (ex: "AI Belvedere - Appleseed family")
+
+      - Add application logo (use public/favicon-516x516.png from this repo)
+
+      - Application type: Regular Web App
+
+      - APplication Login URI: leave blank
+      
+      - Allowed Callback URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/callback
+
+      - Allowed Logout URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/
+
+      - Allowed Web Origins: https://gleaming-creater-something-something-213123432423.koyeb.app
+
+      - Allow Cross-Origin Authentication: Yes
+
+      - Allowed Origins (CORS): https://gleaming-creater-something-something-213123432423.koyeb.app
+
+      - ID Token Expiration: 2592000
+      
+   3. In Auth0, **do not create Social login connectors**. If Google was enabled by default, remove it. With any social login, Auth0 will not limit the users to a predefined list of allowed users: anyone on the web will be able to sign up and use LLM under your API keys.
+
+   4. In Auth0, in the User Management tab, create initial users with passwords
+
+   5. Go back to Koyeb app and add more environment variables to enable authentication with Auth0
+
+      - `AUTH_AUTH0=Y`
+      - `OIDC_BASEURL=https://gleaming-creater-something-something-213123432423.koyeb.app/`
+      - `OIDC_CLIENTID=Your Auth0 ClientID from the application that was created there`
+      - `OIDC_ISSUERBASEURL=your Auth0 application URL, e.g. https://dev-llkj2l34kj34lj3455.us.auth0.com`
+
+   6. Test the app by navigating to the Koyeb-provided URL again. It should now require authentication.
+         
 # 🛠️ Docker deployment to self-hosted AWS Lightsails VM
 
    TBD
 
-# 🛠️ Docker deployment to Google Cloud Run
-
-   TBD
    
 # 🛠️ Deployment to Azure Container Apps: Step by Step Guide
 
