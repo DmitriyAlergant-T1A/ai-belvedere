@@ -1,4 +1,4 @@
-<h1 align="center"><b>AI Belvedere: Chatbot UI for families and small companies</b></h1>
+<h1 align="center"><b>AI Belvedere</b></h1>
 
 <p align="center">
     <img src="public/apple-touch-icon.png" width="100" />
