@@ -111,11 +111,8 @@ Features that existed in the original project, but were hidden or removed
       - `OIDC_CLIENTID=Your Auth0 ClientID from the application that was created there`
       - `OIDC_ISSUERBASEURL=Your Auth0 application URL, e.g. https://dev-llkj2l34kj34lj3455.us.auth0.com`
 
-   6. Test the app by navigating to the Koyeb-provided URL again. It should now require authentication.
+   6. Test the app by navigating to the Koyeb-provided URL again. It should now properly authenticate users.
          
-# 🛠️ Docker deployment to self-hosted AWS Lightsails VM
-
-   TBD
 
    
 # 🛠️ Deployment to Azure Container Apps: Step by Step Guide
