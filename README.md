@@ -37,7 +37,7 @@ Features that existed in the original project, but were hidden or removed
 - Conversations sync to Google Drive  - removed for privacy considerations
 - Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and it did not work with Anthropic models.
 
-# 🛠️ Docker deployment to Koyeb.com. 
+# 🛠️ Deployment to Koyeb.com + Auth0
 
 ### Why Koyeb.com? 
 - As of September 2024, Koyeb.com serverless platform provides Free Tier plan that is sufficient for this deployment 
@@ -48,11 +48,13 @@ Features that existed in the original project, but were hidden or removed
 
    1. Register on Koyeb.com, free "hobbyist" plan is enough
    
-   2. Create a Service - Web Service - Docker
+   2. Create a Service -> Web Service -> Docker
 
-   3. Configure Docker 
+   3. Configure Docker Image
+
       - Repository: `docker.io/aibelvedere/aibelvedere:latest`
       - Environment variables:
+         - `SERVER_PORT=5500`
          - `OPENAI_API_URL=https://api.openai.com/v1/chat/completions`
          - `OPENAI_API_KEY=(your project API key for OpenAI)`
          - `ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages`
@@ -61,13 +63,13 @@ Features that existed in the original project, but were hidden or removed
          - `LOG_DESTINATION_POSTGRESQL=N`
          - `LOG_DESTINATION_CONSOLE=Y`
          - `COMPANY_SYSTEM_PROMPT="A brief defauly system prompt instrusting LLM of its name (e.g. Belvedere), its role as an AI assistant to your family; Introducing your family to the AI Belvedere chatbot: who you are, what languages you speak, etc."`
-         - `AUTH_AUTH0=N` (for now, only temporary, until Auth0 is configured!)
+         - `AUTH_AUTH0=N` for now, only temporary, until Auth0 is configured!
 
       - Exposed ports: 5500
 
-      - Validate app via the Koyeb-provided URL (e.g.: https://gleaming-creater-something-something-213123432423.koyeb.app/).
+      - Validate app via the Koyeb-provided app URL (e.g.: https://gleaming-creater-something-something-213123432423.koyeb.app/)
       
-      - At this point it should work - but still does not require authentication
+      - At this point it should work, but still does not require authentication. Unsafe!
 
    4. Optionally: upgrade to a Starter plan to attach a Custom Domain
 
