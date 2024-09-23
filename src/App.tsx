@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useStore from '@store/store';
 import i18n from './i18n';
 
@@ -8,13 +8,11 @@ import Menu from '@components/Menu';
 import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
 import Toast from '@components/Toast';
+import DemoModeModal from '@components/DemoModeModal';
 
 import AuthenticationUpdater from './background-components/AuthenticationUpdater';
 import PageTitleUpdater from './background-components/PageTitleUpdater';
-import CompanySystemPromptUpdater from './background-components/CompanySystemPromptUpdater';
-
-
-// import { ClientPrincipalContextProvider } from "@aaronpowell/react-static-web-apps-auth";
+import ServerEnvConfigUpdater from './background-components/ServerEnvConfigUpdater';
 import { handleNewMessageDraftBufferRetrieve } from '@utils/handleNewMessageDraftsPersistence';
 
 function App() {
@@ -22,6 +20,9 @@ function App() {
   const setTheme = useStore((state) => state.setTheme);
   const setApiKey = useStore((state) => state.setApiKey);
   const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
+
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const demoMode = useStore((state) => state.demoMode);
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
@@ -84,6 +85,12 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (demoMode) {
+      setIsDemoModalOpen(true);
+    }
+  }, [demoMode]);
+
   const chatDownloadAreaRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -93,13 +100,16 @@ function App() {
 
           {/* Background components */}
           <AuthenticationUpdater />
-          <CompanySystemPromptUpdater />
+          <ServerEnvConfigUpdater />
           <PageTitleUpdater />
 
           <Menu chatDownloadAreaRef={chatDownloadAreaRef}/>
           <Chat chatDownloadAreaRef={chatDownloadAreaRef}/>
           {/* <ApiPopup /> */}
           <Toast />
+
+          {/* Demo Mode Modal */}
+          <DemoModeModal />
         </>
       {/* </ClientPrincipalContextProvider> */}
     </div>

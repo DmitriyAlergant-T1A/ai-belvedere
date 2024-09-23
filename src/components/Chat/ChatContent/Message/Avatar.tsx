@@ -44,12 +44,12 @@ const AssistantAvatar = ({model = undefined}:{model: ModelOptions|undefined}) =>
   let provider = 'openai';
 
   if (model)  // newer state: model recorded on the Message level
-    provider = supportedModels[model].portkeyProvider;
+    provider = supportedModels[model].modelProvider;
   else {       // older state: no model on the Message level -> use chat config
     if (chats && currentChatIndex !== undefined) {
       const chatModelConfig = chats[currentChatIndex]?.config?.model;
       if (chatModelConfig && supportedModels[chatModelConfig]) {
-        provider = supportedModels[chatModelConfig].portkeyProvider; /* openai or anthropic or ..*/
+        provider = supportedModels[chatModelConfig].modelProvider; /* openai or anthropic or ..*/
       }
     }
   } 
