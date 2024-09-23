@@ -72,6 +72,8 @@ New Chat model selection window
          - `LOG_DESTINATION_POSTGRESQL=N`
          - `LOG_DESTINATION_CONSOLE=Y`
          - `COMPANY_SYSTEM_PROMPT="A brief defauly system prompt instrusting LLM of its name (e.g. Belvedere), its role as an AI assistant to your family; Introducing your family to the AI Belvedere chatbot: who you are, what languages you speak, etc."`
+         - `COMPANY_NAME= Your Company Name or Your Fmaily Name`
+         - `DEMO_MODE=N`
          - `AUTH_AUTH0=N` for now, only temporary, until Auth0 is configured!
 
       - Exposed ports: 5500
@@ -128,8 +130,9 @@ New Chat model selection window
    2. Create Azure Container Registry (Basic Tier)
       - Enable Admin Access (but no need to retain the password)
    3. Build, tag and push docker image
+      - Configure VITE environmen variables for the docker image
       - See command examples in the `./github/workflows/docker-image-to-acr.yml` pipeline
-   4. Create Azure Key Vault
+   5. Create Azure Key Vault
       - IAM policy type
       - Grant yourself an IAM role Secrets Officer
       - Create secrets named `openai-api-key`, `anthropic-api-key`
@@ -137,8 +140,6 @@ New Chat model selection window
       - Select a container from ACR
       - Define environment variables for the app:
       ```
-      AUTH_AAD_EXTERNAL=Y
-      AUTH_AUTH0=N
       OPENAI_API_URL=https://api.openai.com/v1/chat/completions
       OPENAI_API_KEY=placeholder
       ANTHROPIC_API_URL=https://api.anthropic.com/v1/messages
@@ -146,7 +147,13 @@ New Chat model selection window
       LOG_DESTINATION_AZURE_LOG_ANALYTICS=N
       LOG_DESTINATION_POSTGRESQL=N
       LOG_DESTINATION_CONSOLE=Y
-      COMPANY_SYSTEM_PROMPT="... default system prompt"
+      COMPANY_SYSTEM_PROMPT=A brief defauly system prompt instrusting LLM of its name (e.g. Belvedere), its role as an AI assistant to your family; Introducing your family to the AI Belvedere chatbot: who you are, what languages you speak, etc.
+      COMPANY_NAME=Your Company Name or Your Fmaily Name
+      ANTHROPIC_ENABLE=Y
+      OPENAI_O1_ENABLE=Y
+      DEMO_MODE=N
+      AUTH_AUTH0=N
+      AUTH_AAD_EXTERNAL=Y
       ```
       - Enable Ingress to port 5500 (public)
    7. After the Container App is deployed:
@@ -191,18 +198,23 @@ This local running mode is useful for testing authentication-related code and co
       LOG_DESTINATION_POSTGRESQL=N;
       LOG_DESTINATION_CONSOLE=Y;
 
-      COMPANY_SYSTEM_PROMPT="... default system prompt"
-
-      AUTH_AUTH0=N
+      COMPANY_SYSTEM_PROMPT=A brief defauly system prompt instrusting LLM of its name (e.g. Belvedere), its role as an AI assistant to your family; Introducing your family to the AI Belvedere chatbot: who you are, what languages you speak, etc.
+      COMPANY_NAME=Your Company Name or Your Fmaily Name
+      ANTHROPIC_ENABLE=Y
+      OPENAI_O1_ENABLE=Y
+      DEMO_MODE=N
+      CHECK_AAD_AUTH=N
       AUTH_AAD_EXTERNAL=N
+      AUTH_AUTH0=N
       ```
 
 4. Create .env.production file to configure client-side build
       ```
-      VITE_COMPANY_NAME=(Your Preferred Company/Group/Family name)
-      VITE_ANTHROPIC_ENABLE=Y
-      VITE_OPENAI_O1_ENABLE=Y
-      VITE_CHECK_AAD_AUTH=N
+    VITE_ANTHROPIC_ENABLE=Y
+    VITE_OPENAI_O1_ENABLE=Y
+    VITE_CHECK_AAD_AUTH=N
+    VITE_LOGOUT_URL=/logout
+    VITE_LOGIN_URL=/login
       ```
 
 5. Run `npm install`
