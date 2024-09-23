@@ -28,11 +28,22 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
 - Download Chat (markdown, json, png)
 - Multiple language support (i18n) -> currently narrowed down to English and Russian. Other languages i18n existed in the upstream project, but these translations were not maintained with fork changes, and currently removed
 
-# ⏳ Future Roadmap. Features not currently available, planned aspirationally
+# 🔥 Screenshots
+
+Main Screen - Chats
+
+![Main Screen Screenshot](documentation/main_screen.png)
+
+New Chat model selection window
+
+![Models Selection Screenshot](documentation/models_selection.png)
+
+# ⏳ Future Roadmap. Planned aspirationally
 - Attached Images support (Vision capability)
 - Improve local content storage using IndexedDB. Currently the application becomes sluggish with many stored chats, and periodic chat history cleanups are recommended for smooth experience. This may be improved in the future.
 - Add support for Google Gemini API models, and keep evolving the model selection window to keep up with the evolving landscape of frontier models 
 - Integration with PostrgreSQL for server-side storage of user settings, prompt library, etc. Settings are currently only stored on device.
+
 
 # 🛠️ Deployment to Koyeb.com + Auth0
 
