@@ -121,6 +121,7 @@ New Chat model selection window
       - `OIDC_BASEURL=https://gleaming-creater-something-something-213123432423.koyeb.app/`
       - `OIDC_CLIENTID=Your Auth0 ClientID from the application that was created there`
       - `OIDC_ISSUERBASEURL=Your Auth0 application URL, e.g. https://dev-llkj2l34kj34lj3455.us.auth0.com`
+      - `AUTH_SECRET=(any random string)`
 
    6. Test the app by navigating to the Koyeb-provided URL again. It should now properly authenticate users
    
