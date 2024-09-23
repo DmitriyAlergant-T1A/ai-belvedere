@@ -83,9 +83,7 @@ Features that existed in the original project, but were hidden or removed
 
       - Application type: Regular Web App
 
-      - APplication Login URI: leave blank
-
-      - ** Note! In the various URLs configured below, the trailings are very important. Where an example has trailing / you should use it. Where an example does not have a trailing / you should not have it. **
+      - Application Login URI: leave blank
       
       - Allowed Callback URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/callback
 
