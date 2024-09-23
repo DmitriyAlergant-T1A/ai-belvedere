@@ -54,7 +54,7 @@ Features that existed in the original project, but were hidden or removed
          - `LOG_DESTINATION_POSTGRESQL=N`
          - `LOG_DESTINATION_CONSOLE=Y`
          - `COMPANY_SYSTEM_PROMPT="A brief defauly system prompt instrusting LLM of its name (e.g. Belvedere), its role as an AI assistant to your family; Introducing your family to the AI Belvedere chatbot: who you are, what languages you speak, etc."`
-         - `AUTH_AUTH0=N` (for now, temporary, until Auth0 is configured)
+         - `AUTH_AUTH0=N` (for now, only temporary, until Auth0 is configured!)
 
       - Exposed ports: 5500
 
@@ -75,20 +75,22 @@ Features that existed in the original project, but were hidden or removed
       - Application type: Regular Web App
 
       - APplication Login URI: leave blank
+
+      - ** Note! In the various URLs configured below, the trailings are very important. Where an example has trailing / you should use it. Where an example does not have a trailing / you should not have it. **
       
       - Allowed Callback URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/callback
 
-      - Allowed Logout URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/
+      - Allowed Logout URLs: https://gleaming-creater-something-something-213123432423.koyeb.app/    **Note trailing / slash, it is important**
 
-      - Allowed Web Origins: https://gleaming-creater-something-something-213123432423.koyeb.app
+      - Allowed Web Origins: https://gleaming-creater-something-something-213123432423.koyeb.app     **Note no trailing slash**
 
       - Allow Cross-Origin Authentication: Yes
 
-      - Allowed Origins (CORS): https://gleaming-creater-something-something-213123432423.koyeb.app
+      - Allowed Origins (CORS): https://gleaming-creater-something-something-213123432423.koyeb.app  **Note no trailing slash**
 
       - ID Token Expiration: 2592000
       
-   3. In Auth0, **do not create Social login connectors**. If Google was enabled by default, remove it. With any social login, Auth0 will not limit the users to a predefined list of allowed users: anyone on the web will be able to sign up and use LLM under your API keys.
+   3. In Auth0, **do not create Social login connectors**. If Google was enabled by default, remove it. With social logins enabled, Auth0 will not limit the users to a predefined list of allowed users: anyone on the web will be able to sign up and use LLM under your API keys. You don't want that.
 
    4. In Auth0, in the User Management tab, create initial users with passwords
 
