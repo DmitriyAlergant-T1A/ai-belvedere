@@ -52,7 +52,7 @@ Features that existed in the original project, but were hidden or removed
 
    3. Configure Docker Image
 
-      - Repository: `docker.io/aibelvedere/aibelvedere:latest`
+      - Repository: `docker.io/dmitriyalergant/ai-belvedere:latest`
       - Environment variables:
          - `SERVER_PORT=5500`
          - `OPENAI_API_URL=https://api.openai.com/v1/chat/completions`
