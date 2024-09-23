@@ -17,13 +17,12 @@ Originally based on "BetterChatGPT" project by Jing Hua (https://github.com/ztjh
 
 - Supports Anthropic and OpenAI models, including o1 (configurable, can be enabled or disabled)
 - Server-Side handling of API keys, with basic usage logging (only metadata, not conversations content)
-- Containerized build is tested with deployment to Azure Container Apps (CI/CD workflow provided) with Azure AD Single Sign-On authentication, and metadata logging to Azure Logs Analytics workspace. Great for corporate deployment.
-- Containerized build is tested with deployment to self-hosted Docker environment and to serverless full stack hosting platforms such as Render.com and Koyeb.com, and supports multi-user authentication with Auth0. This is a good choice for personal and family deployments.
+- For Organizations: containerized deployment to Azure Container Apps (CI/CD workflow provided) with Azure AD Single Sign-On authentication, and metadata logging to Azure Logs Analytics workspace
+- For Personal Use, Friends, and Families: containerized deployment to self-hosted Docker, or to serverless full stack hosting platforms such as Render.com and Koyeb.com, with users authentication by Auth0
 - Prompt Library
 - Dark Mode
-- Add Clarification button with a hotkey to quickly amending the previous message (instead of lengtherning the thread)
-- Keeps track and displays tokens count and accumulated cost estimates
-- Quick model selection window for new chats (with hotkeys)
+- Keeps track and displays tokens count, and accumulated cost estimates
+- Quick model selection window for new chats for best frontier models (with hotkeys)
 - Chats, and unsent message drafts are persisted to browser's local storage. Not stored server-side and not availab
 - Import / Export of chat history
 - Download Chat (markdown, json, png)
