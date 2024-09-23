@@ -37,9 +37,10 @@ Features that existed in the original project, but were hidden or removed
 - Conversations sync to Google Drive  - removed for privacy considerations
 - Advanced options to edit the thread such as rearranging the messages, changing roles, etc. There was no obvious business use-case, it looked complex, and it did not work with Anthropic models.
 
-# 🛠️ Docker deployment to Koyeb.com
+# 🛠️ Docker deployment to Koyeb.com. 
+# # This serverless platform provides Free Tier plan that is sufficient for this deployment (as of September 2024)
 
-   1. Register on Koyeb.com, free "hobbyist" plan is enough - no credit card is required as of Sep 2024
+   1. Register on Koyeb.com, free "hobbyist" plan is enough
    
    2. Create a Service - Web Service - Docker
 
