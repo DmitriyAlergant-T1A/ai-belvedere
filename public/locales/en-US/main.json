@@ -56,5 +56,5 @@
   "replaceCurrentChatToggle": "Drop active chat when New Chat is created",
   "newChatHotkey": "Hotkey: Ctrl + /",
   "proceed": "Proceed",
-  "promptTokenCount": "This prompt is approximately {{count}} tokens plus size of the previously accumulated chat context"
+  "promptTokenCount": "This prompt is approximately {{count}} tokens plus size of the System Prompt and included Previous Chat Context"
 }

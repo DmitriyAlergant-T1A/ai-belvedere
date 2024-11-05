@@ -129,7 +129,7 @@ export const supportedModels: ModelsList = {
   'claude-3.5-sonnet': {
     maxModelInputTokens: 200000-8192,
     maxModelCompletionTokens: 8192,
-    displayName: 'Antropic Claude 3.5 Sonnet',
+    displayName: 'Claude 3.5 Sonnet',
     choiceButtonColor: 'bg-lime-100 dark:bg-lime-800',
     enabled: import.meta.env.VITE_ANTHROPIC_ENABLE=='Y',
     apiAliasCurrent: 'claude-3-5-sonnet-20240620',
@@ -141,6 +141,25 @@ export const supportedModels: ModelsList = {
     },
     usage_description: "On par with GPT-4o in most benchmark. Best for Coding.",
     released_description: 'Jun 2024',
+    cost_description: '20x baseline<br/>',
+    use_system_prompt: true,
+    use_stream: true
+  },
+  'claude-3.5-sonnet-new': {
+    maxModelInputTokens: 200000-8192,
+    maxModelCompletionTokens: 8192,
+    displayName: 'Claude 3.5 Sonnet New (aka 3.6)',
+    choiceButtonColor: 'bg-lime-100 dark:bg-lime-800',
+    enabled: import.meta.env.VITE_ANTHROPIC_ENABLE=='Y',
+    apiAliasCurrent: 'claude-3-5-sonnet-20241022',
+    modelProvider: 'anthropic',
+    titleGenModel: 'claude-3.5-haiku', 
+    cost: {
+      prompt: { price: 3.00, unit: 1000000 },
+      completion: { price: 15.00, unit: 1000000 },
+    },
+    usage_description: "On par with GPT-4o in most benchmark. Best for Coding, approaches o1.",
+    released_description: 'Oct 2024',
     cost_description: '20x baseline<br/>',
     use_system_prompt: true,
     use_stream: true
@@ -166,7 +185,7 @@ export const supportedModels: ModelsList = {
   'claude-3-haiku': {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'Antropic Claude 3 Haiku',
+    displayName: 'Claude 3 Haiku',
     enabled: false,
     apiAliasCurrent: 'claude-3-haiku-20240307',
     modelProvider: 'anthropic',
@@ -181,10 +200,28 @@ export const supportedModels: ModelsList = {
     use_system_prompt: true,
     use_stream: true
   },
+  'claude-3.5-haiku': {
+    maxModelInputTokens: 200000-8192,
+    maxModelCompletionTokens: 8192,
+    displayName: 'Claude 3.5 Haiku',
+    enabled: import.meta.env.VITE_ANTHROPIC_ENABLE=='Y',
+    apiAliasCurrent: 'claude-3-5-haiku-latest',
+    modelProvider: 'anthropic',
+    titleGenModel: 'claude-3.5-haiku',
+    cost: {
+      prompt: { price: 1.00, unit: 1000000 },
+      completion: { price: 5.00, unit: 1000000 },
+    },
+    usage_description: 'Newest smaller model from Anthropic. Approaches gpt-4o in coding and beats Claude 3 Opus in some benchmarks while being 3x cheaper then Sonnet.',
+    released_description: 'Oct 2024',
+    cost_description: '7x baseline',
+    use_system_prompt: true,
+    use_stream: true
+  },
   'claude-3-opus': {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'Antropic Claude 3 Opus',
+    displayName: 'Claude 3 Opus',
     enabled: import.meta.env.VITE_ANTHROPIC_ENABLE=='Y',
     apiAliasCurrent: 'claude-3-opus-20240229',
     modelProvider: 'anthropic',
@@ -253,7 +290,7 @@ export const supportedModels: ModelsList = {
   'claude-3-sonnet': {
     maxModelInputTokens: 200000-4096,
     maxModelCompletionTokens: 4096,
-    displayName: 'Claude 3 Sonnet',
+    displayName: '3 Sonnet',
     enabled: false,
     apiAliasCurrent: 'claude-3-sonnet-20240229',
     modelProvider: 'anthropic',

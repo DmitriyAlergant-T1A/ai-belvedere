@@ -76,7 +76,10 @@ export type ModelOptions =
   | 'claude-3-haiku'
   | 'claude-3-sonnet'
   | 'claude-3-opus'
-  | 'claude-3.5-sonnet';
+  | 'claude-3.5-haiku'
+  | 'claude-3.5-sonnet'
+  | 'claude-3.5-sonnet-new';
+
 
 export interface ModelDetails {
   maxModelInputTokens: number;
