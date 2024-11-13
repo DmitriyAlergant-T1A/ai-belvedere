@@ -29,7 +29,7 @@ export const prepareApiHeaders = async (
 
   const headers: Record<string, string> = {};
 
-  headers['x-model-provider'] = supportedModels[model].portkeyProvider;
+  headers['x-model-provider'] = supportedModels[model].modelProvider;
 
   /* Built-in endpoint (/api/v1/chat/completions) */
   if (apiEndpoint === _builtinAPIEndpoint && 
@@ -165,7 +165,7 @@ export async function handleStream(stream: ReadableStream, addAssistantContent: 
     try {
       while (reading && useStore.getState().generating) {
         const { done, value } = await reader.read();
-        
+       
         if (done) {
           reading = false;
         } else {
@@ -177,7 +177,9 @@ export async function handleStream(stream: ReadableStream, addAssistantContent: 
           for (const line of lines) {
             if (line.startsWith('data:')) {
 
+
               const data = line.slice(6);
+
               //console.debug('handleStream: received data: ', data);
 
               if (data === '[DONE]') {
@@ -186,6 +188,7 @@ export async function handleStream(stream: ReadableStream, addAssistantContent: 
                 buffer += data;
                 try {
                   const content = JSON.parse(buffer)?.content;
+
                   if (content) {
                     addAssistantContent(content);
                     //console.debug('handleStream: processed content: ', content);

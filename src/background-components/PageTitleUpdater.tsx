@@ -14,7 +14,7 @@ const PageTitleUpdater = () => {
         shallow
         );
 
-    const companyName:string = import.meta.env.VITE_COMPANY_NAME || "";
+    const companyName:string = useStore.getState().companyName || "";
 
     useEffect(() => {
         

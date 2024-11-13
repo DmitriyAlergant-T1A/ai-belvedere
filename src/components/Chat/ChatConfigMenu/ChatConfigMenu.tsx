@@ -97,7 +97,6 @@ export const ModelSelector = ({
   _setModel: React.Dispatch<React.SetStateAction<ModelOptions>>;
 }) => {
   const [dropDown, setDropDown] = useState<boolean>(false);
-
   const { t } = useTranslation('model');
 
   return (
@@ -124,21 +123,23 @@ export const ModelSelector = ({
           className='text-sm text-gray-700 dark:text-gray-200 p-0 m-0'
           aria-labelledby='dropdownDefaultButton'
         >
-          {Object.entries(supportedModels).filter(([_, modelDetails]) => 
-    modelDetails.enabled == true && 
-    (import.meta.env.VITE_ANTHROPIC_ENABLE == 'Y' || modelDetails.portkeyProvider !== 'anthropic')
-  ).map(([modelKey, modelDetails]) => (
-            <li
-              className='px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer'
-              onClick={() => {
-                _setModel(modelKey as ModelOptions);
-                setDropDown(false);
-              }}
-              key={modelKey}
-            >
-              {modelDetails.displayName}
-            </li>
-          ))}
+          {Object.entries(supportedModels)
+            .filter(([_, modelDetails]) => modelDetails.enabled === true)
+            .sort(([keyA, detailsA], [keyB, detailsB]) => 
+              detailsA.displayName.localeCompare(detailsB.displayName)
+            )
+            .map(([modelKey, modelDetails]) => (
+              <li
+                className='px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer'
+                onClick={() => {
+                  _setModel(modelKey as ModelOptions);
+                  setDropDown(false);
+                }}
+                key={modelKey}
+              >
+                {modelDetails.displayName}
+              </li>
+            ))}
         </ul>
       </div>
     </div>

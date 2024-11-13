@@ -40,6 +40,16 @@ export interface ConfigSlice {
   setTotalTokenUsed: (totalTokenUsed: TotalTokenUsed) => void;
   setChatNamesAsPageTitles: (chatNamesAsPageTitles: boolean) => void;
   setReplaceCurrentChat: (replaceCurrentChat: boolean) => void;
+  companyName: string;
+  anthropicEnable: boolean;
+  openaiO1Enable: boolean;
+  checkAadAuth: boolean;
+  demoMode: boolean;
+  setCompanyName: (companyName: string) => void;
+  setAnthropicEnable: (anthropicEnable: boolean) => void;
+  setOpenaiO1Enable: (openaiO1Enable: boolean) => void;
+  setCheckAadAuth: (checkAadAuth: boolean) => void;
+  setDemoMode: (demoMode: boolean) => void;
 }
 
 export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
@@ -61,6 +71,11 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
   chatNamesAsPageTitles: false,
   replaceCurrentChat: false,
   totalTokenUsed: {},
+  companyName: import.meta.env.VITE_COMPANY_NAME ?? '',
+  anthropicEnable: import.meta.env.VITE_ANTHROPIC_ENABLE=='Y' ?? true,
+  openaiO1Enable: import.meta.env.VITE_OPENAI_O1_ENABLE=='Y' ?? false,
+  checkAadAuth: import.meta.env.VITE_CHECK_AAD_AUTH=='Y' ?? false,
+  demoMode: import.meta.env.VITE_DEMO_MODE=='Y' ?? false,
   
   setOpenConfig: (openConfig: boolean) => {
     set((prev: ConfigSlice) => ({
@@ -167,4 +182,19 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
   setReplaceCurrentChat(replaceCurrentChat) {
     set((prev: ConfigSlice) => ({ ...prev, replaceCurrentChat }));
   },
+  setCompanyName: (companyName: string) => {
+    set((prev: ConfigSlice) => ({ ...prev, companyName }));
+  },
+  setAnthropicEnable: (anthropicEnable: boolean) => {
+    set((prev: ConfigSlice) => ({ ...prev, anthropicEnable }));
+  },
+  setOpenaiO1Enable: (openaiO1Enable: boolean) => {
+    set((prev: ConfigSlice) => ({ ...prev, openaiO1Enable }));
+  },
+  setCheckAadAuth: (checkAadAuth: boolean) => {
+    set((prev: ConfigSlice) => ({ ...prev, checkAadAuth }));
+  },
+  setDemoMode: (demoMode: boolean) => {
+    set((prev: ConfigSlice) => ({ ...prev, demoMode }));
+  }
 });
